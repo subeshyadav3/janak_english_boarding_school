@@ -20,7 +20,7 @@ async function main() {
       phone: "9845378869",
       email: "janakenglishboardingschool@gmail.com",
       facebook: "https://www.facebook.com/share/1BQYpmXLmM/",
-      whatsapp: "9779855040326",
+      whatsapp: "9779845378869",
       establishedYear: 1996,
       mapUrl: "https://maps.app.goo.gl/UiTVMWV77H1VESez8",
       logo: "/assets/logo.png",

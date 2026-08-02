@@ -33,7 +33,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   email: "janakenglishboardingschool@gmail.com",
   establishedYear: 1996,
   facebook: "https://www.facebook.com/share/1BQYpmXLmM/",
-  whatsapp: "9779855040326",
+  whatsapp: "9779845378869",
   mapUrl: MAP_DIRECTIONS,
   logo: "/assets/logo.png",
   cover1: "/assets/cover1.png",
