@@ -4,7 +4,13 @@ import path from "path";
 import { randomBytes } from "crypto";
 import { requireAdmin, unauthorized } from "@/lib/admin-guard";
 
-const ALLOWED = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
+const ALLOWED = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "application/pdf",
+]);
 
 export async function POST(request: NextRequest) {
   const admin = await requireAdmin();
@@ -18,7 +24,7 @@ export async function POST(request: NextRequest) {
     }
     if (!ALLOWED.has(file.type)) {
       return NextResponse.json(
-        { error: "Only JPG, PNG, WEBP, GIF images are allowed." },
+        { error: "Only JPG, PNG, WEBP, GIF images or PDF files are allowed." },
         { status: 400 }
       );
     }

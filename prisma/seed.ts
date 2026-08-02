@@ -60,6 +60,7 @@ async function main() {
         title: "Result publication",
         description:
           "The results of 1st terminal Examination 2083 is going to be published on 2083/04/10 Sunday",
+        filePath: "/uploads/grade8-result-sample.pdf",
       },
       {
         title: "Admission Open 2083",
@@ -79,7 +80,8 @@ async function main() {
     data: [
       {
         title: "First Terminal Examination 2083 - Grade 8",
-        driveLink: "https://drive.google.com/drive/folders/example",
+        filePath: "/uploads/grade8-result-sample.pdf",
+        driveLink: null,
       },
       {
         title: "First Terminal Examination 2083 - Grade 6 & 7",

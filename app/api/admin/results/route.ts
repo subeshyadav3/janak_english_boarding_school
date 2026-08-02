@@ -17,6 +17,7 @@ export async function POST(request: NextRequest) {
     data: {
       title: String(body.title ?? ""),
       driveLink: body.driveLink ?? "",
+      filePath: body.filePath ?? "",
     },
   });
   return NextResponse.json(item, { status: 201 });

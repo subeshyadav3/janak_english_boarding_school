@@ -12,6 +12,7 @@ export async function PATCH(request: NextRequest, ctx: RouteContext<"/api/admin/
     data: {
       title: String(body.title ?? ""),
       driveLink: body.driveLink ?? "",
+      filePath: body.filePath ?? "",
     },
   });
   return NextResponse.json(item);

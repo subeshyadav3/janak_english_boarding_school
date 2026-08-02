@@ -1,7 +1,8 @@
 import Navbar from "@/app/components/Navbar";
 import Footer from "@/app/components/Footer";
 import HeroSlider from "@/app/components/HeroSlider";
-import HomeSection from "@/app/components/sections/HomeSection";
+import NoticeTicker from "@/app/components/NoticeTicker";
+import AdmissionCta from "@/app/components/sections/AdmissionCta";
 import AboutSection from "@/app/components/sections/AboutSection";
 import StatsSection from "@/app/components/sections/StatsSection";
 import FacilitiesSection from "@/app/components/sections/FacilitiesSection";
@@ -98,11 +99,22 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Navbar settings={settings} />
-      <HeroSlider covers={covers} />
+      <HeroSlider
+        covers={covers}
+        schoolName={settings.schoolName}
+        tagline={settings.tagline}
+        motto={settings.motto}
+        address={settings.address}
+        phone={settings.phone}
+      />
+      <NoticeTicker notices={notices} />
       <main className="flex-1">
-        <HomeSection settings={settings} />
         <AboutSection />
         <StatsSection />
+        <AdmissionCta
+          phone={settings.phone}
+          whatsapp={settings.whatsapp}
+        />
         <FacilitiesSection />
         <TeachersSection teachers={teachers} />
         <NoticesResultsSection notices={notices} results={results} />

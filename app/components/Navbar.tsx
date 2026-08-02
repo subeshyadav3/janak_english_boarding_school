@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Menu, X, GraduationCap } from "lucide-react";
+import Link from "next/link";
+import { Menu, X, GraduationCap, LogIn } from "lucide-react";
 import { DEFAULT_SETTINGS, type SiteSettings } from "@/lib/constants";
 
 const NAV_ITEMS = [
@@ -86,6 +87,17 @@ export default function Navbar({
               {item.label}
             </button>
           ))}
+          <Link
+            href="/login"
+            onClick={() => setOpen(false)}
+            className={`ml-2 inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-bold transition-colors ${
+              scrolled || open
+                ? "bg-brand text-white hover:bg-brand-dark"
+                : "bg-white/15 text-white ring-1 ring-white/30 backdrop-blur hover:bg-white/25"
+            }`}
+          >
+            <LogIn className="h-4 w-4" /> Login
+          </Link>
         </nav>
 
         <button
@@ -109,6 +121,13 @@ export default function Navbar({
                 {item.label}
               </button>
             ))}
+            <Link
+              href="/login"
+              onClick={() => setOpen(false)}
+              className="col-span-2 mt-2 inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand px-3 py-2.5 text-sm font-bold text-white hover:bg-brand-dark transition-colors"
+            >
+              <LogIn className="h-4 w-4" /> Staff Login
+            </Link>
           </div>
         </nav>
       )}

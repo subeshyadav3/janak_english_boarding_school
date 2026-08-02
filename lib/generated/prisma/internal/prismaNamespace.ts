@@ -1107,6 +1107,7 @@ export const ResultScalarFieldEnum = {
   id: 'id',
   title: 'title',
   driveLink: 'driveLink',
+  filePath: 'filePath',
   createdAt: 'createdAt'
 } as const
 

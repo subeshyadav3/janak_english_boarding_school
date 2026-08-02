@@ -18,17 +18,19 @@ import {
   Save,
   Eye,
   Home,
-  Upload,
   LayoutDashboard,
   UserCog,
   Phone,
 } from "lucide-react";
+import { ToastProvider, useToast } from "@/lib/ui/Toast";
+import ConfirmDialog from "@/lib/ui/ConfirmDialog";
+import FileUpload from "@/lib/ui/FileUpload";
 
 type Tab = "overview" | "teachers" | "notices" | "results" | "gallery" | "testimonials" | "enquiries" | "users" | "settings";
 
 type Teacher = { id: string; name: string; position?: string; subject?: string; phone?: string; photo?: string; order: number };
 type Notice = { id: string; title: string; description?: string; filePath?: string };
-type Result = { id: string; title: string; driveLink?: string };
+type Result = { id: string; title: string; driveLink?: string; filePath?: string };
 type GalleryItem = { id: string; imagePath: string; title?: string };
 type Testimonial = { id: string; name: string; message: string };
 type Enquiry = { id: string; name: string; phone?: string; message: string; status: string };
@@ -56,6 +58,14 @@ async function j<T>(url: string, options?: RequestInit): Promise<T> {
 }
 
 export default function AdminDashboard() {
+  return (
+    <ToastProvider>
+      <AdminDashboardInner />
+    </ToastProvider>
+  );
+}
+
+function AdminDashboardInner() {
   const router = useRouter();
   const [tab, setTab] = useState<Tab>("overview");
 
@@ -258,6 +268,8 @@ function Overview() {
 function TeachersManager() {
   const { data, setData, loading } = useFetch<Teacher>("/api/admin/teachers");
   const [error, setError] = useState("");
+  const [confirmId, setConfirmId] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const save = async (item: Teacher) => {
     try {
@@ -267,8 +279,10 @@ function TeachersManager() {
         body: JSON.stringify(item),
       });
       setData((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
+      toast("success", "Teacher saved");
     } catch (e) {
       setError((e as Error).message);
+      toast("error", (e as Error).message);
     }
   };
 
@@ -280,18 +294,22 @@ function TeachersManager() {
         body: JSON.stringify({ name: "New Teacher", order: data.length + 1 }),
       });
       setData((prev) => [...prev, created]);
+      toast("success", "Teacher added");
     } catch (e) {
       setError((e as Error).message);
+      toast("error", (e as Error).message);
     }
   };
 
   const remove = async (id: string) => {
-    if (!confirm("Delete this teacher?")) return;
     try {
       await j(`/api/admin/teachers/${id}`, { method: "DELETE" });
       setData((prev) => prev.filter((t) => t.id !== id));
+      setConfirmId(null);
+      toast("success", "Teacher deleted");
     } catch (e) {
       setError((e as Error).message);
+      toast("error", (e as Error).message);
     }
   };
 
@@ -327,14 +345,15 @@ function TeachersManager() {
             <div className="mt-2 flex flex-wrap items-center gap-2">
               <input type="number" value={t.order} onChange={(e) => set(t.id, "order", Number(e.target.value))}
                 placeholder="Order" className="admin-input w-24" />
-              <PhotoInput value={t.photo} onChange={(v) => set(t.id, "photo", v)} placeholder="Photo URL" />
+              <span className="text-sm font-medium text-brand-deep/60">Photo:</span>
+              <FileUpload value={t.photo} onChange={(v) => set(t.id, "photo", v)} label="Upload Photo" />
             </div>
             <div className="mt-3 flex gap-2">
               <button onClick={() => save(t)}
                 className="inline-flex items-center gap-1 rounded-lg bg-brand px-3 py-2 text-sm font-bold text-white hover:bg-brand-dark">
                 <Save className="h-4 w-4" /> Save
               </button>
-              <button onClick={() => remove(t.id)}
+              <button onClick={() => setConfirmId(t.id)}
                 className="inline-flex items-center gap-1 rounded-lg bg-red-600 px-3 py-2 text-sm font-bold text-white hover:bg-red-700">
                 <Trash2 className="h-4 w-4" />
               </button>
@@ -342,41 +361,14 @@ function TeachersManager() {
           </div>
         ))}
       </div>
-    </PageShell>
-  );
-}
-
-function PhotoInput({ value, onChange, placeholder }: { value?: string; onChange: (v: string) => void; placeholder: string }) {
-  const [uploading, setUploading] = useState(false);
-  const upload = async (file: File) => {
-    setUploading(true);
-    try {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await fetch("/api/upload", { method: "POST", body: fd });
-      if (!res.ok) throw new Error("Upload failed");
-      const data = await res.json();
-      onChange(data.url);
-    } catch (e) {
-      alert((e as Error).message);
-    } finally {
-      setUploading(false);
-    }
-  };
-  return (
-    <div className="flex flex-wrap items-center gap-2">
-      <input
-        value={value ?? ""}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        className="admin-input w-44"
+      <ConfirmDialog
+        open={confirmId !== null}
+        title="Delete teacher?"
+        message="This will remove the teacher from the website."
+        onConfirm={() => confirmId && remove(confirmId)}
+        onCancel={() => setConfirmId(null)}
       />
-      <label className="inline-flex cursor-pointer items-center gap-1 rounded-lg border border-brand px-3 py-2 text-sm font-semibold text-brand hover:bg-brand/5">
-        <Upload className="h-4 w-4" /> {uploading ? "Uploading..." : "Upload"}
-        <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && upload(e.target.files[0])} />
-      </label>
-      {value && <Image src={value} alt="" width={40} height={40} className="rounded object-cover" />}
-    </div>
+    </PageShell>
   );
 }
 
@@ -384,6 +376,8 @@ function PhotoInput({ value, onChange, placeholder }: { value?: string; onChange
 function NoticesManager() {
   const { data, setData, loading } = useFetch<Notice>("/api/admin/notices");
   const [error, setError] = useState("");
+  const [confirmId, setConfirmId] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const save = async (item: Notice) => {
     try {
@@ -392,7 +386,11 @@ function NoticesManager() {
         body: JSON.stringify(item),
       });
       setData((prev) => prev.map((n) => (n.id === updated.id ? updated : n)));
-    } catch (e) { setError((e as Error).message); }
+      toast("success", "Notice saved");
+    } catch (e) {
+      setError((e as Error).message);
+      toast("error", (e as Error).message);
+    }
   };
   const add = async () => {
     try {
@@ -401,14 +399,22 @@ function NoticesManager() {
         body: JSON.stringify({ title: "New Notice" }),
       });
       setData((prev) => [created, ...prev]);
-    } catch (e) { setError((e as Error).message); }
+      toast("success", "Notice added");
+    } catch (e) {
+      setError((e as Error).message);
+      toast("error", (e as Error).message);
+    }
   };
   const remove = async (id: string) => {
-    if (!confirm("Delete this notice?")) return;
     try {
       await j(`/api/admin/notices/${id}`, { method: "DELETE" });
       setData((prev) => prev.filter((n) => n.id !== id));
-    } catch (e) { setError((e as Error).message); }
+      setConfirmId(null);
+      toast("success", "Notice deleted");
+    } catch (e) {
+      setError((e as Error).message);
+      toast("error", (e as Error).message);
+    }
   };
   const set = (id: string, field: keyof Notice, value: string) =>
     setData((prev) => prev.map((n) => (n.id === id ? { ...n, [field]: value } : n)));
@@ -416,7 +422,7 @@ function NoticesManager() {
   if (loading) return <p className="text-sm text-brand-deep/60">Loading...</p>;
 
   return (
-    <PageShell title="Notices" subtitle="Publish announcements for parents and students.">
+    <PageShell title="Notices" subtitle="Publish announcements for parents and students. Optionally attach a PDF/image.">
       <ErrorBanner error={error} onClose={() => setError("")} />
       <button onClick={add} className="mb-4 inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-bold text-white hover:bg-brand-dark">
         <Plus className="h-4 w-4" /> Add Notice
@@ -428,19 +434,35 @@ function NoticesManager() {
               placeholder="Notice Title" className="admin-input w-full" />
             <textarea value={n.description ?? ""} onChange={(e) => set(n.id, "description", e.target.value)}
               placeholder="Description" rows={2} className="admin-input mt-2 w-full" />
-            <input value={n.filePath ?? ""} onChange={(e) => set(n.id, "filePath", e.target.value)}
-              placeholder="File Link (optional)" className="admin-input mt-2 w-full" />
+            <div className="mt-2 flex flex-wrap items-center gap-3">
+              <span className="text-sm font-medium text-brand-deep/60">
+                {n.filePath ? "Attachment:" : "Attach a file (optional):"}
+              </span>
+              <FileUpload
+                value={n.filePath}
+                onChange={(v) => set(n.id, "filePath", v)}
+                accept=".pdf,image/*"
+                label={n.filePath ? "Replace File" : "Upload PDF / Image"}
+              />
+            </div>
             <div className="mt-2 flex gap-2">
               <button onClick={() => save(n)} className="inline-flex items-center gap-1 rounded-lg bg-brand px-3 py-2 text-sm font-bold text-white hover:bg-brand-dark">
                 <Save className="h-4 w-4" /> Save
               </button>
-              <button onClick={() => remove(n.id)} className="inline-flex items-center gap-1 rounded-lg bg-red-600 px-3 py-2 text-sm font-bold text-white hover:bg-red-700">
+              <button onClick={() => setConfirmId(n.id)} className="inline-flex items-center gap-1 rounded-lg bg-red-600 px-3 py-2 text-sm font-bold text-white hover:bg-red-700">
                 <Trash2 className="h-4 w-4" /> Delete
               </button>
             </div>
           </div>
         ))}
       </div>
+      <ConfirmDialog
+        open={confirmId !== null}
+        title="Delete notice?"
+        message="This will remove the notice from the website."
+        onConfirm={() => confirmId && remove(confirmId)}
+        onCancel={() => setConfirmId(null)}
+      />
     </PageShell>
   );
 }
@@ -449,6 +471,8 @@ function NoticesManager() {
 function ResultsManager() {
   const { data, setData, loading } = useFetch<Result>("/api/admin/results");
   const [error, setError] = useState("");
+  const [confirmId, setConfirmId] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const save = async (item: Result) => {
     try {
@@ -457,7 +481,11 @@ function ResultsManager() {
         body: JSON.stringify(item),
       });
       setData((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
-    } catch (e) { setError((e as Error).message); }
+      toast("success", "Result saved");
+    } catch (e) {
+      setError((e as Error).message);
+      toast("error", (e as Error).message);
+    }
   };
   const add = async () => {
     try {
@@ -466,14 +494,22 @@ function ResultsManager() {
         body: JSON.stringify({ title: "New Result" }),
       });
       setData((prev) => [created, ...prev]);
-    } catch (e) { setError((e as Error).message); }
+      toast("success", "Result added");
+    } catch (e) {
+      setError((e as Error).message);
+      toast("error", (e as Error).message);
+    }
   };
   const remove = async (id: string) => {
-    if (!confirm("Delete this result?")) return;
     try {
       await j(`/api/admin/results/${id}`, { method: "DELETE" });
       setData((prev) => prev.filter((r) => r.id !== id));
-    } catch (e) { setError((e as Error).message); }
+      setConfirmId(null);
+      toast("success", "Result deleted");
+    } catch (e) {
+      setError((e as Error).message);
+      toast("error", (e as Error).message);
+    }
   };
   const set = (id: string, field: keyof Result, value: string) =>
     setData((prev) => prev.map((r) => (r.id === id ? { ...r, [field]: value } : r)));
@@ -481,7 +517,7 @@ function ResultsManager() {
   if (loading) return <p className="text-sm text-brand-deep/60">Loading...</p>;
 
   return (
-    <PageShell title="Exam Results" subtitle="Share exam result links with parents.">
+    <PageShell title="Exam Results" subtitle="Upload result files (PDF/image) or paste a Drive link for parents.">
       <ErrorBanner error={error} onClose={() => setError("")} />
       <button onClick={add} className="mb-4 inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-bold text-white hover:bg-brand-dark">
         <Plus className="h-4 w-4" /> Add Result
@@ -490,20 +526,41 @@ function ResultsManager() {
         {data.map((r) => (
           <div key={r.id} className="rounded-xl bg-white border border-line p-4 shadow-sm">
             <input value={r.title} onChange={(e) => set(r.id, "title", e.target.value)}
-              placeholder="Result Title" className="admin-input w-full" />
-            <input value={r.driveLink ?? ""} onChange={(e) => set(r.id, "driveLink", e.target.value)}
-              placeholder="Google Drive Link" className="admin-input mt-2 w-full" />
+              placeholder="Result Title (e.g. First Term 2083 - Grade 8)" className="admin-input w-full" />
+            <div className="mt-2 flex flex-wrap items-center gap-3">
+              <span className="text-sm font-medium text-brand-deep/60">
+                {r.filePath ? "Result file:" : "Upload result file:"}
+              </span>
+              <FileUpload
+                value={r.filePath}
+                onChange={(v) => set(r.id, "filePath", v)}
+                accept=".pdf,image/*"
+                label={r.filePath ? "Replace File" : "Upload PDF / Image"}
+              />
+            </div>
+            <div className="mt-2 flex items-center gap-3">
+              <span className="text-sm font-medium text-brand-deep/60">Drive link (optional):</span>
+              <input value={r.driveLink ?? ""} onChange={(e) => set(r.id, "driveLink", e.target.value)}
+                placeholder="https://drive.google.com/..." className="admin-input flex-1" />
+            </div>
             <div className="mt-2 flex gap-2">
               <button onClick={() => save(r)} className="inline-flex items-center gap-1 rounded-lg bg-brand px-3 py-2 text-sm font-bold text-white hover:bg-brand-dark">
                 <Save className="h-4 w-4" /> Save
               </button>
-              <button onClick={() => remove(r.id)} className="inline-flex items-center gap-1 rounded-lg bg-red-600 px-3 py-2 text-sm font-bold text-white hover:bg-red-700">
+              <button onClick={() => setConfirmId(r.id)} className="inline-flex items-center gap-1 rounded-lg bg-red-600 px-3 py-2 text-sm font-bold text-white hover:bg-red-700">
                 <Trash2 className="h-4 w-4" /> Delete
               </button>
             </div>
           </div>
         ))}
       </div>
+      <ConfirmDialog
+        open={confirmId !== null}
+        title="Delete result?"
+        message="This will remove the result from the website."
+        onConfirm={() => confirmId && remove(confirmId)}
+        onCancel={() => setConfirmId(null)}
+      />
     </PageShell>
   );
 }
@@ -801,13 +858,13 @@ const SETTING_FIELDS = [
   { key: "email", label: "Email" },
   { key: "facebook", label: "Facebook URL" },
   { key: "whatsapp", label: "WhatsApp Number (with country code, no +)" },
-  { key: "logo", label: "Logo" },
-  { key: "cover1", label: "Cover 1" },
-  { key: "cover2", label: "Cover 2" },
-  { key: "cover3", label: "Cover 3" },
-  { key: "cover4", label: "Cover 4" },
-  { key: "cover5", label: "Cover 5" },
-  { key: "cover6", label: "Cover 6" },
+  { key: "logo", label: "Logo", image: true },
+  { key: "cover1", label: "Cover 1", image: true },
+  { key: "cover2", label: "Cover 2", image: true },
+  { key: "cover3", label: "Cover 3", image: true },
+  { key: "cover4", label: "Cover 4", image: true },
+  { key: "cover5", label: "Cover 5", image: true },
+  { key: "cover6", label: "Cover 6", image: true },
 ] as const;
 
 function SettingsManager() {
@@ -816,6 +873,7 @@ function SettingsManager() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+  const { toast } = useToast();
 
   useEffect(() => {
     (async () => {
@@ -839,9 +897,11 @@ function SettingsManager() {
         body: JSON.stringify(settings),
       });
       setSaved(true);
+      toast("success", "Settings saved");
       setTimeout(() => setSaved(false), 3000);
     } catch (e) {
       setError((e as Error).message);
+      toast("error", (e as Error).message);
     } finally {
       setSaving(false);
     }
@@ -858,15 +918,11 @@ function SettingsManager() {
         {SETTING_FIELDS.map((f) => (
           <div key={f.key}>
             <label className="mb-1 block text-sm font-semibold">{f.label}</label>
-            {f.key === "tagline" || f.key === "motto" || f.key === "address" ? (
-              <textarea value={settings[f.key] ?? ""} onChange={(e) => set(f.key, e.target.value)}
-                rows={2} className="admin-input w-full" />
+            {"image" in f && f.image ? (
+              <FileUpload value={settings[f.key] ?? ""} onChange={(v) => set(f.key, v)} label="Upload Image" />
             ) : (
-              <PhotoInput
-                value={settings[f.key] ?? ""}
-                onChange={(v) => set(f.key, v)}
-                placeholder={f.label}
-              />
+              <textarea value={settings[f.key] ?? ""} onChange={(e) => set(f.key, e.target.value)}
+                rows={f.key === "schoolName" ? 1 : 2} className="admin-input w-full" />
             )}
           </div>
         ))}
