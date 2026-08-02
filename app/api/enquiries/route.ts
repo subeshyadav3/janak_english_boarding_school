@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { ENQUIRY_EMAIL, sendMail } from "@/lib/mail";
 
+const esc = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -9,7 +12,6 @@ export async function POST(request: Request) {
     const message = String(body.message ?? "").trim();
     const phone = String(body.phone ?? "").trim();
     const email = String(body.email ?? "").trim();
-    const subject = String(body.subject ?? "").trim();
 
     if (!name || !message) {
       return NextResponse.json(
@@ -23,38 +25,43 @@ export async function POST(request: Request) {
         name,
         phone: phone || null,
         email: email || null,
-        subject: subject || null,
         message,
       },
     });
 
     if (ENQUIRY_EMAIL) {
+      const fields = [
+        { label: "Name", value: name },
+        { label: "Phone", value: phone },
+        { label: "Email", value: email },
+        { label: "Message", value: message },
+      ].filter((f) => f.value.trim());
+
+      const text = fields.map((f) => `${f.label}: ${f.value}`).join("\n");
+
+      const html = `
+        <div style="font-family: Arial, sans-serif; max-width: 560px; margin: auto; border: 1px solid #eee; border-radius: 12px; overflow: hidden;">
+          <div style="background: #4f46e5; color: #fff; padding: 16px 24px;">
+            <h2 style="margin: 0; font-size: 18px;">New website enquiry</h2>
+          </div>
+          <div style="padding: 24px;">
+            ${fields
+              .map(
+                (f) =>
+                  f.label === "Message"
+                    ? `<p style="white-space: pre-line; color: #333; margin: 0 0 12px;"><strong>${esc(f.label)}:</strong> ${esc(f.value)}</p>`
+                    : `<p style="margin: 0 0 12px;"><strong>${esc(f.label)}:</strong> ${esc(f.value)}</p>`
+              )
+              .join("")}
+          </div>
+        </div>
+      `;
+
       sendMail({
         to: ENQUIRY_EMAIL,
         subject: `New website enquiry from ${name}`,
-        text: [
-          `Name: ${name}`,
-          `Phone: ${phone || "-"}`,
-          `Email: ${email || "-"}`,
-          `Subject: ${subject || "-"}`,
-          "",
-          message,
-        ].join("\n"),
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 560px; margin: auto; border: 1px solid #eee; border-radius: 12px; overflow: hidden;">
-            <div style="background: #4f46e5; color: #fff; padding: 16px 24px;">
-              <h2 style="margin: 0; font-size: 18px;">New website enquiry</h2>
-            </div>
-            <div style="padding: 24px;">
-              <p><strong>Name:</strong> ${name}</p>
-              <p><strong>Phone:</strong> ${phone || "-"}</p>
-              <p><strong>Email:</strong> ${email || "-"}</p>
-              <p><strong>Subject:</strong> ${subject || "-"}</p>
-              <hr style="border: none; border-top: 1px solid #eee; margin: 16px 0;" />
-              <p style="white-space: pre-line; color: #333;">${message}</p>
-            </div>
-          </div>
-        `,
+        text,
+        html,
       }).catch((e) => console.error("Enquiry email failed:", e));
     }
 

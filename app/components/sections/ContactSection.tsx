@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, Mail, MessageCircle, Phone } from "lucide-react";
+import { CheckCircle2, Mail, MessageCircle } from "lucide-react";
 
 type ContactSettings = {
   email: string;
@@ -11,6 +11,7 @@ type ContactSettings = {
 
 export default function ContactSection({ settings }: { settings: ContactSettings }) {
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -19,6 +20,7 @@ export default function ContactSection({ settings }: { settings: ContactSettings
 
   const reset = () => {
     setName("");
+    setEmail("");
     setPhone("");
     setMessage("");
   };
@@ -26,6 +28,7 @@ export default function ContactSection({ settings }: { settings: ContactSettings
   const prefilled = () => {
     const lines = [];
     if (name) lines.push(`Name: ${name}`);
+    if (email) lines.push(`Email: ${email}`);
     if (phone) lines.push(`Phone: ${phone}`);
     if (message) lines.push(`Message: ${message}`);
     return lines.length ? lines.join("\n") : "";
@@ -55,7 +58,7 @@ export default function ContactSection({ settings }: { settings: ContactSettings
       const res = await fetch("/api/enquiries", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, phone, message }),
+        body: JSON.stringify({ name, email, phone, message }),
       });
       if (!res.ok) throw new Error("Failed to send");
       setSent(true);
@@ -121,20 +124,19 @@ export default function ContactSection({ settings }: { settings: ContactSettings
           />
           <div className="grid gap-4 sm:grid-cols-2">
             <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email Address"
+              type="email"
+              className="w-full rounded-lg border border-line bg-white px-4 py-3 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/30"
+            />
+            <input
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="Phone Number"
               type="tel"
               className="w-full rounded-lg border border-line bg-white px-4 py-3 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/30"
             />
-            {settings.phone && (
-              <a
-                href={`tel:${settings.phone}`}
-                className="inline-flex items-center justify-center gap-2 rounded-lg border border-line px-4 py-3 text-sm font-semibold text-brand-deep/70 hover:border-brand hover:bg-brand-soft/50 transition-colors"
-              >
-                <Phone className="h-4 w-4" /> {settings.phone}
-              </a>
-            )}
           </div>
           <textarea
             value={message}
