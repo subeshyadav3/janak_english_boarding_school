@@ -1,0 +1,44 @@
+import { NextResponse, type NextRequest } from "next/server";
+import { mkdir, writeFile } from "fs/promises";
+import path from "path";
+import { randomBytes } from "crypto";
+import { requireAdmin, unauthorized } from "@/lib/admin-guard";
+
+const ALLOWED = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
+
+export async function POST(request: NextRequest) {
+  const admin = await requireAdmin();
+  if (!admin) return unauthorized();
+
+  try {
+    const form = await request.formData();
+    const file = form.get("file");
+    if (!(file instanceof File)) {
+      return NextResponse.json({ error: "No file provided." }, { status: 400 });
+    }
+    if (!ALLOWED.has(file.type)) {
+      return NextResponse.json(
+        { error: "Only JPG, PNG, WEBP, GIF images are allowed." },
+        { status: 400 }
+      );
+    }
+    if (file.size > 8 * 1024 * 1024) {
+      return NextResponse.json(
+        { error: "File must be under 8MB." },
+        { status: 400 }
+      );
+    }
+
+    const ext = path.extname(file.name) || ".jpg";
+    const filename = `${Date.now()}-${randomBytes(6).toString("hex")}${ext}`;
+    const dir = path.join(process.cwd(), "public", "uploads");
+    await mkdir(dir, { recursive: true });
+    const buffer = Buffer.from(await file.arrayBuffer());
+    await writeFile(path.join(dir, filename), buffer);
+
+    return NextResponse.json({ url: `/uploads/${filename}` });
+  } catch (e) {
+    console.error("Upload failed:", e);
+    return NextResponse.json({ error: "Upload failed." }, { status: 500 });
+  }
+}

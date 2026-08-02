@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Setting {
+  id         String   @id @default(cuid())
+  schoolName String   @default("Janak English Boarding School Pvt. Ltd.")
+  tagline    String   @default("Shaping Young Minds for a Brighter Tomorrow")
+  motto      String   @default("Quality Education is Our Motto")
+  address    String   @default("Gaur-3, Rautahat, Nepal")
+  phone      String   @default("9845378869")
+  email      String   @default("janakenglishboardingschool@gmail.com")
+  facebook   String?
+  whatsapp   String?
+  logo       String?
+  cover1     String?
+  cover2     String?
+  cover3     String?
+  cover4     String?
+  cover5     String?
+  cover6     String?
+  updatedAt  DateTime @updatedAt
+}
+
+model Teacher {
+  id        String   @id @default(cuid())
+  name      String
+  position  String?
+  subject   String?
+  phone     String?
+  photo     String?
+  order     Int      @default(1)
+  createdAt DateTime @default(now())
+}
+
+model Notice {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  filePath    String?
+  createdAt   DateTime @default(now())
+}
+
+model Result {
+  id        String   @id @default(cuid())
+  title     String
+  driveLink String?
+  createdAt DateTime @default(now())
+}
+
+model GalleryItem {
+  id        String   @id @default(cuid())
+  imagePath String
+  title     String?
+  createdAt DateTime @default(now())
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model Enquiry {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String?
+  message   String
+  status    String   @default("new")
+  createdAt DateTime @default(now())
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  name         String?
+  role         String   @default("admin") // "admin" | "teacher"
+  createdAt    DateTime @default(now())
+}
