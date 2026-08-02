@@ -23,6 +23,7 @@ import {
   getTestimonials,
   getEvents,
 } from "@/lib/data";
+import { getSessionUser } from "@/lib/auth";
 import { SITE_URL, SCHOOL_COORDS } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
@@ -38,6 +39,7 @@ export default async function HomePage() {
       getTestimonials(),
       getEvents(),
     ]);
+  const user = await getSessionUser();
 
   const covers = [
     settings.cover1,
@@ -139,7 +141,7 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Navbar settings={settings} />
+      <Navbar settings={settings} user={user} />
       <HeroSlider
         covers={covers}
         schoolName={settings.schoolName}

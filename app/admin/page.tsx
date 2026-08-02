@@ -220,7 +220,7 @@ function AdminDashboardInner() {
             </button>
           </div>
         </div>
-        <nav className="sticky top-0 z-40 mx-auto max-w-7xl flex gap-1 overflow-x-auto bg-brand-deep px-2 pb-2 sm:px-4">
+        <nav className="sticky top-0 z-40 mx-auto max-w-7xl flex gap-1 overflow-x-auto bg-brand-deep px-2 pb-2 sm:px-4 lg:flex-wrap lg:overflow-visible">
           {TABS.map((t) => (
             <button
               key={t.id}
