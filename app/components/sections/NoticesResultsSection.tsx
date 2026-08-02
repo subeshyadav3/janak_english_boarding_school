@@ -308,20 +308,20 @@ export default function NoticesResultsSection({
             {results.map((r) => (
               <div
                 key={r.id}
-                className="flex flex-col justify-between gap-3 rounded-xl bg-white border border-line p-5 shadow-sm hover:shadow-md transition-shadow sm:flex-row sm:items-center"
+                className="rounded-xl bg-white border border-line p-5 shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="min-w-0">
                   <span className="mb-1.5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-brand/70">
                     <FileText className="h-3.5 w-3.5" /> Result Sheet
                   </span>
-                  <h3 className="truncate font-bold">{r.title || "Result"}</h3>
+                  <h3 className="font-bold">{r.title || "Result"}</h3>
                   {r.createdAt && (
                     <p className="mt-0.5 text-xs text-brand-deep/50">
                       {formatDate(r.createdAt)}
                     </p>
                   )}
                 </div>
-                <div className="flex shrink-0 flex-wrap items-center gap-2">
+                <div className="mt-3 flex flex-wrap items-center gap-2">
                   {r.filePath ? (
                     <FileViewer title={r.title || "Result"} filePath={r.filePath} />
                   ) : (

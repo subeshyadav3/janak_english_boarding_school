@@ -20,8 +20,12 @@ export async function PUT(request: NextRequest) {
     "address",
     "phone",
     "email",
+    "establishedYear",
     "facebook",
     "whatsapp",
+    "instagram",
+    "youtube",
+    "mapUrl",
     "logo",
     "cover1",
     "cover2",
@@ -31,9 +35,18 @@ export async function PUT(request: NextRequest) {
     "cover6",
   ] as const;
 
-  const data: Record<string, string | null> = {};
+  const data: Record<string, string | number | null> = {};
   for (const f of fields) {
     const v = body[f];
+    if (f === "establishedYear") {
+      data[f] =
+        typeof v === "number" && v > 0
+          ? v
+          : typeof v === "string" && v.trim()
+            ? Number(v)
+            : null;
+      continue;
+    }
     data[f] = typeof v === "string" && v.trim() ? v : null;
   }
 

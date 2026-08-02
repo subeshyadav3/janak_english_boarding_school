@@ -17,6 +17,9 @@ export async function POST(request: NextRequest) {
     data: {
       name: String(body.name ?? ""),
       message: String(body.message ?? ""),
+      role: body.role ?? "parent",
+      rating: Number(body.rating ?? 5),
+      photo: body.photo ?? null,
     },
   });
   return NextResponse.json(item, { status: 201 });

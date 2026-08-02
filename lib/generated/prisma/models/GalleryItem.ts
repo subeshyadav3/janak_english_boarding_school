@@ -28,6 +28,7 @@ export type GalleryItemMinAggregateOutputType = {
   id: string | null
   imagePath: string | null
   title: string | null
+  album: string | null
   createdAt: Date | null
 }
 
@@ -35,6 +36,7 @@ export type GalleryItemMaxAggregateOutputType = {
   id: string | null
   imagePath: string | null
   title: string | null
+  album: string | null
   createdAt: Date | null
 }
 
@@ -42,6 +44,7 @@ export type GalleryItemCountAggregateOutputType = {
   id: number
   imagePath: number
   title: number
+  album: number
   createdAt: number
   _all: number
 }
@@ -51,6 +54,7 @@ export type GalleryItemMinAggregateInputType = {
   id?: true
   imagePath?: true
   title?: true
+  album?: true
   createdAt?: true
 }
 
@@ -58,6 +62,7 @@ export type GalleryItemMaxAggregateInputType = {
   id?: true
   imagePath?: true
   title?: true
+  album?: true
   createdAt?: true
 }
 
@@ -65,6 +70,7 @@ export type GalleryItemCountAggregateInputType = {
   id?: true
   imagePath?: true
   title?: true
+  album?: true
   createdAt?: true
   _all?: true
 }
@@ -145,6 +151,7 @@ export type GalleryItemGroupByOutputType = {
   id: string
   imagePath: string
   title: string | null
+  album: string | null
   createdAt: Date
   _count: GalleryItemCountAggregateOutputType | null
   _min: GalleryItemMinAggregateOutputType | null
@@ -173,6 +180,7 @@ export type GalleryItemWhereInput = {
   id?: Prisma.StringFilter<"GalleryItem"> | string
   imagePath?: Prisma.StringFilter<"GalleryItem"> | string
   title?: Prisma.StringNullableFilter<"GalleryItem"> | string | null
+  album?: Prisma.StringNullableFilter<"GalleryItem"> | string | null
   createdAt?: Prisma.DateTimeFilter<"GalleryItem"> | Date | string
 }
 
@@ -180,6 +188,7 @@ export type GalleryItemOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   imagePath?: Prisma.SortOrder
   title?: Prisma.SortOrderInput | Prisma.SortOrder
+  album?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -190,6 +199,7 @@ export type GalleryItemWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.GalleryItemWhereInput | Prisma.GalleryItemWhereInput[]
   imagePath?: Prisma.StringFilter<"GalleryItem"> | string
   title?: Prisma.StringNullableFilter<"GalleryItem"> | string | null
+  album?: Prisma.StringNullableFilter<"GalleryItem"> | string | null
   createdAt?: Prisma.DateTimeFilter<"GalleryItem"> | Date | string
 }, "id">
 
@@ -197,6 +207,7 @@ export type GalleryItemOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   imagePath?: Prisma.SortOrder
   title?: Prisma.SortOrderInput | Prisma.SortOrder
+  album?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.GalleryItemCountOrderByAggregateInput
   _max?: Prisma.GalleryItemMaxOrderByAggregateInput
@@ -210,6 +221,7 @@ export type GalleryItemScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"GalleryItem"> | string
   imagePath?: Prisma.StringWithAggregatesFilter<"GalleryItem"> | string
   title?: Prisma.StringNullableWithAggregatesFilter<"GalleryItem"> | string | null
+  album?: Prisma.StringNullableWithAggregatesFilter<"GalleryItem"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"GalleryItem"> | Date | string
 }
 
@@ -217,6 +229,7 @@ export type GalleryItemCreateInput = {
   id?: string
   imagePath: string
   title?: string | null
+  album?: string | null
   createdAt?: Date | string
 }
 
@@ -224,6 +237,7 @@ export type GalleryItemUncheckedCreateInput = {
   id?: string
   imagePath: string
   title?: string | null
+  album?: string | null
   createdAt?: Date | string
 }
 
@@ -231,6 +245,7 @@ export type GalleryItemUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  album?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -238,6 +253,7 @@ export type GalleryItemUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  album?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -245,6 +261,7 @@ export type GalleryItemCreateManyInput = {
   id?: string
   imagePath: string
   title?: string | null
+  album?: string | null
   createdAt?: Date | string
 }
 
@@ -252,6 +269,7 @@ export type GalleryItemUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  album?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -259,6 +277,7 @@ export type GalleryItemUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  album?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -266,6 +285,7 @@ export type GalleryItemCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   imagePath?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  album?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -273,6 +293,7 @@ export type GalleryItemMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   imagePath?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  album?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -280,6 +301,7 @@ export type GalleryItemMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   imagePath?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  album?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -289,6 +311,7 @@ export type GalleryItemSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   id?: boolean
   imagePath?: boolean
   title?: boolean
+  album?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["galleryItem"]>
 
@@ -296,6 +319,7 @@ export type GalleryItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   imagePath?: boolean
   title?: boolean
+  album?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["galleryItem"]>
 
@@ -303,6 +327,7 @@ export type GalleryItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   imagePath?: boolean
   title?: boolean
+  album?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["galleryItem"]>
 
@@ -310,10 +335,11 @@ export type GalleryItemSelectScalar = {
   id?: boolean
   imagePath?: boolean
   title?: boolean
+  album?: boolean
   createdAt?: boolean
 }
 
-export type GalleryItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "imagePath" | "title" | "createdAt", ExtArgs["result"]["galleryItem"]>
+export type GalleryItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "imagePath" | "title" | "album" | "createdAt", ExtArgs["result"]["galleryItem"]>
 
 export type $GalleryItemPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "GalleryItem"
@@ -322,6 +348,7 @@ export type $GalleryItemPayload<ExtArgs extends runtime.Types.Extensions.Interna
     id: string
     imagePath: string
     title: string | null
+    album: string | null
     createdAt: Date
   }, ExtArgs["result"]["galleryItem"]>
   composites: {}
@@ -749,6 +776,7 @@ export interface GalleryItemFieldRefs {
   readonly id: Prisma.FieldRef<"GalleryItem", 'String'>
   readonly imagePath: Prisma.FieldRef<"GalleryItem", 'String'>
   readonly title: Prisma.FieldRef<"GalleryItem", 'String'>
+  readonly album: Prisma.FieldRef<"GalleryItem", 'String'>
   readonly createdAt: Prisma.FieldRef<"GalleryItem", 'DateTime'>
 }
     

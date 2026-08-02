@@ -1,3 +1,7 @@
+export const MAP_EMBED = "https://www.google.com/maps?q=26.7659182,85.2689964&z=17&output=embed";
+export const MAP_DIRECTIONS = "https://maps.app.goo.gl/UiTVMWV77H1VESez8";
+export const MAP_SHORT = "https://maps.app.goo.gl/UiTVMWV77H1VESez8";
+
 export type SiteSettings = {
   schoolName: string;
   tagline: string;
@@ -5,8 +9,12 @@ export type SiteSettings = {
   address: string;
   phone: string;
   email: string;
+  establishedYear?: number | null;
   facebook?: string | null;
   whatsapp?: string | null;
+  instagram?: string | null;
+  youtube?: string | null;
+  mapUrl?: string | null;
   logo?: string | null;
   cover1?: string | null;
   cover2?: string | null;
@@ -23,8 +31,10 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   address: "Gaur-3, Rautahat, Nepal",
   phone: "9845378869",
   email: "janakenglishboardingschool@gmail.com",
+  establishedYear: 1996,
   facebook: "https://www.facebook.com/share/1BQYpmXLmM/",
   whatsapp: "9779855040326",
+  mapUrl: MAP_DIRECTIONS,
   logo: "/assets/logo.png",
   cover1: "/assets/cover1.png",
   cover2: "/assets/cover2.png",
@@ -98,8 +108,3 @@ export const FEATURES = [
   "Personality development and leadership skills",
   "A safe, friendly, and inspiring school environment",
 ];
-
-export const MAP_EMBED = "https://www.google.com/maps?q=26.7659182,85.2689964&z=17&output=embed";
-export const MAP_DIRECTIONS =
-  "https://www.google.com/maps/place/Janak+English+boarding+school+Gaur,+Rautahat+Nepal/@26.7659182,85.2689964,623m";
-export const MAP_SHORT = "https://maps.app.goo.gl/F29y7MG6Th8KEr3U9";

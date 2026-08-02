@@ -21,6 +21,8 @@ async function main() {
       email: "janakenglishboardingschool@gmail.com",
       facebook: "https://www.facebook.com/share/1BQYpmXLmM/",
       whatsapp: "9779855040326",
+      establishedYear: 1996,
+      mapUrl: "https://maps.app.goo.gl/UiTVMWV77H1VESez8",
       logo: "/assets/logo.png",
       cover1: "/assets/cover1.png",
       cover2: "/assets/cover2.png",
@@ -38,17 +40,25 @@ async function main() {
         name: "Sunny Deol Patel",
         position: "Co-ordinator",
         subject: "Mathematics",
+        qualification: "M.A. Mathematics, B.Ed.",
+        email: "sunnydeol@janakschool.edu.np",
         phone: "9844608775",
         photo: "/assets/teacher_sunny_deol_patel.jpg",
         order: 1,
+        active: true,
+        joinedAt: new Date("2018-04-12"),
       },
       {
         name: "Randir Kumar Sah",
         position: "Vice-Principal",
         subject: "Computer",
+        qualification: "M.Sc. Computer Science",
+        email: "randir@janakschool.edu.np",
         phone: "9865137594",
         photo: "/assets/teacher_randir_kumar_sah.jpg",
         order: 2,
+        active: true,
+        joinedAt: new Date("2015-02-01"),
       },
     ],
   });
@@ -60,17 +70,23 @@ async function main() {
         title: "Result publication",
         description:
           "The results of 1st terminal Examination 2083 is going to be published on 2083/04/10 Sunday",
+        category: "exam",
         filePath: "/uploads/grade8-result-sample.pdf",
+        published: true,
       },
       {
         title: "Admission Open 2083",
         description:
           "Admissions are now open for Nursery to Grade 8 for the academic session 2083. Contact the school office for details.",
+        category: "admission",
+        published: true,
       },
       {
         title: "Parents-Teachers Meeting",
         description:
           "A parents-teachers meeting has been scheduled for the coming Saturday. All guardians are requested to attend.",
+        category: "meeting",
+        published: true,
       },
     ],
   });
@@ -90,15 +106,49 @@ async function main() {
     ],
   });
 
+  await prisma.event.deleteMany();
+  await prisma.event.createMany({
+    data: [
+      {
+        title: "Annual Sports Day",
+        description: "Inter-house sports competition and athletic events for all grades.",
+        date: new Date("2026-09-15T09:00:00"),
+        time: "9:00 AM",
+        location: "School Playground",
+      },
+      {
+        title: "Parents-Teachers Meeting",
+        description: "Meet your child's teachers to discuss academic progress.",
+        date: new Date("2026-09-22T10:00:00"),
+        time: "10:00 AM",
+        location: "School Hall",
+      },
+      {
+        title: "Dashain Tihar Break",
+        description: "School remains closed for the festive break.",
+        date: new Date("2026-10-01T00:00:00"),
+        time: "All Day",
+        location: "School",
+      },
+      {
+        title: "Annual Day Celebration",
+        description: "Annual cultural program and prize distribution ceremony.",
+        date: new Date("2026-12-25T14:00:00"),
+        time: "2:00 PM",
+        location: "Main Auditorium",
+      },
+    ],
+  });
+
   await prisma.galleryItem.deleteMany();
   await prisma.galleryItem.createMany({
     data: [
-      { imagePath: "/assets/cover1.png", title: "School Building" },
-      { imagePath: "/assets/cover2.png", title: "Students in Class" },
-      { imagePath: "/assets/cover3.png", title: "Annual Day Celebration" },
-      { imagePath: "/assets/cover4.png", title: "Sports Day" },
-      { imagePath: "/assets/cover5.png", title: "Cultural Program" },
-      { imagePath: "/assets/cover6.png", title: "Awards Ceremony" },
+      { imagePath: "/assets/cover1.png", title: "School Building", album: "Campus" },
+      { imagePath: "/assets/cover2.png", title: "Students in Class", album: "Classroom" },
+      { imagePath: "/assets/cover3.png", title: "Annual Day Celebration", album: "Events" },
+      { imagePath: "/assets/cover4.png", title: "Sports Day", album: "Events" },
+      { imagePath: "/assets/cover5.png", title: "Cultural Program", album: "Events" },
+      { imagePath: "/assets/cover6.png", title: "Awards Ceremony", album: "Events" },
     ],
   });
 
@@ -109,16 +159,29 @@ async function main() {
         name: "Sita Devi Sah",
         message:
           "Janak English Boarding School has given my children the confidence and discipline they needed. The teachers are truly dedicated.",
+        role: "parent",
+        rating: 5,
       },
       {
         name: "Ramesh Prasad Gupta",
         message:
           "The best decision we made was enrolling our kids here. English medium education with strong moral values - exactly what a child needs.",
+        role: "parent",
+        rating: 5,
       },
       {
         name: "Gita Kumari Yadav",
         message:
           "I am impressed by the individual attention my child receives. The school feels like a second home for our family.",
+        role: "parent",
+        rating: 4,
+      },
+      {
+        name: "Aarav Sah",
+        message:
+          "Studying here has helped me grow both academically and personally. The teachers always support us.",
+        role: "student",
+        rating: 5,
       },
     ],
   });

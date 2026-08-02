@@ -8,42 +8,53 @@ datasource db {
 }
 
 model Setting {
-  id         String   @id @default(cuid())
-  schoolName String   @default("Janak English Boarding School Pvt. Ltd.")
-  tagline    String   @default("Shaping Young Minds for a Brighter Tomorrow")
-  motto      String   @default("Quality Education is Our Motto")
-  address    String   @default("Gaur-3, Rautahat, Nepal")
-  phone      String   @default("9845378869")
-  email      String   @default("janakenglishboardingschool@gmail.com")
-  facebook   String?
-  whatsapp   String?
-  logo       String?
-  cover1     String?
-  cover2     String?
-  cover3     String?
-  cover4     String?
-  cover5     String?
-  cover6     String?
-  updatedAt  DateTime @updatedAt
+  id              String   @id @default(cuid())
+  schoolName      String   @default("Janak English Boarding School Pvt. Ltd.")
+  tagline         String   @default("Shaping Young Minds for a Brighter Tomorrow")
+  motto           String   @default("Quality Education is Our Motto")
+  address         String   @default("Gaur-3, Rautahat, Nepal")
+  phone           String   @default("9845378869")
+  email           String   @default("janakenglishboardingschool@gmail.com")
+  establishedYear Int?
+  facebook        String?
+  whatsapp        String?
+  instagram       String?
+  youtube         String?
+  mapUrl          String?
+  logo            String?
+  cover1          String?
+  cover2          String?
+  cover3          String?
+  cover4          String?
+  cover5          String?
+  cover6          String?
+  updatedAt       DateTime @updatedAt
 }
 
 model Teacher {
-  id        String   @id @default(cuid())
-  name      String
-  position  String?
-  subject   String?
-  phone     String?
-  photo     String?
-  order     Int      @default(1)
-  createdAt DateTime @default(now())
+  id            String   @id @default(cuid())
+  name          String
+  position      String?
+  subject       String?
+  qualification String?
+  email         String?
+  phone         String?
+  photo         String?
+  order         Int      @default(1)
+  active        Boolean  @default(true)
+  joinedAt      DateTime?
+  createdAt     DateTime @default(now())
 }
 
 model Notice {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   title       String
   description String?
+  category    String    @default("general") // "admission" | "exam" | "event" | "meeting" | "general"
   filePath    String?
-  createdAt   DateTime @default(now())
+  published   Boolean   @default(true)
+  publishAt   DateTime?
+  createdAt   DateTime  @default(now())
 }
 
 model Result {
@@ -54,10 +65,21 @@ model Result {
   createdAt DateTime @default(now())
 }
 
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  date        DateTime
+  time        String?
+  location    String?
+  createdAt   DateTime @default(now())
+}
+
 model GalleryItem {
   id        String   @id @default(cuid())
   imagePath String
   title     String?
+  album     String?
   createdAt DateTime @default(now())
 }
 
@@ -65,15 +87,22 @@ model Testimonial {
   id        String   @id @default(cuid())
   name      String
   message   String
+  role      String? // "parent" | "student" | "alumni"
+  rating    Int      @default(5)
+  photo     String?
   createdAt DateTime @default(now())
 }
 
 model Enquiry {
   id        String   @id @default(cuid())
   name      String
+  email     String?
   phone     String?
+  subject   String?
   message   String
-  status    String   @default("new")
+  category  String   @default("general")
+  status    String   @default("new") // "new" | "contacted" | "resolved"
+  read      Boolean  @default(false)
   createdAt DateTime @default(now())
 }
 

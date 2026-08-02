@@ -20,9 +20,13 @@ export async function PATCH(request: NextRequest, ctx: RouteContext<"/api/admin/
       name: String(body.name ?? ""),
       position: body.position ?? "",
       subject: body.subject ?? "",
+      qualification: body.qualification ?? "",
+      email: body.email ?? "",
       phone: body.phone ?? "",
       photo: body.photo ?? "",
       order: Number(body.order ?? 1),
+      active: body.active ?? true,
+      joinedAt: body.joinedAt ? new Date(body.joinedAt) : undefined,
     },
   });
   return NextResponse.json(item);

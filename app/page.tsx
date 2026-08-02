@@ -10,29 +10,32 @@ import TeachersSection from "@/app/components/sections/TeachersSection";
 import NoticesResultsSection from "@/app/components/sections/NoticesResultsSection";
 import TestimonialsSection from "@/app/components/sections/TestimonialsSection";
 import GallerySection from "@/app/components/sections/GallerySection";
-import LocationSection from "@/app/components/sections/LocationSection";
-import ContactSection from "@/app/components/sections/ContactSection";
+import EventsSection from "@/app/components/sections/EventsSection";
 import FaqSection from "@/app/components/sections/FaqSection";
+import ContactSection from "@/app/components/sections/ContactSection";
+import LocationSection from "@/app/components/sections/LocationSection";
 import {
   getSettings,
   getTeachers,
-  getNotices,
+  getNoticesPublic,
   getResults,
   getGallery,
   getTestimonials,
+  getEvents,
 } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [settings, teachers, notices, results, gallery, testimonials] =
+  const [settings, teachers, notices, results, gallery, testimonials, events] =
     await Promise.all([
       getSettings(),
       getTeachers(),
-      getNotices(),
+      getNoticesPublic(),
       getResults(),
       getGallery(),
       getTestimonials(),
+      getEvents(),
     ]);
 
   const covers = [
@@ -118,9 +121,9 @@ export default async function HomePage() {
         <FacilitiesSection />
         <TeachersSection teachers={teachers} />
         <NoticesResultsSection notices={notices} results={results} />
+        <EventsSection events={events} />
         <TestimonialsSection testimonials={testimonials} />
         <GallerySection items={gallery} />
-        <LocationSection address={settings.address} />
         <FaqSection />
         <ContactSection
           settings={{
@@ -128,6 +131,7 @@ export default async function HomePage() {
             whatsapp: settings.whatsapp,
           }}
         />
+        <LocationSection address={settings.address} />
       </main>
       <Footer settings={settings} />
     </>

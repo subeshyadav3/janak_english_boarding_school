@@ -7,6 +7,8 @@ export async function POST(request: Request) {
     const name = String(body.name ?? "").trim();
     const message = String(body.message ?? "").trim();
     const phone = String(body.phone ?? "").trim();
+    const email = String(body.email ?? "").trim();
+    const subject = String(body.subject ?? "").trim();
 
     if (!name || !message) {
       return NextResponse.json(
@@ -16,7 +18,13 @@ export async function POST(request: Request) {
     }
 
     await prisma.enquiry.create({
-      data: { name, phone: phone || null, message },
+      data: {
+        name,
+        phone: phone || null,
+        email: email || null,
+        subject: subject || null,
+        message,
+      },
     });
 
     return NextResponse.json({ success: true });

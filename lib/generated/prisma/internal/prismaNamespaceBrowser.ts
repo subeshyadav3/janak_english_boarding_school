@@ -55,6 +55,7 @@ export const ModelName = {
   Teacher: 'Teacher',
   Notice: 'Notice',
   Result: 'Result',
+  Event: 'Event',
   GalleryItem: 'GalleryItem',
   Testimonial: 'Testimonial',
   Enquiry: 'Enquiry',
@@ -85,8 +86,12 @@ export const SettingScalarFieldEnum = {
   address: 'address',
   phone: 'phone',
   email: 'email',
+  establishedYear: 'establishedYear',
   facebook: 'facebook',
   whatsapp: 'whatsapp',
+  instagram: 'instagram',
+  youtube: 'youtube',
+  mapUrl: 'mapUrl',
   logo: 'logo',
   cover1: 'cover1',
   cover2: 'cover2',
@@ -105,9 +110,13 @@ export const TeacherScalarFieldEnum = {
   name: 'name',
   position: 'position',
   subject: 'subject',
+  qualification: 'qualification',
+  email: 'email',
   phone: 'phone',
   photo: 'photo',
   order: 'order',
+  active: 'active',
+  joinedAt: 'joinedAt',
   createdAt: 'createdAt'
 } as const
 
@@ -118,7 +127,10 @@ export const NoticeScalarFieldEnum = {
   id: 'id',
   title: 'title',
   description: 'description',
+  category: 'category',
   filePath: 'filePath',
+  published: 'published',
+  publishAt: 'publishAt',
   createdAt: 'createdAt'
 } as const
 
@@ -136,10 +148,24 @@ export const ResultScalarFieldEnum = {
 export type ResultScalarFieldEnum = (typeof ResultScalarFieldEnum)[keyof typeof ResultScalarFieldEnum]
 
 
+export const EventScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  date: 'date',
+  time: 'time',
+  location: 'location',
+  createdAt: 'createdAt'
+} as const
+
+export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
+
+
 export const GalleryItemScalarFieldEnum = {
   id: 'id',
   imagePath: 'imagePath',
   title: 'title',
+  album: 'album',
   createdAt: 'createdAt'
 } as const
 
@@ -150,6 +176,9 @@ export const TestimonialScalarFieldEnum = {
   id: 'id',
   name: 'name',
   message: 'message',
+  role: 'role',
+  rating: 'rating',
+  photo: 'photo',
   createdAt: 'createdAt'
 } as const
 
@@ -159,9 +188,13 @@ export type TestimonialScalarFieldEnum = (typeof TestimonialScalarFieldEnum)[key
 export const EnquiryScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  email: 'email',
   phone: 'phone',
+  subject: 'subject',
   message: 'message',
+  category: 'category',
   status: 'status',
+  read: 'read',
   createdAt: 'createdAt'
 } as const
 
