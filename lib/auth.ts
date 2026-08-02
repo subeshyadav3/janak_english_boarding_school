@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
 
 const COOKIE_NAME = "admin_session";
-const SESSION_TTL = 60 * 60 * 24 * 7; // 7 days in seconds
+const SESSION_TTL = 60 * 60 * 24 * 180; // 180 days (~6 months) in seconds
 
 function sign(payload: string, secret: string) {
   return createHmac("sha256", secret).update(payload).digest("hex");

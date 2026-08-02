@@ -58,3 +58,16 @@ export async function getTestimonials() {
     take: 6,
   });
 }
+
+export async function getEvents() {
+  if (!(await dbAvailable())) return [];
+  return prisma.event.findMany({ orderBy: { date: "asc" } });
+}
+
+export async function getNoticesPublic() {
+  if (!(await dbAvailable())) return DEFAULT_NOTICES;
+  return prisma.notice.findMany({
+    where: { published: true },
+    orderBy: { createdAt: "desc" },
+  });
+}

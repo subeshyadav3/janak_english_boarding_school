@@ -38,6 +38,11 @@ export type Notice = Prisma.NoticeModel
  */
 export type Result = Prisma.ResultModel
 /**
+ * Model Event
+ * 
+ */
+export type Event = Prisma.EventModel
+/**
  * Model GalleryItem
  * 
  */

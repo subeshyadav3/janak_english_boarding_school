@@ -41,3 +41,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# AI agent / local scratch docs (not part of the repo)
+AGENTS.md
+agents.md
+CLAUDE.md
+plan.md
+.agent/
+.agents/
+.claude/

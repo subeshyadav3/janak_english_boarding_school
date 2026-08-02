@@ -1,6 +1,10 @@
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/auth";
 
+export const metadata = {
+  robots: { index: false, follow: false },
+};
+
 export default async function AdminLayout({
   children,
 }: {

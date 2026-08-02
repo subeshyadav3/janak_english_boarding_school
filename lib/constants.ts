@@ -1,3 +1,27 @@
+export const MAP_EMBED = "https://www.google.com/maps?q=26.7659182,85.2689964&z=17&output=embed";
+export const MAP_DIRECTIONS = "https://maps.app.goo.gl/UiTVMWV77H1VESez8";
+export const MAP_SHORT = "https://maps.app.goo.gl/UiTVMWV77H1VESez8";
+
+export const ENQUIRY_CATEGORIES = [
+  "admission",
+  "fees",
+  "academics",
+  "events",
+  "transport",
+  "general",
+  "other",
+] as const;
+
+export const ENQUIRY_CATEGORY_LABELS: Record<string, string> = {
+  admission: "Admission",
+  fees: "Fees & Payment",
+  academics: "Academics / Results",
+  events: "Events & Programs",
+  transport: "Transport",
+  general: "General",
+  other: "Other",
+};
+
 export type SiteSettings = {
   schoolName: string;
   tagline: string;
@@ -5,8 +29,12 @@ export type SiteSettings = {
   address: string;
   phone: string;
   email: string;
+  establishedYear?: number | null;
   facebook?: string | null;
   whatsapp?: string | null;
+  instagram?: string | null;
+  youtube?: string | null;
+  mapUrl?: string | null;
   logo?: string | null;
   cover1?: string | null;
   cover2?: string | null;
@@ -14,6 +42,11 @@ export type SiteSettings = {
   cover4?: string | null;
   cover5?: string | null;
   cover6?: string | null;
+  admissionTitle?: string | null;
+  admissionText?: string | null;
+  admissionCallLabel?: string | null;
+  admissionWhatsappLabel?: string | null;
+  admissionEnabled?: boolean;
 };
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -23,8 +56,10 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   address: "Gaur-3, Rautahat, Nepal",
   phone: "9845378869",
   email: "janakenglishboardingschool@gmail.com",
-  facebook: "https://www.facebook.com/share/1BQYpmXLmM/",
-  whatsapp: "9779855040326",
+  establishedYear: 1996,
+  facebook: "https://www.facebook.com/p/Janak-English-Boarding-school-PvtLtd-61574904595487/",
+  whatsapp: "9779845378869",
+  mapUrl: MAP_DIRECTIONS,
   logo: "/assets/logo.png",
   cover1: "/assets/cover1.png",
   cover2: "/assets/cover2.png",
@@ -32,6 +67,12 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   cover4: "/assets/cover4.png",
   cover5: "/assets/cover5.png",
   cover6: "/assets/cover6.png",
+  admissionTitle: "Admissions Open — Nursery to Grade 8",
+  admissionText:
+    "English medium, disciplined and caring environment. Enroll your child today for a brighter tomorrow.",
+  admissionCallLabel: "Call Us",
+  admissionWhatsappLabel: "WhatsApp Us",
+  admissionEnabled: true,
 };
 
 export const DEFAULT_TEACHERS = [
@@ -98,8 +139,3 @@ export const FEATURES = [
   "Personality development and leadership skills",
   "A safe, friendly, and inspiring school environment",
 ];
-
-export const MAP_EMBED = "https://www.google.com/maps?q=26.7659182,85.2689964&z=17&output=embed";
-export const MAP_DIRECTIONS =
-  "https://www.google.com/maps/place/Janak+English+boarding+school+Gaur,+Rautahat+Nepal/@26.7659182,85.2689964,623m";
-export const MAP_SHORT = "https://maps.app.goo.gl/F29y7MG6Th8KEr3U9";

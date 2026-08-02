@@ -12,6 +12,9 @@ export async function PATCH(request: NextRequest, ctx: RouteContext<"/api/admin/
     data: {
       name: String(body.name ?? ""),
       message: String(body.message ?? ""),
+      role: body.role ?? "parent",
+      rating: Number(body.rating ?? 5),
+      photo: body.photo ?? undefined,
     },
   });
   return NextResponse.json(item);

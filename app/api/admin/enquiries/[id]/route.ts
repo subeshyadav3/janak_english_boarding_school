@@ -9,7 +9,10 @@ export async function PATCH(request: NextRequest, ctx: RouteContext<"/api/admin/
   const body = await request.json();
   const item = await prisma.enquiry.update({
     where: { id },
-    data: { status: body.status ?? "new" },
+    data: {
+      status: body.status ?? undefined,
+      read: body.read ?? undefined,
+    },
   });
   return NextResponse.json(item);
 }

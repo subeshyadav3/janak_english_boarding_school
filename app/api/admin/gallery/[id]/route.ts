@@ -12,6 +12,7 @@ export async function PATCH(request: NextRequest, ctx: RouteContext<"/api/admin/
     data: {
       imagePath: String(body.imagePath ?? ""),
       title: body.title ?? "",
+      album: body.album ?? undefined,
     },
   });
   return NextResponse.json(item);

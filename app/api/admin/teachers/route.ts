@@ -26,9 +26,13 @@ export async function POST(request: NextRequest) {
       name: String(body.name ?? ""),
       position: body.position ?? "",
       subject: body.subject ?? "",
+      qualification: body.qualification ?? "",
+      email: body.email ?? "",
       phone: body.phone ?? "",
       photo: body.photo ?? "",
       order: Number(body.order ?? (maxOrder._max.order ?? 0) + 1),
+      active: body.active ?? true,
+      joinedAt: body.joinedAt ? new Date(body.joinedAt) : null,
     },
   });
   return NextResponse.json(item, { status: 201 });

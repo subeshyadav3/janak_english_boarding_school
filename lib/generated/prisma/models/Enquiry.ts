@@ -27,27 +27,39 @@ export type AggregateEnquiry = {
 export type EnquiryMinAggregateOutputType = {
   id: string | null
   name: string | null
+  email: string | null
   phone: string | null
+  subject: string | null
   message: string | null
+  category: string | null
   status: string | null
+  read: boolean | null
   createdAt: Date | null
 }
 
 export type EnquiryMaxAggregateOutputType = {
   id: string | null
   name: string | null
+  email: string | null
   phone: string | null
+  subject: string | null
   message: string | null
+  category: string | null
   status: string | null
+  read: boolean | null
   createdAt: Date | null
 }
 
 export type EnquiryCountAggregateOutputType = {
   id: number
   name: number
+  email: number
   phone: number
+  subject: number
   message: number
+  category: number
   status: number
+  read: number
   createdAt: number
   _all: number
 }
@@ -56,27 +68,39 @@ export type EnquiryCountAggregateOutputType = {
 export type EnquiryMinAggregateInputType = {
   id?: true
   name?: true
+  email?: true
   phone?: true
+  subject?: true
   message?: true
+  category?: true
   status?: true
+  read?: true
   createdAt?: true
 }
 
 export type EnquiryMaxAggregateInputType = {
   id?: true
   name?: true
+  email?: true
   phone?: true
+  subject?: true
   message?: true
+  category?: true
   status?: true
+  read?: true
   createdAt?: true
 }
 
 export type EnquiryCountAggregateInputType = {
   id?: true
   name?: true
+  email?: true
   phone?: true
+  subject?: true
   message?: true
+  category?: true
   status?: true
+  read?: true
   createdAt?: true
   _all?: true
 }
@@ -156,9 +180,13 @@ export type EnquiryGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type EnquiryGroupByOutputType = {
   id: string
   name: string
+  email: string | null
   phone: string | null
+  subject: string | null
   message: string
+  category: string
   status: string
+  read: boolean
   createdAt: Date
   _count: EnquiryCountAggregateOutputType | null
   _min: EnquiryMinAggregateOutputType | null
@@ -186,18 +214,26 @@ export type EnquiryWhereInput = {
   NOT?: Prisma.EnquiryWhereInput | Prisma.EnquiryWhereInput[]
   id?: Prisma.StringFilter<"Enquiry"> | string
   name?: Prisma.StringFilter<"Enquiry"> | string
+  email?: Prisma.StringNullableFilter<"Enquiry"> | string | null
   phone?: Prisma.StringNullableFilter<"Enquiry"> | string | null
+  subject?: Prisma.StringNullableFilter<"Enquiry"> | string | null
   message?: Prisma.StringFilter<"Enquiry"> | string
+  category?: Prisma.StringFilter<"Enquiry"> | string
   status?: Prisma.StringFilter<"Enquiry"> | string
+  read?: Prisma.BoolFilter<"Enquiry"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Enquiry"> | Date | string
 }
 
 export type EnquiryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  subject?: Prisma.SortOrderInput | Prisma.SortOrder
   message?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  read?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -207,18 +243,26 @@ export type EnquiryWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.EnquiryWhereInput[]
   NOT?: Prisma.EnquiryWhereInput | Prisma.EnquiryWhereInput[]
   name?: Prisma.StringFilter<"Enquiry"> | string
+  email?: Prisma.StringNullableFilter<"Enquiry"> | string | null
   phone?: Prisma.StringNullableFilter<"Enquiry"> | string | null
+  subject?: Prisma.StringNullableFilter<"Enquiry"> | string | null
   message?: Prisma.StringFilter<"Enquiry"> | string
+  category?: Prisma.StringFilter<"Enquiry"> | string
   status?: Prisma.StringFilter<"Enquiry"> | string
+  read?: Prisma.BoolFilter<"Enquiry"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Enquiry"> | Date | string
 }, "id">
 
 export type EnquiryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  subject?: Prisma.SortOrderInput | Prisma.SortOrder
   message?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  read?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.EnquiryCountOrderByAggregateInput
   _max?: Prisma.EnquiryMaxOrderByAggregateInput
@@ -231,99 +275,143 @@ export type EnquiryScalarWhereWithAggregatesInput = {
   NOT?: Prisma.EnquiryScalarWhereWithAggregatesInput | Prisma.EnquiryScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Enquiry"> | string
   name?: Prisma.StringWithAggregatesFilter<"Enquiry"> | string
+  email?: Prisma.StringNullableWithAggregatesFilter<"Enquiry"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"Enquiry"> | string | null
+  subject?: Prisma.StringNullableWithAggregatesFilter<"Enquiry"> | string | null
   message?: Prisma.StringWithAggregatesFilter<"Enquiry"> | string
+  category?: Prisma.StringWithAggregatesFilter<"Enquiry"> | string
   status?: Prisma.StringWithAggregatesFilter<"Enquiry"> | string
+  read?: Prisma.BoolWithAggregatesFilter<"Enquiry"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Enquiry"> | Date | string
 }
 
 export type EnquiryCreateInput = {
   id?: string
   name: string
+  email?: string | null
   phone?: string | null
+  subject?: string | null
   message: string
+  category?: string
   status?: string
+  read?: boolean
   createdAt?: Date | string
 }
 
 export type EnquiryUncheckedCreateInput = {
   id?: string
   name: string
+  email?: string | null
   phone?: string | null
+  subject?: string | null
   message: string
+  category?: string
   status?: string
+  read?: boolean
   createdAt?: Date | string
 }
 
 export type EnquiryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   message?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  read?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type EnquiryUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   message?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  read?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type EnquiryCreateManyInput = {
   id?: string
   name: string
+  email?: string | null
   phone?: string | null
+  subject?: string | null
   message: string
+  category?: string
   status?: string
+  read?: boolean
   createdAt?: Date | string
 }
 
 export type EnquiryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   message?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  read?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type EnquiryUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   message?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  read?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type EnquiryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  subject?: Prisma.SortOrder
   message?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  read?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type EnquiryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  subject?: Prisma.SortOrder
   message?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  read?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type EnquiryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  subject?: Prisma.SortOrder
   message?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  read?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -332,40 +420,56 @@ export type EnquiryMinOrderByAggregateInput = {
 export type EnquirySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  email?: boolean
   phone?: boolean
+  subject?: boolean
   message?: boolean
+  category?: boolean
   status?: boolean
+  read?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["enquiry"]>
 
 export type EnquirySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  email?: boolean
   phone?: boolean
+  subject?: boolean
   message?: boolean
+  category?: boolean
   status?: boolean
+  read?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["enquiry"]>
 
 export type EnquirySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  email?: boolean
   phone?: boolean
+  subject?: boolean
   message?: boolean
+  category?: boolean
   status?: boolean
+  read?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["enquiry"]>
 
 export type EnquirySelectScalar = {
   id?: boolean
   name?: boolean
+  email?: boolean
   phone?: boolean
+  subject?: boolean
   message?: boolean
+  category?: boolean
   status?: boolean
+  read?: boolean
   createdAt?: boolean
 }
 
-export type EnquiryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "phone" | "message" | "status" | "createdAt", ExtArgs["result"]["enquiry"]>
+export type EnquiryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "phone" | "subject" | "message" | "category" | "status" | "read" | "createdAt", ExtArgs["result"]["enquiry"]>
 
 export type $EnquiryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Enquiry"
@@ -373,9 +477,13 @@ export type $EnquiryPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
+    email: string | null
     phone: string | null
+    subject: string | null
     message: string
+    category: string
     status: string
+    read: boolean
     createdAt: Date
   }, ExtArgs["result"]["enquiry"]>
   composites: {}
@@ -802,9 +910,13 @@ export interface Prisma__EnquiryClient<T, Null = never, ExtArgs extends runtime.
 export interface EnquiryFieldRefs {
   readonly id: Prisma.FieldRef<"Enquiry", 'String'>
   readonly name: Prisma.FieldRef<"Enquiry", 'String'>
+  readonly email: Prisma.FieldRef<"Enquiry", 'String'>
   readonly phone: Prisma.FieldRef<"Enquiry", 'String'>
+  readonly subject: Prisma.FieldRef<"Enquiry", 'String'>
   readonly message: Prisma.FieldRef<"Enquiry", 'String'>
+  readonly category: Prisma.FieldRef<"Enquiry", 'String'>
   readonly status: Prisma.FieldRef<"Enquiry", 'String'>
+  readonly read: Prisma.FieldRef<"Enquiry", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Enquiry", 'DateTime'>
 }
     

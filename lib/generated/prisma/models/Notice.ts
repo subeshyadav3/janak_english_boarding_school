@@ -28,7 +28,10 @@ export type NoticeMinAggregateOutputType = {
   id: string | null
   title: string | null
   description: string | null
+  category: string | null
   filePath: string | null
+  published: boolean | null
+  publishAt: Date | null
   createdAt: Date | null
 }
 
@@ -36,7 +39,10 @@ export type NoticeMaxAggregateOutputType = {
   id: string | null
   title: string | null
   description: string | null
+  category: string | null
   filePath: string | null
+  published: boolean | null
+  publishAt: Date | null
   createdAt: Date | null
 }
 
@@ -44,7 +50,10 @@ export type NoticeCountAggregateOutputType = {
   id: number
   title: number
   description: number
+  category: number
   filePath: number
+  published: number
+  publishAt: number
   createdAt: number
   _all: number
 }
@@ -54,7 +63,10 @@ export type NoticeMinAggregateInputType = {
   id?: true
   title?: true
   description?: true
+  category?: true
   filePath?: true
+  published?: true
+  publishAt?: true
   createdAt?: true
 }
 
@@ -62,7 +74,10 @@ export type NoticeMaxAggregateInputType = {
   id?: true
   title?: true
   description?: true
+  category?: true
   filePath?: true
+  published?: true
+  publishAt?: true
   createdAt?: true
 }
 
@@ -70,7 +85,10 @@ export type NoticeCountAggregateInputType = {
   id?: true
   title?: true
   description?: true
+  category?: true
   filePath?: true
+  published?: true
+  publishAt?: true
   createdAt?: true
   _all?: true
 }
@@ -151,7 +169,10 @@ export type NoticeGroupByOutputType = {
   id: string
   title: string
   description: string | null
+  category: string
   filePath: string | null
+  published: boolean
+  publishAt: Date | null
   createdAt: Date
   _count: NoticeCountAggregateOutputType | null
   _min: NoticeMinAggregateOutputType | null
@@ -180,7 +201,10 @@ export type NoticeWhereInput = {
   id?: Prisma.StringFilter<"Notice"> | string
   title?: Prisma.StringFilter<"Notice"> | string
   description?: Prisma.StringNullableFilter<"Notice"> | string | null
+  category?: Prisma.StringFilter<"Notice"> | string
   filePath?: Prisma.StringNullableFilter<"Notice"> | string | null
+  published?: Prisma.BoolFilter<"Notice"> | boolean
+  publishAt?: Prisma.DateTimeNullableFilter<"Notice"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Notice"> | Date | string
 }
 
@@ -188,7 +212,10 @@ export type NoticeOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  category?: Prisma.SortOrder
   filePath?: Prisma.SortOrderInput | Prisma.SortOrder
+  published?: Prisma.SortOrder
+  publishAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -199,7 +226,10 @@ export type NoticeWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.NoticeWhereInput | Prisma.NoticeWhereInput[]
   title?: Prisma.StringFilter<"Notice"> | string
   description?: Prisma.StringNullableFilter<"Notice"> | string | null
+  category?: Prisma.StringFilter<"Notice"> | string
   filePath?: Prisma.StringNullableFilter<"Notice"> | string | null
+  published?: Prisma.BoolFilter<"Notice"> | boolean
+  publishAt?: Prisma.DateTimeNullableFilter<"Notice"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Notice"> | Date | string
 }, "id">
 
@@ -207,7 +237,10 @@ export type NoticeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  category?: Prisma.SortOrder
   filePath?: Prisma.SortOrderInput | Prisma.SortOrder
+  published?: Prisma.SortOrder
+  publishAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.NoticeCountOrderByAggregateInput
   _max?: Prisma.NoticeMaxOrderByAggregateInput
@@ -221,7 +254,10 @@ export type NoticeScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Notice"> | string
   title?: Prisma.StringWithAggregatesFilter<"Notice"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Notice"> | string | null
+  category?: Prisma.StringWithAggregatesFilter<"Notice"> | string
   filePath?: Prisma.StringNullableWithAggregatesFilter<"Notice"> | string | null
+  published?: Prisma.BoolWithAggregatesFilter<"Notice"> | boolean
+  publishAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Notice"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Notice"> | Date | string
 }
 
@@ -229,7 +265,10 @@ export type NoticeCreateInput = {
   id?: string
   title: string
   description?: string | null
+  category?: string
   filePath?: string | null
+  published?: boolean
+  publishAt?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -237,7 +276,10 @@ export type NoticeUncheckedCreateInput = {
   id?: string
   title: string
   description?: string | null
+  category?: string
   filePath?: string | null
+  published?: boolean
+  publishAt?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -245,7 +287,10 @@ export type NoticeUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.StringFieldUpdateOperationsInput | string
   filePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -253,7 +298,10 @@ export type NoticeUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.StringFieldUpdateOperationsInput | string
   filePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -261,7 +309,10 @@ export type NoticeCreateManyInput = {
   id?: string
   title: string
   description?: string | null
+  category?: string
   filePath?: string | null
+  published?: boolean
+  publishAt?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -269,7 +320,10 @@ export type NoticeUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.StringFieldUpdateOperationsInput | string
   filePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -277,7 +331,10 @@ export type NoticeUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.StringFieldUpdateOperationsInput | string
   filePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -285,7 +342,10 @@ export type NoticeCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   filePath?: Prisma.SortOrder
+  published?: Prisma.SortOrder
+  publishAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -293,7 +353,10 @@ export type NoticeMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   filePath?: Prisma.SortOrder
+  published?: Prisma.SortOrder
+  publishAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -301,7 +364,10 @@ export type NoticeMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   filePath?: Prisma.SortOrder
+  published?: Prisma.SortOrder
+  publishAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -311,7 +377,10 @@ export type NoticeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   id?: boolean
   title?: boolean
   description?: boolean
+  category?: boolean
   filePath?: boolean
+  published?: boolean
+  publishAt?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["notice"]>
 
@@ -319,7 +388,10 @@ export type NoticeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   id?: boolean
   title?: boolean
   description?: boolean
+  category?: boolean
   filePath?: boolean
+  published?: boolean
+  publishAt?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["notice"]>
 
@@ -327,7 +399,10 @@ export type NoticeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   id?: boolean
   title?: boolean
   description?: boolean
+  category?: boolean
   filePath?: boolean
+  published?: boolean
+  publishAt?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["notice"]>
 
@@ -335,11 +410,14 @@ export type NoticeSelectScalar = {
   id?: boolean
   title?: boolean
   description?: boolean
+  category?: boolean
   filePath?: boolean
+  published?: boolean
+  publishAt?: boolean
   createdAt?: boolean
 }
 
-export type NoticeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "filePath" | "createdAt", ExtArgs["result"]["notice"]>
+export type NoticeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "category" | "filePath" | "published" | "publishAt" | "createdAt", ExtArgs["result"]["notice"]>
 
 export type $NoticePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Notice"
@@ -348,7 +426,10 @@ export type $NoticePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     id: string
     title: string
     description: string | null
+    category: string
     filePath: string | null
+    published: boolean
+    publishAt: Date | null
     createdAt: Date
   }, ExtArgs["result"]["notice"]>
   composites: {}
@@ -776,7 +857,10 @@ export interface NoticeFieldRefs {
   readonly id: Prisma.FieldRef<"Notice", 'String'>
   readonly title: Prisma.FieldRef<"Notice", 'String'>
   readonly description: Prisma.FieldRef<"Notice", 'String'>
+  readonly category: Prisma.FieldRef<"Notice", 'String'>
   readonly filePath: Prisma.FieldRef<"Notice", 'String'>
+  readonly published: Prisma.FieldRef<"Notice", 'Boolean'>
+  readonly publishAt: Prisma.FieldRef<"Notice", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Notice", 'DateTime'>
 }
     

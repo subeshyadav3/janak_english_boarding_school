@@ -1,3 +1,4 @@
+import Image from "next/image";
 import {
   ABOUT_PARAGRAPHS,
   FEATURES,
@@ -11,22 +12,42 @@ export default function AboutSection() {
       <div className="container-site">
         <h2 className="section-title">About Our School</h2>
         <div className="section-title-line" />
-        <div className="max-w-3xl mx-auto space-y-5 text-center text-brand-deep/90 leading-relaxed">
-          {ABOUT_PARAGRAPHS.map((p, i) => (
-            <p key={i}>{p}</p>
-          ))}
-        </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
-          {FEATURES.map((f) => (
-            <div
-              key={f}
-              className="flex items-start gap-3 rounded-xl bg-white border border-line p-4 shadow-sm hover:shadow-md transition-shadow"
-            >
-              <CheckCircle2 className="h-5 w-5 text-accent shrink-0 mt-0.5" />
-              <p className="text-sm font-medium">{f}</p>
+        <div className="grid items-center gap-10 lg:grid-cols-2">
+          <div className="relative">
+            <div className="overflow-hidden rounded-2xl shadow-lg ring-1 ring-line">
+              <Image
+                src="/assets/cover3.png"
+                alt="Janak English Boarding School"
+                width={720}
+                height={520}
+                className="h-72 w-full object-cover sm:h-96"
+              />
             </div>
-          ))}
+            <div className="absolute -bottom-5 -right-3 hidden rounded-2xl bg-gradient-to-br from-brand to-brand-dark px-6 py-4 text-white shadow-xl sm:block">
+              <p className="text-3xl font-extrabold text-accent">28+</p>
+              <p className="text-xs font-medium text-white/85">
+                Years of Trusted Education
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <div className="space-y-4 text-brand-deep/90 leading-relaxed">
+              {ABOUT_PARAGRAPHS.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+            </div>
+
+            <div className="mt-6 grid gap-2.5 sm:grid-cols-2">
+              {FEATURES.slice(0, 6).map((f) => (
+                <div key={f} className="flex items-start gap-2.5">
+                  <CheckCircle2 className="h-5 w-5 shrink-0 text-accent" />
+                  <p className="text-sm font-medium">{f}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className="mt-12 max-w-3xl mx-auto rounded-2xl bg-gradient-to-br from-brand to-brand-dark text-white p-8 md:p-10 shadow-lg">

@@ -17,6 +17,7 @@ export async function POST(request: NextRequest) {
     data: {
       imagePath: String(body.imagePath ?? ""),
       title: body.title ?? "",
+      album: body.album ?? null,
     },
   });
   return NextResponse.json(item, { status: 201 });

@@ -28,6 +28,7 @@ export type ResultMinAggregateOutputType = {
   id: string | null
   title: string | null
   driveLink: string | null
+  filePath: string | null
   createdAt: Date | null
 }
 
@@ -35,6 +36,7 @@ export type ResultMaxAggregateOutputType = {
   id: string | null
   title: string | null
   driveLink: string | null
+  filePath: string | null
   createdAt: Date | null
 }
 
@@ -42,6 +44,7 @@ export type ResultCountAggregateOutputType = {
   id: number
   title: number
   driveLink: number
+  filePath: number
   createdAt: number
   _all: number
 }
@@ -51,6 +54,7 @@ export type ResultMinAggregateInputType = {
   id?: true
   title?: true
   driveLink?: true
+  filePath?: true
   createdAt?: true
 }
 
@@ -58,6 +62,7 @@ export type ResultMaxAggregateInputType = {
   id?: true
   title?: true
   driveLink?: true
+  filePath?: true
   createdAt?: true
 }
 
@@ -65,6 +70,7 @@ export type ResultCountAggregateInputType = {
   id?: true
   title?: true
   driveLink?: true
+  filePath?: true
   createdAt?: true
   _all?: true
 }
@@ -145,6 +151,7 @@ export type ResultGroupByOutputType = {
   id: string
   title: string
   driveLink: string | null
+  filePath: string | null
   createdAt: Date
   _count: ResultCountAggregateOutputType | null
   _min: ResultMinAggregateOutputType | null
@@ -173,6 +180,7 @@ export type ResultWhereInput = {
   id?: Prisma.StringFilter<"Result"> | string
   title?: Prisma.StringFilter<"Result"> | string
   driveLink?: Prisma.StringNullableFilter<"Result"> | string | null
+  filePath?: Prisma.StringNullableFilter<"Result"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Result"> | Date | string
 }
 
@@ -180,6 +188,7 @@ export type ResultOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   driveLink?: Prisma.SortOrderInput | Prisma.SortOrder
+  filePath?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -190,6 +199,7 @@ export type ResultWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ResultWhereInput | Prisma.ResultWhereInput[]
   title?: Prisma.StringFilter<"Result"> | string
   driveLink?: Prisma.StringNullableFilter<"Result"> | string | null
+  filePath?: Prisma.StringNullableFilter<"Result"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Result"> | Date | string
 }, "id">
 
@@ -197,6 +207,7 @@ export type ResultOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   driveLink?: Prisma.SortOrderInput | Prisma.SortOrder
+  filePath?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.ResultCountOrderByAggregateInput
   _max?: Prisma.ResultMaxOrderByAggregateInput
@@ -210,6 +221,7 @@ export type ResultScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Result"> | string
   title?: Prisma.StringWithAggregatesFilter<"Result"> | string
   driveLink?: Prisma.StringNullableWithAggregatesFilter<"Result"> | string | null
+  filePath?: Prisma.StringNullableWithAggregatesFilter<"Result"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Result"> | Date | string
 }
 
@@ -217,6 +229,7 @@ export type ResultCreateInput = {
   id?: string
   title: string
   driveLink?: string | null
+  filePath?: string | null
   createdAt?: Date | string
 }
 
@@ -224,6 +237,7 @@ export type ResultUncheckedCreateInput = {
   id?: string
   title: string
   driveLink?: string | null
+  filePath?: string | null
   createdAt?: Date | string
 }
 
@@ -231,6 +245,7 @@ export type ResultUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   driveLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  filePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -238,6 +253,7 @@ export type ResultUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   driveLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  filePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -245,6 +261,7 @@ export type ResultCreateManyInput = {
   id?: string
   title: string
   driveLink?: string | null
+  filePath?: string | null
   createdAt?: Date | string
 }
 
@@ -252,6 +269,7 @@ export type ResultUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   driveLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  filePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -259,6 +277,7 @@ export type ResultUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   driveLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  filePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -266,6 +285,7 @@ export type ResultCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   driveLink?: Prisma.SortOrder
+  filePath?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -273,6 +293,7 @@ export type ResultMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   driveLink?: Prisma.SortOrder
+  filePath?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -280,6 +301,7 @@ export type ResultMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   driveLink?: Prisma.SortOrder
+  filePath?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -289,6 +311,7 @@ export type ResultSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   id?: boolean
   title?: boolean
   driveLink?: boolean
+  filePath?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["result"]>
 
@@ -296,6 +319,7 @@ export type ResultSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   id?: boolean
   title?: boolean
   driveLink?: boolean
+  filePath?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["result"]>
 
@@ -303,6 +327,7 @@ export type ResultSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   id?: boolean
   title?: boolean
   driveLink?: boolean
+  filePath?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["result"]>
 
@@ -310,10 +335,11 @@ export type ResultSelectScalar = {
   id?: boolean
   title?: boolean
   driveLink?: boolean
+  filePath?: boolean
   createdAt?: boolean
 }
 
-export type ResultOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "driveLink" | "createdAt", ExtArgs["result"]["result"]>
+export type ResultOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "driveLink" | "filePath" | "createdAt", ExtArgs["result"]["result"]>
 
 export type $ResultPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Result"
@@ -322,6 +348,7 @@ export type $ResultPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     id: string
     title: string
     driveLink: string | null
+    filePath: string | null
     createdAt: Date
   }, ExtArgs["result"]["result"]>
   composites: {}
@@ -749,6 +776,7 @@ export interface ResultFieldRefs {
   readonly id: Prisma.FieldRef<"Result", 'String'>
   readonly title: Prisma.FieldRef<"Result", 'String'>
   readonly driveLink: Prisma.FieldRef<"Result", 'String'>
+  readonly filePath: Prisma.FieldRef<"Result", 'String'>
   readonly createdAt: Prisma.FieldRef<"Result", 'DateTime'>
 }
     

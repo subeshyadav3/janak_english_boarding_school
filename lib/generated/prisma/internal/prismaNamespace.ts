@@ -401,6 +401,7 @@ export const ModelName = {
   Teacher: 'Teacher',
   Notice: 'Notice',
   Result: 'Result',
+  Event: 'Event',
   GalleryItem: 'GalleryItem',
   Testimonial: 'Testimonial',
   Enquiry: 'Enquiry',
@@ -420,7 +421,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "setting" | "teacher" | "notice" | "result" | "galleryItem" | "testimonial" | "enquiry" | "adminUser"
+    modelProps: "setting" | "teacher" | "notice" | "result" | "event" | "galleryItem" | "testimonial" | "enquiry" | "adminUser"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -717,6 +718,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ResultCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ResultCountAggregateOutputType> | number
+        }
+      }
+    }
+    Event: {
+      payload: Prisma.$EventPayload<ExtArgs>
+      fields: Prisma.EventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>
+        }
+        findFirst: {
+          args: Prisma.EventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>
+        }
+        findMany: {
+          args: Prisma.EventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>[]
+        }
+        create: {
+          args: Prisma.EventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>
+        }
+        createMany: {
+          args: Prisma.EventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>[]
+        }
+        delete: {
+          args: Prisma.EventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>
+        }
+        update: {
+          args: Prisma.EventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>
+        }
+        deleteMany: {
+          args: Prisma.EventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>[]
+        }
+        upsert: {
+          args: Prisma.EventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>
+        }
+        aggregate: {
+          args: Prisma.EventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEvent>
+        }
+        groupBy: {
+          args: Prisma.EventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EventCountAggregateOutputType> | number
         }
       }
     }
@@ -1063,8 +1138,12 @@ export const SettingScalarFieldEnum = {
   address: 'address',
   phone: 'phone',
   email: 'email',
+  establishedYear: 'establishedYear',
   facebook: 'facebook',
   whatsapp: 'whatsapp',
+  instagram: 'instagram',
+  youtube: 'youtube',
+  mapUrl: 'mapUrl',
   logo: 'logo',
   cover1: 'cover1',
   cover2: 'cover2',
@@ -1072,6 +1151,11 @@ export const SettingScalarFieldEnum = {
   cover4: 'cover4',
   cover5: 'cover5',
   cover6: 'cover6',
+  admissionTitle: 'admissionTitle',
+  admissionText: 'admissionText',
+  admissionCallLabel: 'admissionCallLabel',
+  admissionWhatsappLabel: 'admissionWhatsappLabel',
+  admissionEnabled: 'admissionEnabled',
   updatedAt: 'updatedAt'
 } as const
 
@@ -1083,9 +1167,13 @@ export const TeacherScalarFieldEnum = {
   name: 'name',
   position: 'position',
   subject: 'subject',
+  qualification: 'qualification',
+  email: 'email',
   phone: 'phone',
   photo: 'photo',
   order: 'order',
+  active: 'active',
+  joinedAt: 'joinedAt',
   createdAt: 'createdAt'
 } as const
 
@@ -1096,7 +1184,10 @@ export const NoticeScalarFieldEnum = {
   id: 'id',
   title: 'title',
   description: 'description',
+  category: 'category',
   filePath: 'filePath',
+  published: 'published',
+  publishAt: 'publishAt',
   createdAt: 'createdAt'
 } as const
 
@@ -1107,16 +1198,31 @@ export const ResultScalarFieldEnum = {
   id: 'id',
   title: 'title',
   driveLink: 'driveLink',
+  filePath: 'filePath',
   createdAt: 'createdAt'
 } as const
 
 export type ResultScalarFieldEnum = (typeof ResultScalarFieldEnum)[keyof typeof ResultScalarFieldEnum]
 
 
+export const EventScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  date: 'date',
+  time: 'time',
+  location: 'location',
+  createdAt: 'createdAt'
+} as const
+
+export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
+
+
 export const GalleryItemScalarFieldEnum = {
   id: 'id',
   imagePath: 'imagePath',
   title: 'title',
+  album: 'album',
   createdAt: 'createdAt'
 } as const
 
@@ -1127,6 +1233,9 @@ export const TestimonialScalarFieldEnum = {
   id: 'id',
   name: 'name',
   message: 'message',
+  role: 'role',
+  rating: 'rating',
+  photo: 'photo',
   createdAt: 'createdAt'
 } as const
 
@@ -1136,9 +1245,13 @@ export type TestimonialScalarFieldEnum = (typeof TestimonialScalarFieldEnum)[key
 export const EnquiryScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  email: 'email',
   phone: 'phone',
+  subject: 'subject',
   message: 'message',
+  category: 'category',
   status: 'status',
+  read: 'read',
   createdAt: 'createdAt'
 } as const
 
@@ -1202,20 +1315,6 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
- * Reference to a field of type 'DateTime'
- */
-export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-    
-
-
-/**
- * Reference to a field of type 'DateTime[]'
- */
-export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -1226,6 +1325,27 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'DateTime'
+ */
+export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+/**
+ * Reference to a field of type 'DateTime[]'
+ */
+export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
     
 
 
@@ -1397,6 +1517,7 @@ export type GlobalOmitConfig = {
   teacher?: Prisma.TeacherOmit
   notice?: Prisma.NoticeOmit
   result?: Prisma.ResultOmit
+  event?: Prisma.EventOmit
   galleryItem?: Prisma.GalleryItemOmit
   testimonial?: Prisma.TestimonialOmit
   enquiry?: Prisma.EnquiryOmit

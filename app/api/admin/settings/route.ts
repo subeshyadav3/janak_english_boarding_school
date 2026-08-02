@@ -20,8 +20,12 @@ export async function PUT(request: NextRequest) {
     "address",
     "phone",
     "email",
+    "establishedYear",
     "facebook",
     "whatsapp",
+    "instagram",
+    "youtube",
+    "mapUrl",
     "logo",
     "cover1",
     "cover2",
@@ -29,12 +33,29 @@ export async function PUT(request: NextRequest) {
     "cover4",
     "cover5",
     "cover6",
+    "admissionTitle",
+    "admissionText",
+    "admissionCallLabel",
+    "admissionWhatsappLabel",
   ] as const;
 
-  const data: Record<string, string | null> = {};
+  const data: Record<string, string | number | boolean | null> = {};
   for (const f of fields) {
     const v = body[f];
+    if (f === "establishedYear") {
+      data[f] =
+        typeof v === "number" && v > 0
+          ? v
+          : typeof v === "string" && v.trim()
+            ? Number(v)
+            : null;
+      continue;
+    }
     data[f] = typeof v === "string" && v.trim() ? v : null;
+  }
+
+  if (typeof body.admissionEnabled === "boolean") {
+    data.admissionEnabled = body.admissionEnabled;
   }
 
   const existing = await prisma.setting.findUnique({ where: { id: "main" } });

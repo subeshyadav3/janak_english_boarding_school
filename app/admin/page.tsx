@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import {
   LogOut,
@@ -13,32 +12,122 @@ import {
   Quote,
   Settings,
   Inbox,
-  Plus,
-  Trash2,
-  Save,
   Eye,
   Home,
-  Upload,
   LayoutDashboard,
   UserCog,
   Phone,
+  CalendarDays,
+  ExternalLink,
+  GraduationCap,
 } from "lucide-react";
+import { ToastProvider, useToast } from "@/lib/ui/Toast";
+import ConfirmDialog from "@/lib/ui/ConfirmDialog";
+import FileUpload from "@/lib/ui/FileUpload";
+import Badge from "@/lib/ui/admin/Badge";
+import ListRow from "@/lib/ui/admin/ListRow";
+import CrudManager from "@/lib/ui/admin/CrudManager";
+import Modal from "@/lib/ui/admin/Modal";
+import { DetailRow } from "@/lib/ui/admin/DetailRow";
+import { TextInput, Textarea, Select, Toggle, FormRow } from "@/lib/ui/admin/Controls";
+import { ENQUIRY_CATEGORY_LABELS } from "@/lib/constants";
 
-type Tab = "overview" | "teachers" | "notices" | "results" | "gallery" | "testimonials" | "enquiries" | "users" | "settings";
+type Tab =
+  | "overview"
+  | "admission"
+  | "teachers"
+  | "notices"
+  | "results"
+  | "events"
+  | "gallery"
+  | "testimonials"
+  | "enquiries"
+  | "users"
+  | "settings";
 
-type Teacher = { id: string; name: string; position?: string; subject?: string; phone?: string; photo?: string; order: number };
-type Notice = { id: string; title: string; description?: string; filePath?: string };
-type Result = { id: string; title: string; driveLink?: string };
-type GalleryItem = { id: string; imagePath: string; title?: string };
-type Testimonial = { id: string; name: string; message: string };
-type Enquiry = { id: string; name: string; phone?: string; message: string; status: string };
-type User = { id: string; username: string; name?: string; role: string; createdAt?: string };
+type Teacher = {
+  id: string;
+  name: string;
+  position?: string | null;
+  subject?: string | null;
+  qualification?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  photo?: string | null;
+  order: number;
+  active: boolean;
+  joinedAt?: string | null;
+  createdAt?: string;
+};
+type Notice = {
+  id: string;
+  title: string;
+  description?: string | null;
+  category?: string | null;
+  filePath?: string | null;
+  published?: boolean;
+  publishAt?: string | null;
+  createdAt?: string;
+};
+type Result = {
+  id: string;
+  title: string;
+  driveLink?: string | null;
+  filePath?: string | null;
+  createdAt?: string;
+};
+type Event = {
+  id: string;
+  title: string;
+  description?: string | null;
+  date: string;
+  time?: string | null;
+  location?: string | null;
+  createdAt?: string;
+};
+type GalleryItem = {
+  id: string;
+  imagePath: string;
+  title?: string | null;
+  album?: string | null;
+  createdAt?: string;
+};
+type Testimonial = {
+  id: string;
+  name: string;
+  message: string;
+  role?: string | null;
+  rating?: number;
+  photo?: string | null;
+  createdAt?: string;
+};
+type Enquiry = {
+  id: string;
+  name: string;
+  email?: string | null;
+  phone?: string | null;
+  subject?: string | null;
+  message: string;
+  category?: string | null;
+  status: string;
+  read?: boolean;
+  createdAt?: string;
+};
+type User = {
+  id: string;
+  username: string;
+  name?: string | null;
+  role: string;
+  createdAt?: string;
+};
 
 const TABS: { id: Tab; label: string; icon: typeof Users }[] = [
   { id: "overview", label: "Overview", icon: LayoutDashboard },
+  { id: "admission", label: "Admission", icon: GraduationCap },
   { id: "teachers", label: "Teachers", icon: Users },
   { id: "notices", label: "Notices", icon: Megaphone },
   { id: "results", label: "Results", icon: Trophy },
+  { id: "events", label: "Events", icon: CalendarDays },
   { id: "gallery", label: "Gallery", icon: ImageIcon },
   { id: "testimonials", label: "Testimonials", icon: Quote },
   { id: "enquiries", label: "Enquiries", icon: Inbox },
@@ -55,7 +144,45 @@ async function j<T>(url: string, options?: RequestInit): Promise<T> {
   return res.json();
 }
 
+const fmtDate = (d?: string | null) =>
+  d ? new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "";
+
+function Stars({ value }: { value: number }) {
+  return (
+    <span className="text-sm tracking-tight text-accent">
+      {"★".repeat(Math.max(0, Math.min(5, value)))}
+      <span className="text-line">{"★".repeat(Math.max(0, 5 - Math.min(5, value)))}</span>
+    </span>
+  );
+}
+
+function FileBadge({ path }: { path?: string | null }) {
+  if (!path) return null;
+  return /\.pdf$/i.test(path) ? <Badge label="PDF" color="rose" /> : <Badge label="Image" color="violet" />;
+}
+
+function LinkOut({ href, label = "Open" }: { href: string; label?: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="inline-flex items-center gap-1.5 rounded-lg border border-brand px-3 py-1.5 text-sm font-semibold text-brand hover:bg-brand/5 transition-colors"
+    >
+      <ExternalLink className="h-3.5 w-3.5" /> {label}
+    </a>
+  );
+}
+
 export default function AdminDashboard() {
+  return (
+    <ToastProvider>
+      <AdminDashboardInner />
+    </ToastProvider>
+  );
+}
+
+function AdminDashboardInner() {
   const router = useRouter();
   const [tab, setTab] = useState<Tab>("overview");
 
@@ -68,37 +195,37 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-surface">
       <header className="bg-brand-deep text-white shadow-lg">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/20">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3">
+          <div className="flex min-w-0 items-center gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/20">
               <LayoutDashboard className="h-5 w-5 text-accent" />
             </span>
-            <div>
-              <h1 className="text-lg font-bold">Admin Dashboard</h1>
-              <p className="text-xs text-white/60">Janak English Boarding School</p>
+            <div className="min-w-0">
+              <h1 className="truncate text-base font-bold sm:text-lg">Admin Dashboard</h1>
+              <p className="hidden text-xs text-white/60 sm:block">Janak English Boarding School</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-sm hover:bg-white/20 transition"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-2 text-sm hover:bg-white/20 transition"
             >
-              <Home className="h-4 w-4" /> View Site
+              <Home className="h-4 w-4" /> <span className="hidden sm:inline">View Site</span>
             </Link>
             <button
               onClick={logout}
-              className="inline-flex items-center gap-2 rounded-lg bg-red-600/90 px-3 py-2 text-sm hover:bg-red-600 transition"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-red-600/90 px-3 py-2 text-sm hover:bg-red-600 transition"
             >
-              <LogOut className="h-4 w-4" /> Logout
+              <LogOut className="h-4 w-4" /> <span className="hidden sm:inline">Logout</span>
             </button>
           </div>
         </div>
-        <nav className="mx-auto max-w-7xl flex gap-1 overflow-x-auto px-4 pb-2">
+        <nav className="sticky top-0 z-40 mx-auto max-w-7xl flex gap-1 overflow-x-auto bg-brand-deep px-2 pb-2 sm:px-4 lg:flex-wrap lg:overflow-visible">
           {TABS.map((t) => (
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className={`inline-flex shrink-0 items-center gap-2 rounded-t-lg px-4 py-2 text-sm font-medium transition ${
+              className={`inline-flex shrink-0 items-center gap-2 rounded-t-lg px-3 py-2 text-sm font-medium transition sm:px-4 ${
                 tab === t.id
                   ? "bg-surface text-brand-deep"
                   : "text-white/70 hover:text-white hover:bg-white/5"
@@ -111,10 +238,12 @@ export default function AdminDashboard() {
       </header>
 
       <main className="mx-auto max-w-7xl px-4 py-8">
-        {tab === "overview" && <Overview />}
+        {tab === "overview" && <Overview onNavigate={setTab} />}
+        {tab === "admission" && <AdmissionManager />}
         {tab === "teachers" && <TeachersManager />}
         {tab === "notices" && <NoticesManager />}
         {tab === "results" && <ResultsManager />}
+        {tab === "events" && <EventsManager />}
         {tab === "gallery" && <GalleryManager />}
         {tab === "testimonials" && <TestimonialsManager />}
         {tab === "enquiries" && <EnquiriesManager />}
@@ -128,16 +257,6 @@ export default function AdminDashboard() {
 function useFetch<T>(url: string) {
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
-  const load = useCallback(async () => {
-    try {
-      const d = await j<T[]>(url);
-      setData(d);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  }, [url]);
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -154,7 +273,7 @@ function useFetch<T>(url: string) {
       cancelled = true;
     };
   }, [url]);
-  return { data, setData, loading, load };
+  return { data, loading };
 }
 
 function PageShell({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
@@ -169,47 +288,44 @@ function PageShell({ title, subtitle, children }: { title: string; subtitle?: st
   );
 }
 
-function ErrorBanner({ error, onClose }: { error: string; onClose: () => void }) {
-  if (!error) return null;
-  return (
-    <div className="mb-4 flex items-center justify-between rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">
-      <span>{error}</span>
-      <button onClick={onClose} className="font-bold">×</button>
-    </div>
-  );
-}
-
 // ---------- Overview ----------
-function Overview() {
+function Overview({ onNavigate }: { onNavigate: (t: Tab) => void }) {
   const teachers = useFetch<Teacher>("/api/admin/teachers");
   const notices = useFetch<Notice>("/api/admin/notices");
   const results = useFetch<Result>("/api/admin/results");
+  const events = useFetch<Event>("/api/admin/events");
   const gallery = useFetch<GalleryItem>("/api/admin/gallery");
   const testimonials = useFetch<Testimonial>("/api/admin/testimonials");
   const enquiries = useFetch<Enquiry>("/api/admin/enquiries");
 
   const cards = [
-    { label: "Teachers", count: teachers.data.length, icon: Users, color: "from-brand to-brand-dark" },
-    { label: "Notices", count: notices.data.length, icon: Megaphone, color: "from-accent to-orange-400" },
-    { label: "Results", count: results.data.length, icon: Trophy, color: "from-violet-600 to-purple-500" },
-    { label: "Gallery Photos", count: gallery.data.length, icon: ImageIcon, color: "from-teal-600 to-emerald-500" },
-    { label: "Testimonials", count: testimonials.data.length, icon: Quote, color: "from-pink-600 to-rose-500" },
-    { label: "New Enquiries", count: enquiries.data.filter((e) => e.status === "new").length, icon: Inbox, color: "from-sky-600 to-blue-500" },
+    { label: "Teachers", count: teachers.data.length, icon: Users, color: "from-brand to-brand-dark", tab: "teachers" as Tab },
+    { label: "Notices", count: notices.data.length, icon: Megaphone, color: "from-accent to-orange-400", tab: "notices" as Tab },
+    { label: "Results", count: results.data.length, icon: Trophy, color: "from-violet-600 to-purple-500", tab: "results" as Tab },
+    { label: "Events", count: events.data.length, icon: CalendarDays, color: "from-amber-500 to-yellow-400", tab: "events" as Tab },
+    { label: "Gallery Photos", count: gallery.data.length, icon: ImageIcon, color: "from-teal-600 to-emerald-500", tab: "gallery" as Tab },
+    { label: "Testimonials", count: testimonials.data.length, icon: Quote, color: "from-pink-600 to-rose-500", tab: "testimonials" as Tab },
+    { label: "New Enquiries", count: enquiries.data.filter((e) => e.status === "new").length, icon: Inbox, color: "from-sky-600 to-blue-500", tab: "enquiries" as Tab },
+    { label: "Users", count: 0, icon: UserCog, color: "from-slate-600 to-slate-500", tab: "users" as Tab },
   ];
 
   const recentEnquiries = enquiries.data.slice(0, 5);
 
   return (
     <PageShell title="Overview" subtitle="Quick summary of your school website content.">
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-4 gap-4">
         {cards.map((c) => (
-          <div key={c.label} className="rounded-2xl bg-white border border-line p-5 shadow-sm">
+          <button
+            key={c.label}
+            onClick={() => onNavigate(c.tab)}
+            className="rounded-2xl bg-white border border-line p-5 shadow-sm text-left transition-all hover:-translate-y-0.5 hover:shadow-md"
+          >
             <span className={`inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${c.color} text-white`}>
               <c.icon className="h-5 w-5" />
             </span>
             <p className="mt-4 text-3xl font-extrabold text-brand-deep">{c.count}</p>
             <p className="text-sm text-brand-deep/60">{c.label}</p>
-          </div>
+          </button>
         ))}
       </div>
 
@@ -254,539 +370,870 @@ function Overview() {
   );
 }
 
-// ---------- Teachers ----------
-function TeachersManager() {
-  const { data, setData, loading } = useFetch<Teacher>("/api/admin/teachers");
+// ---------- Admission ----------
+function AdmissionManager() {
+  const [form, setForm] = useState({
+    admissionTitle: "",
+    admissionText: "",
+    admissionCallLabel: "Call Us",
+    admissionWhatsappLabel: "WhatsApp Us",
+    phone: "",
+    whatsapp: "",
+    admissionEnabled: true,
+  });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const { toast } = useToast();
 
-  const save = async (item: Teacher) => {
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const d = await j<Record<string, string | boolean | null>>("/api/admin/settings");
+        if (!cancelled && d) {
+          setForm({
+            admissionTitle: String(d.admissionTitle || "Admissions Open — Nursery to Grade 8"),
+            admissionText: String(
+              d.admissionText || "English medium, disciplined and caring environment. Enroll your child today for a brighter tomorrow."
+            ),
+            admissionCallLabel: String(d.admissionCallLabel || "Call Us"),
+            admissionWhatsappLabel: String(d.admissionWhatsappLabel || "WhatsApp Us"),
+            phone: String(d.phone || ""),
+            whatsapp: String(d.whatsapp || ""),
+            admissionEnabled: d.admissionEnabled !== false,
+          });
+        }
+      } catch (e) {
+        if (!cancelled) setError((e as Error).message);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const save = async () => {
+    setSaving(true);
     try {
-      const updated = await j<Teacher>(`/api/admin/teachers/${item.id}`, {
-        method: "PATCH",
+      await j("/api/admin/settings", {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(item),
+        body: JSON.stringify(form),
       });
-      setData((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
+      toast("success", "Admission section saved");
     } catch (e) {
       setError((e as Error).message);
+      toast("error", (e as Error).message);
+    } finally {
+      setSaving(false);
     }
   };
-
-  const add = async () => {
-    try {
-      const created = await j<Teacher>("/api/admin/teachers", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: "New Teacher", order: data.length + 1 }),
-      });
-      setData((prev) => [...prev, created]);
-    } catch (e) {
-      setError((e as Error).message);
-    }
-  };
-
-  const remove = async (id: string) => {
-    if (!confirm("Delete this teacher?")) return;
-    try {
-      await j(`/api/admin/teachers/${id}`, { method: "DELETE" });
-      setData((prev) => prev.filter((t) => t.id !== id));
-    } catch (e) {
-      setError((e as Error).message);
-    }
-  };
-
-  const set = (id: string, field: keyof Teacher, value: string | number) =>
-    setData((prev) => prev.map((t) => (t.id === id ? { ...t, [field]: value } : t)));
 
   if (loading) return <p className="text-sm text-brand-deep/60">Loading...</p>;
 
   return (
-    <PageShell title="Teachers" subtitle="Manage the teaching staff shown on the website.">
-      <ErrorBanner error={error} onClose={() => setError("")} />
-      <button
-        onClick={add}
-        className="mb-4 inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-bold text-white hover:bg-brand-dark"
-      >
-        <Plus className="h-4 w-4" /> Add Teacher
-      </button>
-      <div className="grid gap-4 md:grid-cols-2">
-        {data.map((t) => (
-          <div key={t.id} className="rounded-xl bg-white border border-line p-4 shadow-sm">
-            <div className="flex flex-wrap items-center gap-2">
-              <input value={t.name} onChange={(e) => set(t.id, "name", e.target.value)}
-                placeholder="Name" className="admin-input flex-1" />
-              <input value={t.position ?? ""} onChange={(e) => set(t.id, "position", e.target.value)}
-                placeholder="Position" className="admin-input flex-1" />
-            </div>
-            <div className="mt-2 flex flex-wrap items-center gap-2">
-              <input value={t.subject ?? ""} onChange={(e) => set(t.id, "subject", e.target.value)}
-                placeholder="Subject" className="admin-input flex-1" />
-              <input value={t.phone ?? ""} onChange={(e) => set(t.id, "phone", e.target.value)}
-                placeholder="Phone" className="admin-input flex-1" />
-            </div>
-            <div className="mt-2 flex flex-wrap items-center gap-2">
-              <input type="number" value={t.order} onChange={(e) => set(t.id, "order", Number(e.target.value))}
-                placeholder="Order" className="admin-input w-24" />
-              <PhotoInput value={t.photo} onChange={(v) => set(t.id, "photo", v)} placeholder="Photo URL" />
-            </div>
-            <div className="mt-3 flex gap-2">
-              <button onClick={() => save(t)}
-                className="inline-flex items-center gap-1 rounded-lg bg-brand px-3 py-2 text-sm font-bold text-white hover:bg-brand-dark">
-                <Save className="h-4 w-4" /> Save
-              </button>
-              <button onClick={() => remove(t.id)}
-                className="inline-flex items-center gap-1 rounded-lg bg-red-600 px-3 py-2 text-sm font-bold text-white hover:bg-red-700">
-                <Trash2 className="h-4 w-4" />
-              </button>
+    <PageShell title="Admission Section" subtitle="Customize the admissions banner shown on the homepage.">
+      {error && (
+        <div className="mb-4 flex items-center justify-between rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">
+          <span>{error}</span>
+          <button onClick={() => setError("")} className="font-bold">×</button>
+        </div>
+      )}
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <div className="space-y-4 rounded-2xl bg-white border border-line p-5 shadow-sm">
+          <FormRow>
+            <TextInput
+              label="Heading"
+              value={form.admissionTitle}
+              onChange={(e) => setForm({ ...form, admissionTitle: e.target.value })}
+            />
+            <TextInput
+              label="Call button label"
+              value={form.admissionCallLabel}
+              onChange={(e) => setForm({ ...form, admissionCallLabel: e.target.value })}
+            />
+          </FormRow>
+          <Textarea
+            label="Description"
+            rows={3}
+            value={form.admissionText}
+            onChange={(e) => setForm({ ...form, admissionText: e.target.value })}
+          />
+          <FormRow>
+            <TextInput
+              label="WhatsApp button label"
+              value={form.admissionWhatsappLabel}
+              onChange={(e) => setForm({ ...form, admissionWhatsappLabel: e.target.value })}
+            />
+            <TextInput
+              label="Phone number"
+              value={form.phone}
+              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+            />
+          </FormRow>
+          <TextInput
+            label="WhatsApp number (with country code, no +)"
+            value={form.whatsapp}
+            onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
+          />
+          <Toggle
+            label="Show admission section"
+            hint="Turn off to hide the banner from the homepage."
+            checked={form.admissionEnabled}
+            onChange={(v) => setForm({ ...form, admissionEnabled: v })}
+          />
+          <button
+            onClick={save}
+            disabled={saving}
+            className="inline-flex items-center gap-2 rounded-lg bg-brand px-5 py-3 text-sm font-bold text-white hover:bg-brand-dark disabled:opacity-50 transition-colors"
+          >
+            {saving ? "Saving..." : "Save Admission Section"}
+          </button>
+        </div>
+
+        <div>
+          <p className="mb-2 text-sm font-semibold text-brand-deep/60">Preview</p>
+          <div className="overflow-hidden rounded-2xl bg-gradient-to-r from-brand to-brand-dark p-6 text-white shadow-sm">
+            <h3 className="text-xl font-extrabold">{form.admissionTitle || "Admissions Open"}</h3>
+            <p className="mt-2 text-sm text-white/80">{form.admissionText}</p>
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+              <span className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-bold text-brand">
+                <Phone className="h-4 w-4" /> {form.admissionCallLabel || "Call Us"}
+              </span>
+              <span className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-accent to-orange-400 px-5 py-2.5 text-sm font-bold text-white">
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+                </svg>
+                {form.admissionWhatsappLabel || "WhatsApp Us"}
+              </span>
             </div>
           </div>
-        ))}
+        </div>
       </div>
     </PageShell>
   );
 }
 
-function PhotoInput({ value, onChange, placeholder }: { value?: string; onChange: (v: string) => void; placeholder: string }) {
-  const [uploading, setUploading] = useState(false);
-  const upload = async (file: File) => {
-    setUploading(true);
-    try {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await fetch("/api/upload", { method: "POST", body: fd });
-      if (!res.ok) throw new Error("Upload failed");
-      const data = await res.json();
-      onChange(data.url);
-    } catch (e) {
-      alert((e as Error).message);
-    } finally {
-      setUploading(false);
-    }
-  };
+// ---------- Teachers ----------
+function TeachersManager() {
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      <input
-        value={value ?? ""}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        className="admin-input w-44"
+    <PageShell title="Teachers" subtitle="Manage the teaching staff shown on the website.">
+      <CrudManager<Teacher>
+        title="Teacher"
+        endpoint="/api/admin/teachers"
+        addLabel="Add Teacher"
+        blank={{ name: "", position: "", subject: "", qualification: "", email: "", phone: "", photo: "", order: 1, active: true }}
+        emptyIcon={Users}
+        emptyTitle="No teachers yet"
+        emptyMessage="Add your first teacher to show them on the website."
+        searchKeys={["name", "position", "subject", "phone"]}
+        searchPlaceholder="Search teachers..."
+        formTitle="Teacher details"
+        formSubtitle="Fill in the details and save."
+        createBody={(f) => ({
+          name: f.name || "New Teacher",
+          position: f.position ?? "",
+          subject: f.subject ?? "",
+          qualification: f.qualification ?? "",
+          email: f.email ?? "",
+          phone: f.phone ?? "",
+          photo: f.photo ?? "",
+          order: Number(f.order ?? 1),
+          active: f.active ?? true,
+        })}
+        updateBody={(f) => ({
+          name: f.name || "New Teacher",
+          position: f.position ?? "",
+          subject: f.subject ?? "",
+          qualification: f.qualification ?? "",
+          email: f.email ?? "",
+          phone: f.phone ?? "",
+          photo: f.photo ?? "",
+          order: Number(f.order ?? 1),
+          active: f.active ?? true,
+        })}
+        renderRow={(t, { onView, onEdit, onDelete }) => (
+          <ListRow
+            avatar={t.photo}
+            fallbackText={(t.name || "?").charAt(0).toUpperCase()}
+            title={t.name}
+            subtitle={`${t.position || "Teacher"}${t.subject ? ` • ${t.subject}` : ""}`}
+            badges={<>{t.active === false && <Badge label="Inactive" color="gray" />}</>}
+            meta={t.phone || undefined}
+            onView={onView}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
+        )}
+        renderForm={(f, set) => (
+          <div className="space-y-4">
+            <FormRow>
+              <TextInput label="Full name" required value={f.name ?? ""} onChange={(e) => set({ name: e.target.value })} />
+              <TextInput label="Position" value={f.position ?? ""} onChange={(e) => set({ position: e.target.value })} placeholder="e.g. Principal, Class Teacher" />
+            </FormRow>
+            <FormRow>
+              <TextInput label="Subject" value={f.subject ?? ""} onChange={(e) => set({ subject: e.target.value })} placeholder="e.g. Mathematics" />
+              <TextInput label="Qualification" value={f.qualification ?? ""} onChange={(e) => set({ qualification: e.target.value })} />
+            </FormRow>
+            <FormRow>
+              <TextInput label="Email" type="email" value={f.email ?? ""} onChange={(e) => set({ email: e.target.value })} />
+              <TextInput label="Phone" value={f.phone ?? ""} onChange={(e) => set({ phone: e.target.value })} />
+            </FormRow>
+            <FormRow>
+              <TextInput label="Display order" type="number" value={String(f.order ?? 1)} onChange={(e) => set({ order: Number(e.target.value) })} />
+              <div className="flex items-end">
+                <Toggle label="Show on website" checked={f.active !== false} onChange={(v) => set({ active: v })} />
+              </div>
+            </FormRow>
+            <div>
+              <span className="mb-1.5 block text-sm font-semibold text-brand-deep">Photo</span>
+              <FileUpload value={f.photo ?? ""} onChange={(v) => set({ photo: v })} accept="image/*" label="Upload Photo" />
+            </div>
+          </div>
+        )}
+        renderView={(t) => (
+          <div className="space-y-4">
+            {t.photo && (
+              <div className="flex justify-center">
+                <img src={t.photo} alt={t.name} className="h-32 w-32 rounded-2xl object-cover ring-1 ring-line" />
+              </div>
+            )}
+            <div className="grid gap-4 sm:grid-cols-2">
+              <DetailRow label="Name">{t.name}</DetailRow>
+              <DetailRow label="Position">{t.position || "—"}</DetailRow>
+              <DetailRow label="Subject">{t.subject || "—"}</DetailRow>
+              <DetailRow label="Qualification">{t.qualification || "—"}</DetailRow>
+              <DetailRow label="Email">{t.email || "—"}</DetailRow>
+              <DetailRow label="Phone">{t.phone || "—"}</DetailRow>
+              <DetailRow label="Status">{t.active === false ? "Inactive" : "Active"}</DetailRow>
+              <DetailRow label="Joined">{fmtDate(t.joinedAt) || "—"}</DetailRow>
+            </div>
+          </div>
+        )}
+        deleteConfirmTitle={(t) => `Delete ${t.name}?`}
+        deleteConfirmMessage="This will remove the teacher from the website."
       />
-      <label className="inline-flex cursor-pointer items-center gap-1 rounded-lg border border-brand px-3 py-2 text-sm font-semibold text-brand hover:bg-brand/5">
-        <Upload className="h-4 w-4" /> {uploading ? "Uploading..." : "Upload"}
-        <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && upload(e.target.files[0])} />
-      </label>
-      {value && <Image src={value} alt="" width={40} height={40} className="rounded object-cover" />}
-    </div>
+    </PageShell>
   );
 }
 
 // ---------- Notices ----------
 function NoticesManager() {
-  const { data, setData, loading } = useFetch<Notice>("/api/admin/notices");
-  const [error, setError] = useState("");
-
-  const save = async (item: Notice) => {
-    try {
-      const updated = await j<Notice>(`/api/admin/notices/${item.id}`, {
-        method: "PATCH", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(item),
-      });
-      setData((prev) => prev.map((n) => (n.id === updated.id ? updated : n)));
-    } catch (e) { setError((e as Error).message); }
-  };
-  const add = async () => {
-    try {
-      const created = await j<Notice>("/api/admin/notices", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: "New Notice" }),
-      });
-      setData((prev) => [created, ...prev]);
-    } catch (e) { setError((e as Error).message); }
-  };
-  const remove = async (id: string) => {
-    if (!confirm("Delete this notice?")) return;
-    try {
-      await j(`/api/admin/notices/${id}`, { method: "DELETE" });
-      setData((prev) => prev.filter((n) => n.id !== id));
-    } catch (e) { setError((e as Error).message); }
-  };
-  const set = (id: string, field: keyof Notice, value: string) =>
-    setData((prev) => prev.map((n) => (n.id === id ? { ...n, [field]: value } : n)));
-
-  if (loading) return <p className="text-sm text-brand-deep/60">Loading...</p>;
-
   return (
     <PageShell title="Notices" subtitle="Publish announcements for parents and students.">
-      <ErrorBanner error={error} onClose={() => setError("")} />
-      <button onClick={add} className="mb-4 inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-bold text-white hover:bg-brand-dark">
-        <Plus className="h-4 w-4" /> Add Notice
-      </button>
-      <div className="space-y-3">
-        {data.map((n) => (
-          <div key={n.id} className="rounded-xl bg-white border border-line p-4 shadow-sm">
-            <input value={n.title} onChange={(e) => set(n.id, "title", e.target.value)}
-              placeholder="Notice Title" className="admin-input w-full" />
-            <textarea value={n.description ?? ""} onChange={(e) => set(n.id, "description", e.target.value)}
-              placeholder="Description" rows={2} className="admin-input mt-2 w-full" />
-            <input value={n.filePath ?? ""} onChange={(e) => set(n.id, "filePath", e.target.value)}
-              placeholder="File Link (optional)" className="admin-input mt-2 w-full" />
-            <div className="mt-2 flex gap-2">
-              <button onClick={() => save(n)} className="inline-flex items-center gap-1 rounded-lg bg-brand px-3 py-2 text-sm font-bold text-white hover:bg-brand-dark">
-                <Save className="h-4 w-4" /> Save
-              </button>
-              <button onClick={() => remove(n.id)} className="inline-flex items-center gap-1 rounded-lg bg-red-600 px-3 py-2 text-sm font-bold text-white hover:bg-red-700">
-                <Trash2 className="h-4 w-4" /> Delete
-              </button>
+      <CrudManager<Notice>
+        title="Notice"
+        endpoint="/api/admin/notices"
+        addLabel="Add Notice"
+        blank={{ title: "", description: "", category: "general", filePath: "", published: true }}
+        emptyIcon={Megaphone}
+        emptyTitle="No notices yet"
+        emptyMessage="Publish announcements for parents and students."
+        searchKeys={["title", "category"]}
+        searchPlaceholder="Search notices..."
+        formTitle="Notice details"
+        formSubtitle="Optionally attach a PDF/image."
+        createBody={(f) => ({
+          title: f.title || "New Notice",
+          description: f.description ?? "",
+          category: f.category || "general",
+          filePath: f.filePath ?? "",
+          published: f.published ?? true,
+        })}
+        updateBody={(f) => ({
+          title: f.title || "New Notice",
+          description: f.description ?? "",
+          category: f.category || "general",
+          filePath: f.filePath ?? "",
+          published: f.published ?? true,
+        })}
+        renderRow={(n, { onView, onEdit, onDelete }) => (
+          <ListRow
+            title={n.title}
+            subtitle={fmtDate(n.createdAt)}
+            badges={
+              <>
+                <Badge label={n.category || "general"} color="accent" />
+                {n.published === false && <Badge label="Hidden" color="gray" />}
+                {n.filePath && <Badge label="File" color="rose" />}
+              </>
+            }
+            onView={onView}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
+        )}
+        renderForm={(f, set) => (
+          <div className="space-y-4">
+            <FormRow>
+              <TextInput label="Title" required value={f.title ?? ""} onChange={(e) => set({ title: e.target.value })} />
+              <Select label="Category" value={f.category || "general"} onChange={(e) => set({ category: e.target.value })}>
+                <option value="general">General</option>
+                <option value="admission">Admission</option>
+                <option value="exam">Exam</option>
+                <option value="event">Event</option>
+                <option value="meeting">Meeting</option>
+              </Select>
+            </FormRow>
+            <Textarea label="Description" rows={3} value={f.description ?? ""} onChange={(e) => set({ description: e.target.value })} />
+            <div>
+              <span className="mb-1.5 block text-sm font-semibold text-brand-deep">Attachment (PDF / image)</span>
+              <FileUpload value={f.filePath ?? ""} onChange={(v) => set({ filePath: v })} accept=".pdf,image/*" label={f.filePath ? "Replace File" : "Upload PDF / Image"} />
             </div>
+            <Toggle label="Published" hint="Unpublished notices are hidden from the website." checked={f.published !== false} onChange={(v) => set({ published: v })} />
           </div>
-        ))}
-      </div>
+        )}
+        renderView={(n) => (
+          <div className="space-y-4">
+            <DetailRow label="Title">{n.title}</DetailRow>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <DetailRow label="Category">{n.category || "general"}</DetailRow>
+              <DetailRow label="Status">{n.published === false ? "Hidden" : "Published"}</DetailRow>
+            </div>
+            <DetailRow label="Published on">{fmtDate(n.createdAt) || "—"}</DetailRow>
+            {n.description && <DetailRow label="Description">{n.description}</DetailRow>}
+            {n.filePath && (
+              <DetailRow label="Attachment">
+                <LinkOut href={n.filePath} label="Open attachment" />
+              </DetailRow>
+            )}
+          </div>
+        )}
+        deleteConfirmTitle={(n) => `Delete "${n.title}"?`}
+        deleteConfirmMessage="This will remove the notice from the website."
+      />
     </PageShell>
   );
 }
 
 // ---------- Results ----------
 function ResultsManager() {
-  const { data, setData, loading } = useFetch<Result>("/api/admin/results");
-  const [error, setError] = useState("");
-
-  const save = async (item: Result) => {
-    try {
-      const updated = await j<Result>(`/api/admin/results/${item.id}`, {
-        method: "PATCH", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(item),
-      });
-      setData((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
-    } catch (e) { setError((e as Error).message); }
-  };
-  const add = async () => {
-    try {
-      const created = await j<Result>("/api/admin/results", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: "New Result" }),
-      });
-      setData((prev) => [created, ...prev]);
-    } catch (e) { setError((e as Error).message); }
-  };
-  const remove = async (id: string) => {
-    if (!confirm("Delete this result?")) return;
-    try {
-      await j(`/api/admin/results/${id}`, { method: "DELETE" });
-      setData((prev) => prev.filter((r) => r.id !== id));
-    } catch (e) { setError((e as Error).message); }
-  };
-  const set = (id: string, field: keyof Result, value: string) =>
-    setData((prev) => prev.map((r) => (r.id === id ? { ...r, [field]: value } : r)));
-
-  if (loading) return <p className="text-sm text-brand-deep/60">Loading...</p>;
-
   return (
-    <PageShell title="Exam Results" subtitle="Share exam result links with parents.">
-      <ErrorBanner error={error} onClose={() => setError("")} />
-      <button onClick={add} className="mb-4 inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-bold text-white hover:bg-brand-dark">
-        <Plus className="h-4 w-4" /> Add Result
-      </button>
-      <div className="space-y-3">
-        {data.map((r) => (
-          <div key={r.id} className="rounded-xl bg-white border border-line p-4 shadow-sm">
-            <input value={r.title} onChange={(e) => set(r.id, "title", e.target.value)}
-              placeholder="Result Title" className="admin-input w-full" />
-            <input value={r.driveLink ?? ""} onChange={(e) => set(r.id, "driveLink", e.target.value)}
-              placeholder="Google Drive Link" className="admin-input mt-2 w-full" />
-            <div className="mt-2 flex gap-2">
-              <button onClick={() => save(r)} className="inline-flex items-center gap-1 rounded-lg bg-brand px-3 py-2 text-sm font-bold text-white hover:bg-brand-dark">
-                <Save className="h-4 w-4" /> Save
-              </button>
-              <button onClick={() => remove(r.id)} className="inline-flex items-center gap-1 rounded-lg bg-red-600 px-3 py-2 text-sm font-bold text-white hover:bg-red-700">
-                <Trash2 className="h-4 w-4" /> Delete
-              </button>
+    <PageShell title="Exam Results" subtitle="Upload result files (PDF/image) or paste a Drive link for parents.">
+      <CrudManager<Result>
+        title="Result"
+        endpoint="/api/admin/results"
+        addLabel="Add Result"
+        blank={{ title: "", driveLink: "", filePath: "" }}
+        emptyIcon={Trophy}
+        emptyTitle="No results yet"
+        emptyMessage="Upload result files or share a Drive link for parents."
+        searchKeys={["title"]}
+        searchPlaceholder="Search results..."
+        formTitle="Result details"
+        createBody={(f) => ({ title: f.title || "New Result", driveLink: f.driveLink ?? "", filePath: f.filePath ?? "" })}
+        updateBody={(f) => ({ title: f.title || "New Result", driveLink: f.driveLink ?? "", filePath: f.filePath ?? "" })}
+        renderRow={(r, { onView, onEdit, onDelete }) => (
+          <ListRow
+            title={r.title}
+            subtitle={fmtDate(r.createdAt)}
+            badges={
+              <>
+                <FileBadge path={r.filePath} />
+                {r.driveLink && <Badge label="Drive link" color="blue" />}
+              </>
+            }
+            onView={onView}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
+        )}
+        renderForm={(f, set) => (
+          <div className="space-y-4">
+            <TextInput label="Title" required value={f.title ?? ""} onChange={(e) => set({ title: e.target.value })} placeholder="e.g. First Term 2083 - Grade 8" />
+            <TextInput label="Google Drive link (optional)" value={f.driveLink ?? ""} onChange={(e) => set({ driveLink: e.target.value })} placeholder="https://drive.google.com/..." />
+            <div>
+              <span className="mb-1.5 block text-sm font-semibold text-brand-deep">Result file (PDF / image)</span>
+              <FileUpload value={f.filePath ?? ""} onChange={(v) => set({ filePath: v })} accept=".pdf,image/*" label={f.filePath ? "Replace File" : "Upload PDF / Image"} />
             </div>
           </div>
-        ))}
-      </div>
+        )}
+        renderView={(r) => (
+          <div className="space-y-4">
+            <DetailRow label="Title">{r.title}</DetailRow>
+            <DetailRow label="Posted on">{fmtDate(r.createdAt) || "—"}</DetailRow>
+            {r.filePath && (
+              <DetailRow label="File">
+                <LinkOut href={r.filePath} label="Open result file" />
+              </DetailRow>
+            )}
+            {r.driveLink && (
+              <DetailRow label="Drive link">
+                <LinkOut href={r.driveLink} label="Open Drive link" />
+              </DetailRow>
+            )}
+          </div>
+        )}
+        deleteConfirmTitle={(r) => `Delete "${r.title}"?`}
+        deleteConfirmMessage="This will remove the result from the website."
+      />
+    </PageShell>
+  );
+}
+
+// ---------- Events ----------
+function EventsManager() {
+  const eventDate = (f: Partial<Event>) => {
+    const d = f.date ? new Date(f.date) : new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  };
+  return (
+    <PageShell title="Events" subtitle="Manage school events shown on the website.">
+      <CrudManager<Event>
+        title="Event"
+        endpoint="/api/admin/events"
+        addLabel="Add Event"
+        blank={{ title: "", description: "", date: "", time: "", location: "" }}
+        emptyIcon={CalendarDays}
+        emptyTitle="No events yet"
+        emptyMessage="Add upcoming school events for parents and students."
+        searchKeys={["title", "location"]}
+        searchPlaceholder="Search events..."
+        formTitle="Event details"
+        createBody={(f) => ({ title: f.title || "New Event", description: f.description ?? "", date: f.date || new Date().toISOString(), time: f.time ?? "", location: f.location ?? "" })}
+        updateBody={(f) => ({ title: f.title || "New Event", description: f.description ?? "", date: f.date || new Date().toISOString(), time: f.time ?? "", location: f.location ?? "" })}
+        renderRow={(e, { onView, onEdit, onDelete }) => (
+          <ListRow
+            title={e.title}
+            subtitle={`${fmtDate(e.date)}${e.time ? ` at ${e.time}` : ""}`}
+            badges={<>{e.location && <Badge label={e.location} color="green" />}</>}
+            onView={onView}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
+        )}
+        renderForm={(f, set) => (
+          <div className="space-y-4">
+            <TextInput label="Title" required value={f.title ?? ""} onChange={(e) => set({ title: e.target.value })} />
+            <FormRow>
+              <TextInput label="Date" type="date" value={eventDate(f)} onChange={(e) => set({ date: e.target.value })} />
+              <TextInput label="Time (optional)" type="time" value={f.time ?? ""} onChange={(e) => set({ time: e.target.value })} />
+            </FormRow>
+            <TextInput label="Location (optional)" value={f.location ?? ""} onChange={(e) => set({ location: e.target.value })} />
+            <Textarea label="Description (optional)" rows={3} value={f.description ?? ""} onChange={(e) => set({ description: e.target.value })} />
+          </div>
+        )}
+        renderView={(e) => (
+          <div className="space-y-4">
+            <DetailRow label="Title">{e.title}</DetailRow>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <DetailRow label="Date">{fmtDate(e.date)}</DetailRow>
+              <DetailRow label="Time">{e.time || "—"}</DetailRow>
+            </div>
+            <DetailRow label="Location">{e.location || "—"}</DetailRow>
+            {e.description && <DetailRow label="Description">{e.description}</DetailRow>}
+          </div>
+        )}
+        deleteConfirmTitle={(e) => `Delete "${e.title}"?`}
+        deleteConfirmMessage="This will remove the event from the website."
+      />
     </PageShell>
   );
 }
 
 // ---------- Gallery ----------
 function GalleryManager() {
-  const { data, setData, loading } = useFetch<GalleryItem>("/api/admin/gallery");
-  const [error, setError] = useState("");
-
-  const upload = async (file: File) => {
-    try {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await fetch("/api/upload", { method: "POST", body: fd });
-      if (!res.ok) throw new Error("Upload failed");
-      const d = await res.json();
-      const created = await j<GalleryItem>("/api/admin/gallery", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ imagePath: d.url, title: "" }),
-      });
-      setData((prev) => [created, ...prev]);
-    } catch (e) { setError((e as Error).message); }
-  };
-
-  const remove = async (id: string) => {
-    if (!confirm("Delete this photo?")) return;
-    try {
-      await j(`/api/admin/gallery/${id}`, { method: "DELETE" });
-      setData((prev) => prev.filter((g) => g.id !== id));
-    } catch (e) { setError((e as Error).message); }
-  };
-
-  if (loading) return <p className="text-sm text-brand-deep/60">Loading...</p>;
-
   return (
     <PageShell title="Gallery" subtitle="Upload and manage school photos.">
-      <ErrorBanner error={error} onClose={() => setError("")} />
-      <label className="mb-6 inline-flex cursor-pointer items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-bold text-white hover:bg-brand-dark">
-        <Plus className="h-4 w-4" /> Upload New Photo
-        <input type="file" accept="image/*" className="hidden"
-          onChange={(e) => e.target.files?.[0] && upload(e.target.files[0])} />
-      </label>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        {data.map((g) => (
-          <div key={g.id} className="group relative aspect-square overflow-hidden rounded-xl border border-line">
-            <Image src={g.imagePath} alt={g.title || "Gallery"} fill className="object-cover" />
-            <button onClick={() => remove(g.id)}
-              className="absolute right-2 top-2 rounded-lg bg-red-600 p-2 text-white opacity-0 group-hover:opacity-100 transition">
-              <Trash2 className="h-4 w-4" />
-            </button>
+      <CrudManager<GalleryItem>
+        title="Photo"
+        endpoint="/api/admin/gallery"
+        addLabel="Add Photo"
+        blank={{ imagePath: "", title: "", album: "" }}
+        emptyIcon={ImageIcon}
+        emptyTitle="No photos yet"
+        emptyMessage="Upload school photos to show in the gallery."
+        searchKeys={["title", "album"]}
+        searchPlaceholder="Search photos..."
+        formTitle="Photo details"
+        createBody={(f) => ({ imagePath: f.imagePath || "", title: f.title ?? "", album: f.album ?? "" })}
+        updateBody={(f) => ({ imagePath: f.imagePath || "", title: f.title ?? "", album: f.album ?? "" })}
+        renderRow={(g, { onView, onEdit, onDelete }) => (
+          <ListRow
+            avatar={g.imagePath}
+            title={g.title || "Untitled photo"}
+            subtitle={fmtDate(g.createdAt)}
+            badges={<>{g.album && <Badge label={g.album} color="violet" />}</>}
+            onView={onView}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
+        )}
+        renderForm={(f, set) => (
+          <div className="space-y-4">
+            <div>
+              <span className="mb-1.5 block text-sm font-semibold text-brand-deep">Photo</span>
+              <FileUpload value={f.imagePath ?? ""} onChange={(v) => set({ imagePath: v })} accept="image/*" label="Upload Photo" />
+            </div>
+            <TextInput label="Title (optional)" value={f.title ?? ""} onChange={(e) => set({ title: e.target.value })} />
+            <TextInput label="Album (optional)" value={f.album ?? ""} onChange={(e) => set({ album: e.target.value })} />
           </div>
-        ))}
-      </div>
+        )}
+        renderView={(g) => (
+          <div className="space-y-4">
+            <div className="overflow-hidden rounded-xl bg-surface-muted">
+              <img src={g.imagePath} alt={g.title || "Gallery"} className="w-full max-h-96 object-contain" />
+            </div>
+            <DetailRow label="Title">{g.title || "—"}</DetailRow>
+            <DetailRow label="Album">{g.album || "—"}</DetailRow>
+            <DetailRow label="Uploaded on">{fmtDate(g.createdAt) || "—"}</DetailRow>
+          </div>
+        )}
+        deleteConfirmTitle={() => "Delete this photo?"}
+        deleteConfirmMessage="This will remove the photo from the gallery."
+      />
     </PageShell>
   );
 }
 
 // ---------- Testimonials ----------
 function TestimonialsManager() {
-  const { data, setData, loading } = useFetch<Testimonial>("/api/admin/testimonials");
-  const [error, setError] = useState("");
-
-  const save = async (item: Testimonial) => {
-    try {
-      const updated = await j<Testimonial>(`/api/admin/testimonials/${item.id}`, {
-        method: "PATCH", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(item),
-      });
-      setData((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
-    } catch (e) { setError((e as Error).message); }
-  };
-  const add = async () => {
-    try {
-      const created = await j<Testimonial>("/api/admin/testimonials", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: "Parent", message: "Testimonial message" }),
-      });
-      setData((prev) => [created, ...prev]);
-    } catch (e) { setError((e as Error).message); }
-  };
-  const remove = async (id: string) => {
-    if (!confirm("Delete this testimonial?")) return;
-    try {
-      await j(`/api/admin/testimonials/${id}`, { method: "DELETE" });
-      setData((prev) => prev.filter((t) => t.id !== id));
-    } catch (e) { setError((e as Error).message); }
-  };
-  const set = (id: string, field: keyof Testimonial, value: string) =>
-    setData((prev) => prev.map((t) => (t.id === id ? { ...t, [field]: value } : t)));
-
-  if (loading) return <p className="text-sm text-brand-deep/60">Loading...</p>;
-
   return (
     <PageShell title="Testimonials" subtitle="Show what parents and students say.">
-      <ErrorBanner error={error} onClose={() => setError("")} />
-      <button onClick={add} className="mb-4 inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-bold text-white hover:bg-brand-dark">
-        <Plus className="h-4 w-4" /> Add Testimonial
-      </button>
-      <div className="space-y-3">
-        {data.map((t) => (
-          <div key={t.id} className="rounded-xl bg-white border border-line p-4 shadow-sm">
-            <input value={t.name} onChange={(e) => set(t.id, "name", e.target.value)}
-              placeholder="Name" className="admin-input w-full" />
-            <textarea value={t.message} onChange={(e) => set(t.id, "message", e.target.value)}
-              placeholder="Message" rows={2} className="admin-input mt-2 w-full" />
-            <div className="mt-2 flex gap-2">
-              <button onClick={() => save(t)} className="inline-flex items-center gap-1 rounded-lg bg-brand px-3 py-2 text-sm font-bold text-white hover:bg-brand-dark">
-                <Save className="h-4 w-4" /> Save
-              </button>
-              <button onClick={() => remove(t.id)} className="inline-flex items-center gap-1 rounded-lg bg-red-600 px-3 py-2 text-sm font-bold text-white hover:bg-red-700">
-                <Trash2 className="h-4 w-4" /> Delete
-              </button>
+      <CrudManager<Testimonial>
+        title="Testimonial"
+        endpoint="/api/admin/testimonials"
+        addLabel="Add Testimonial"
+        blank={{ name: "", message: "", role: "parent", rating: 5, photo: "" }}
+        emptyIcon={Quote}
+        emptyTitle="No testimonials yet"
+        emptyMessage="Add reviews from parents and students."
+        searchKeys={["name", "role"]}
+        searchPlaceholder="Search testimonials..."
+        formTitle="Testimonial details"
+        createBody={(f) => ({ name: f.name || "Parent", message: f.message || "", role: f.role ?? "parent", rating: Number(f.rating ?? 5), photo: f.photo ?? "" })}
+        updateBody={(f) => ({ name: f.name || "Parent", message: f.message || "", role: f.role ?? "parent", rating: Number(f.rating ?? 5), photo: f.photo ?? "" })}
+        renderRow={(t, { onView, onEdit, onDelete }) => (
+          <ListRow
+            avatar={t.photo}
+            fallbackText={(t.name || "?").charAt(0).toUpperCase()}
+            title={t.name}
+            subtitle={t.role || undefined}
+            badges={<Stars value={t.rating ?? 5} />}
+            meta={
+              <span className="max-w-[220px] truncate italic text-brand-deep/50">&ldquo;{t.message}&rdquo;</span>
+            }
+            onView={onView}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
+        )}
+        renderForm={(f, set) => (
+          <div className="space-y-4">
+            <FormRow>
+              <TextInput label="Name" required value={f.name ?? ""} onChange={(e) => set({ name: e.target.value })} />
+              <Select label="Role" value={f.role || "parent"} onChange={(e) => set({ role: e.target.value })}>
+                <option value="parent">Parent</option>
+                <option value="student">Student</option>
+                <option value="alumni">Alumni</option>
+              </Select>
+            </FormRow>
+            <Select label="Rating" value={String(f.rating ?? 5)} onChange={(e) => set({ rating: Number(e.target.value) })}>
+              {[5, 4, 3, 2, 1].map((n) => (
+                <option key={n} value={n}>{n} star{n > 1 ? "s" : ""}</option>
+              ))}
+            </Select>
+            <Textarea label="Message" rows={3} required value={f.message ?? ""} onChange={(e) => set({ message: e.target.value })} />
+            <div>
+              <span className="mb-1.5 block text-sm font-semibold text-brand-deep">Photo (optional)</span>
+              <FileUpload value={f.photo ?? ""} onChange={(v) => set({ photo: v })} accept="image/*" label="Upload Photo" />
             </div>
           </div>
-        ))}
-      </div>
+        )}
+        renderView={(t) => (
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              {t.photo && <img src={t.photo} alt={t.name} className="h-14 w-14 rounded-full object-cover ring-1 ring-line" />}
+              <div>
+                <p className="font-bold">{t.name}</p>
+                {t.role && <p className="text-sm text-brand-deep/60">{t.role}</p>}
+                <Stars value={t.rating ?? 5} />
+              </div>
+            </div>
+            <DetailRow label="Message">{t.message}</DetailRow>
+            <DetailRow label="Posted on">{fmtDate(t.createdAt) || "—"}</DetailRow>
+          </div>
+        )}
+        deleteConfirmTitle={(t) => `Delete ${t.name}'s testimonial?`}
+        deleteConfirmMessage="This will remove the testimonial from the website."
+      />
     </PageShell>
   );
 }
 
 // ---------- Enquiries ----------
 function EnquiriesManager() {
-  const { data, setData, loading } = useFetch<Enquiry>("/api/admin/enquiries");
+  const [data, setData] = useState<Enquiry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [viewing, setViewing] = useState<Enquiry | null>(null);
+  const [confirmId, setConfirmId] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const { toast } = useToast();
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const d = await j<Enquiry[]>("/api/admin/enquiries");
+        if (!cancelled) setData(d);
+      } catch (e) {
+        if (!cancelled) setError((e as Error).message);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const filtered = search.trim()
+    ? data.filter((e) =>
+        [e.name, e.phone, e.email, e.subject, e.message]
+          .filter(Boolean)
+          .some((v) => (v as string).toLowerCase().includes(search.toLowerCase()))
+      )
+    : data;
 
   const setStatus = async (id: string, status: string) => {
     try {
       const updated = await j<Enquiry>(`/api/admin/enquiries/${id}`, {
-        method: "PATCH", headers: { "Content-Type": "application/json" },
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status }),
       });
       setData((prev) => prev.map((e) => (e.id === updated.id ? updated : e)));
-    } catch (e) { setError((e as Error).message); }
+      setViewing((v) => (v && v.id === updated.id ? updated : v));
+      toast("success", `Marked as ${status}`);
+    } catch (e) {
+      setError((e as Error).message);
+      toast("error", (e as Error).message);
+    }
   };
+
   const remove = async (id: string) => {
-    if (!confirm("Delete this enquiry?")) return;
     try {
       await j(`/api/admin/enquiries/${id}`, { method: "DELETE" });
       setData((prev) => prev.filter((e) => e.id !== id));
-    } catch (e) { setError((e as Error).message); }
+      setConfirmId(null);
+      setViewing(null);
+      toast("success", "Enquiry deleted");
+    } catch (e) {
+      setError((e as Error).message);
+      toast("error", (e as Error).message);
+    }
   };
 
   if (loading) return <p className="text-sm text-brand-deep/60">Loading...</p>;
 
   return (
     <PageShell title="Enquiries" subtitle="Messages sent through the contact form.">
-      <ErrorBanner error={error} onClose={() => setError("")} />
-      <div className="space-y-3">
-        {data.length === 0 && (
-          <p className="text-sm text-brand-deep/60">No enquiries yet.</p>
-        )}
-        {data.map((e) => (
-          <div key={e.id} className="rounded-xl bg-white border border-line p-4 shadow-sm">
-            <div className="flex items-center justify-between">
-              <p className="font-bold">{e.name}</p>
-              <span className={`rounded-full px-3 py-1 text-xs font-bold ${
-                e.status === "new" ? "bg-accent/15 text-accent"
-                : e.status === "contacted" ? "bg-blue-100 text-blue-700"
-                : "bg-green-100 text-green-700"
-              }`}>
-                {e.status}
+      {error && (
+        <div className="mb-4 flex items-center justify-between rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">
+          <span>{error}</span>
+          <button onClick={() => setError("")} className="font-bold">×</button>
+        </div>
+      )}
+      <div className="mb-4">
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search enquiries..."
+          className="admin-input w-full max-w-xs"
+        />
+      </div>
+      {filtered.length === 0 ? (
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-line bg-white px-6 py-14 text-center">
+          <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-soft text-brand">
+            <Inbox className="h-6 w-6" />
+          </span>
+          <h3 className="mt-4 font-bold text-brand-deep">No enquiries yet</h3>
+          <p className="mt-1 max-w-sm text-sm text-brand-deep/60">Messages from the contact form will appear here.</p>
+        </div>
+      ) : (
+        <div className="overflow-hidden rounded-2xl bg-white border border-line shadow-sm">
+          <div className="divide-y divide-line">
+            {filtered.map((e) => (
+              <div key={e.id} className="flex flex-wrap items-center gap-3 px-3 py-4 sm:px-5">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand font-bold">
+                  {e.name.charAt(0).toUpperCase()}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="truncate font-semibold text-brand-deep">{e.name}</p>
+                    <Badge
+                      label={e.status}
+                      color={e.status === "new" ? "accent" : e.status === "contacted" ? "blue" : "green"}
+                    />
+                    {e.category && e.category !== "general" && (
+                      <Badge label={ENQUIRY_CATEGORY_LABELS[e.category] || e.category} color="gray" />
+                    )}
+                  </div>
+                  <p className="mt-0.5 truncate text-sm text-brand-deep/60">
+                    {e.subject || e.message}
+                    {e.phone && ` • ${e.phone}`}
+                  </p>
+                </div>
+                <span className="hidden shrink-0 text-sm text-brand-deep/60 md:block">{fmtDate(e.createdAt)}</span>
+                <div className="ml-auto flex shrink-0 items-center gap-1">
+                  <button
+                    onClick={() => setViewing(e)}
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-line text-brand-deep/60 hover:border-brand hover:bg-brand-soft hover:text-brand transition-colors"
+                    title="View"
+                  >
+                    <Eye className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => setConfirmId(e.id)}
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-line text-brand-deep/60 hover:border-red-200 hover:bg-red-50 hover:text-red-600 transition-colors"
+                    title="Delete"
+                  >
+                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <Modal open={viewing !== null} onClose={() => setViewing(null)} title="Enquiry details" subtitle="Message from the contact form">
+        {viewing && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand font-bold">
+                {viewing.name.charAt(0).toUpperCase()}
               </span>
+              <div>
+                <p className="font-bold">{viewing.name}</p>
+                <Badge
+                  label={viewing.status}
+                  color={viewing.status === "new" ? "accent" : viewing.status === "contacted" ? "blue" : "green"}
+                />
+              </div>
             </div>
-            {e.phone && <p className="mt-1 text-sm text-brand-deep/70">Phone: {e.phone}</p>}
-            <p className="mt-2 text-sm leading-relaxed">{e.message}</p>
-            <div className="mt-3 flex gap-2">
-              {e.status !== "contacted" && (
-                <button onClick={() => setStatus(e.id, "contacted")}
-                  className="rounded-lg border border-blue-600 px-3 py-1.5 text-sm font-semibold text-blue-700 hover:bg-blue-50">
+            <div className="grid gap-3 sm:grid-cols-2">
+              <DetailRow label="Phone">{viewing.phone || "—"}</DetailRow>
+              <DetailRow label="Email">{viewing.email || "—"}</DetailRow>
+              <DetailRow label="Subject">{viewing.subject || "—"}</DetailRow>
+              <DetailRow label="Received on">{fmtDate(viewing.createdAt)}</DetailRow>
+            </div>
+            <DetailRow label="Message">{viewing.message}</DetailRow>
+            <div className="flex flex-wrap gap-2 border-t border-line pt-4">
+              {viewing.status !== "contacted" && (
+                <button
+                  onClick={() => setStatus(viewing.id, "contacted")}
+                  className="rounded-lg border border-blue-600 px-3 py-1.5 text-sm font-semibold text-blue-700 hover:bg-blue-50"
+                >
                   Mark contacted
                 </button>
               )}
-              {e.status !== "resolved" && (
-                <button onClick={() => setStatus(e.id, "resolved")}
-                  className="rounded-lg border border-green-600 px-3 py-1.5 text-sm font-semibold text-green-700 hover:bg-green-50">
+              {viewing.status !== "resolved" && (
+                <button
+                  onClick={() => setStatus(viewing.id, "resolved")}
+                  className="rounded-lg border border-green-600 px-3 py-1.5 text-sm font-semibold text-green-700 hover:bg-green-50"
+                >
                   Mark resolved
                 </button>
               )}
-              <button onClick={() => remove(e.id)}
-                className="inline-flex items-center gap-1 rounded-lg bg-red-600 px-3 py-1.5 text-sm font-bold text-white hover:bg-red-700">
-                <Trash2 className="h-4 w-4" /> Delete
+              <button
+                onClick={() => {
+                  const id = viewing.id;
+                  setViewing(null);
+                  setConfirmId(id);
+                }}
+                className="inline-flex items-center gap-1 rounded-lg bg-red-600 px-3 py-1.5 text-sm font-bold text-white hover:bg-red-700 ml-auto"
+              >
+                Delete
               </button>
             </div>
           </div>
-        ))}
-      </div>
+        )}
+      </Modal>
+
+      <ConfirmDialog
+        open={confirmId !== null}
+        title="Delete enquiry?"
+        message="This will permanently remove the enquiry."
+        onConfirm={() => confirmId && remove(confirmId)}
+        onCancel={() => setConfirmId(null)}
+      />
     </PageShell>
   );
 }
 
 // ---------- Users ----------
 function UsersManager() {
-  const { data, setData, loading } = useFetch<User>("/api/admin/users");
-  const [error, setError] = useState("");
-  const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ username: "", name: "", password: "", role: "teacher" });
-
-  const addUser = async () => {
-    try {
-      const created = await j<User>("/api/admin/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      setData((prev) => [created, ...prev]);
-      setShowForm(false);
-      setForm({ username: "", name: "", password: "", role: "teacher" });
-    } catch (e) {
-      setError((e as Error).message);
-    }
-  };
-
-  const remove = async (id: string) => {
-    if (!confirm("Delete this user?")) return;
-    try {
-      await j(`/api/admin/users/${id}`, { method: "DELETE" });
-      setData((prev) => prev.filter((u) => u.id !== id));
-    } catch (e) {
-      setError((e as Error).message);
-    }
-  };
-
-  if (loading) return <p className="text-sm text-brand-deep/60">Loading...</p>;
-
   return (
     <PageShell title="Users" subtitle="Create and manage staff login accounts.">
-      <ErrorBanner error={error} onClose={() => setError("")} />
-      <button onClick={() => setShowForm((v) => !v)}
-        className="mb-4 inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-bold text-white hover:bg-brand-dark">
-        <Plus className="h-4 w-4" /> {showForm ? "Cancel" : "Add User"}
-      </button>
-
-      {showForm && (
-        <div className="mb-6 max-w-lg rounded-xl bg-white border border-line p-5 shadow-sm">
-          <div className="space-y-3">
-            <input value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value })}
-              placeholder="Username" className="admin-input w-full" />
-            <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
-              placeholder="Full name" className="admin-input w-full" />
-            <input value={form.password} type="password" onChange={(e) => setForm({ ...form, password: e.target.value })}
-              placeholder="Password (min 4 chars)" className="admin-input w-full" />
-            <div className="flex gap-3">
-              <label className="flex items-center gap-2 text-sm font-medium">
-                <input type="radio" checked={form.role === "teacher"} onChange={() => setForm({ ...form, role: "teacher" })} /> Teacher
-              </label>
-              <label className="flex items-center gap-2 text-sm font-medium">
-                <input type="radio" checked={form.role === "admin"} onChange={() => setForm({ ...form, role: "admin" })} /> Admin
-              </label>
-            </div>
-            <button onClick={addUser}
-              className="rounded-lg bg-brand px-4 py-2 text-sm font-bold text-white hover:bg-brand-dark">
-              Create User
-            </button>
+      <CrudManager<User & { password?: string }>
+        title="User"
+        endpoint="/api/admin/users"
+        addLabel="Add User"
+        blank={{ username: "", name: "", password: "", role: "teacher" }}
+        emptyIcon={UserCog}
+        emptyTitle="No users yet"
+        emptyMessage="Create login accounts for staff."
+        searchKeys={["username", "name", "role"]}
+        searchPlaceholder="Search users..."
+        formTitle="User account"
+        formSubtitle="Teachers can manage results and notices."
+        createBody={(f) => ({
+          username: f.username || "",
+          name: f.name ?? "",
+          password: f.password || "",
+          role: f.role === "admin" ? "admin" : "teacher",
+        })}
+        updateBody={(f) => ({
+          name: f.name ?? "",
+          role: f.role === "admin" ? "admin" : "teacher",
+          ...(f.password ? { password: f.password } : {}),
+        })}
+        renderRow={(u, { onEdit, onDelete }) => (
+          <ListRow
+            fallbackText={(u.name || u.username).charAt(0).toUpperCase()}
+            fallbackClass={u.role === "admin" ? "bg-brand text-white" : "bg-accent text-white"}
+            title={u.name || u.username}
+            subtitle={`@${u.username}`}
+            badges={<Badge label={u.role} color={u.role === "admin" ? "brand" : "accent"} />}
+            meta={fmtDate(u.createdAt)}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
+        )}
+        renderForm={(f, set) => (
+          <div className="space-y-4">
+            <TextInput
+              label="Username"
+              required
+              value={f.username ?? ""}
+              onChange={(e) => set({ username: e.target.value })}
+              hint="Used to log in."
+            />
+            <TextInput label="Full name" value={f.name ?? ""} onChange={(e) => set({ name: e.target.value })} />
+            <TextInput
+              label={f.password !== undefined ? "Password (leave blank to keep current)" : "Password"}
+              type="password"
+              value={f.password ?? ""}
+              onChange={(e) => set({ password: e.target.value })}
+              hint="At least 4 characters."
+            />
+            <Select label="Role" value={f.role || "teacher"} onChange={(e) => set({ role: e.target.value })}>
+              <option value="teacher">Teacher</option>
+              <option value="admin">Admin</option>
+            </Select>
           </div>
-        </div>
-      )}
-
-      <div className="rounded-xl bg-white border border-line shadow-sm overflow-hidden">
-        <div className="divide-y divide-line">
-          {data.map((u) => (
-            <div key={u.id} className="flex items-center gap-4 px-5 py-4">
-              <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white text-sm font-bold ${
-                u.role === "admin" ? "bg-brand" : "bg-accent"
-              }`}>
-                {(u.name || u.username).charAt(0).toUpperCase()}
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="font-semibold truncate">{u.name || u.username}</p>
-                <p className="text-sm text-brand-deep/60">@{u.username}</p>
-              </div>
-              <span className={`rounded-full px-3 py-1 text-xs font-bold ${
-                u.role === "admin" ? "bg-brand-soft text-brand" : "bg-accent-soft text-accent"
-              }`}>
-                {u.role}
-              </span>
-              <button onClick={() => remove(u.id)}
-                className="inline-flex items-center gap-1 rounded-lg bg-red-600 px-3 py-1.5 text-sm font-bold text-white hover:bg-red-700">
-                <Trash2 className="h-4 w-4" />
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
+        )}
+        deleteConfirmTitle={(u) => `Delete user ${u.username}?`}
+        deleteConfirmMessage="This will remove their login access."
+      />
     </PageShell>
   );
 }
@@ -801,13 +1248,13 @@ const SETTING_FIELDS = [
   { key: "email", label: "Email" },
   { key: "facebook", label: "Facebook URL" },
   { key: "whatsapp", label: "WhatsApp Number (with country code, no +)" },
-  { key: "logo", label: "Logo" },
-  { key: "cover1", label: "Cover 1" },
-  { key: "cover2", label: "Cover 2" },
-  { key: "cover3", label: "Cover 3" },
-  { key: "cover4", label: "Cover 4" },
-  { key: "cover5", label: "Cover 5" },
-  { key: "cover6", label: "Cover 6" },
+  { key: "logo", label: "Logo", image: true },
+  { key: "cover1", label: "Cover 1", image: true },
+  { key: "cover2", label: "Cover 2", image: true },
+  { key: "cover3", label: "Cover 3", image: true },
+  { key: "cover4", label: "Cover 4", image: true },
+  { key: "cover5", label: "Cover 5", image: true },
+  { key: "cover6", label: "Cover 6", image: true },
 ] as const;
 
 function SettingsManager() {
@@ -816,6 +1263,7 @@ function SettingsManager() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+  const { toast } = useToast();
 
   useEffect(() => {
     (async () => {
@@ -835,13 +1283,16 @@ function SettingsManager() {
     setSaved(false);
     try {
       await j("/api/admin/settings", {
-        method: "PUT", headers: { "Content-Type": "application/json" },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(settings),
       });
       setSaved(true);
+      toast("success", "Settings saved");
       setTimeout(() => setSaved(false), 3000);
     } catch (e) {
       setError((e as Error).message);
+      toast("error", (e as Error).message);
     } finally {
       setSaving(false);
     }
@@ -853,26 +1304,27 @@ function SettingsManager() {
 
   return (
     <PageShell title="Site Settings" subtitle="Update school info, contact details and images.">
-      <ErrorBanner error={error} onClose={() => setError("")} />
+      {error && (
+        <div className="mb-4 flex items-center justify-between rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">
+          <span>{error}</span>
+          <button onClick={() => setError("")} className="font-bold">×</button>
+        </div>
+      )}
       <div className="max-w-2xl space-y-4">
         {SETTING_FIELDS.map((f) => (
           <div key={f.key}>
             <label className="mb-1 block text-sm font-semibold">{f.label}</label>
-            {f.key === "tagline" || f.key === "motto" || f.key === "address" ? (
-              <textarea value={settings[f.key] ?? ""} onChange={(e) => set(f.key, e.target.value)}
-                rows={2} className="admin-input w-full" />
+            {"image" in f && f.image ? (
+              <FileUpload value={settings[f.key] ?? ""} onChange={(v) => set(f.key, v)} label="Upload Image" />
             ) : (
-              <PhotoInput
-                value={settings[f.key] ?? ""}
-                onChange={(v) => set(f.key, v)}
-                placeholder={f.label}
-              />
+              <textarea value={settings[f.key] ?? ""} onChange={(e) => set(f.key, e.target.value)}
+                rows={f.key === "schoolName" ? 1 : 2} className="admin-input w-full" />
             )}
           </div>
         ))}
         <button onClick={save} disabled={saving}
           className="inline-flex items-center gap-2 rounded-lg bg-brand px-5 py-3 text-sm font-bold text-white hover:bg-brand-dark disabled:opacity-50">
-          <Save className="h-4 w-4" /> {saving ? "Saving..." : "Save Settings"}
+          {saving ? "Saving..." : "Save Settings"}
         </button>
         {saved && <span className="ml-3 text-sm font-semibold text-green-700">Saved!</span>}
         <p className="text-xs text-brand-deep/50">

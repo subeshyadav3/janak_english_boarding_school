@@ -20,8 +20,18 @@ export type SettingModel = runtime.Types.Result.DefaultSelection<Prisma.$Setting
 
 export type AggregateSetting = {
   _count: SettingCountAggregateOutputType | null
+  _avg: SettingAvgAggregateOutputType | null
+  _sum: SettingSumAggregateOutputType | null
   _min: SettingMinAggregateOutputType | null
   _max: SettingMaxAggregateOutputType | null
+}
+
+export type SettingAvgAggregateOutputType = {
+  establishedYear: number | null
+}
+
+export type SettingSumAggregateOutputType = {
+  establishedYear: number | null
 }
 
 export type SettingMinAggregateOutputType = {
@@ -32,8 +42,12 @@ export type SettingMinAggregateOutputType = {
   address: string | null
   phone: string | null
   email: string | null
+  establishedYear: number | null
   facebook: string | null
   whatsapp: string | null
+  instagram: string | null
+  youtube: string | null
+  mapUrl: string | null
   logo: string | null
   cover1: string | null
   cover2: string | null
@@ -41,6 +55,11 @@ export type SettingMinAggregateOutputType = {
   cover4: string | null
   cover5: string | null
   cover6: string | null
+  admissionTitle: string | null
+  admissionText: string | null
+  admissionCallLabel: string | null
+  admissionWhatsappLabel: string | null
+  admissionEnabled: boolean | null
   updatedAt: Date | null
 }
 
@@ -52,8 +71,12 @@ export type SettingMaxAggregateOutputType = {
   address: string | null
   phone: string | null
   email: string | null
+  establishedYear: number | null
   facebook: string | null
   whatsapp: string | null
+  instagram: string | null
+  youtube: string | null
+  mapUrl: string | null
   logo: string | null
   cover1: string | null
   cover2: string | null
@@ -61,6 +84,11 @@ export type SettingMaxAggregateOutputType = {
   cover4: string | null
   cover5: string | null
   cover6: string | null
+  admissionTitle: string | null
+  admissionText: string | null
+  admissionCallLabel: string | null
+  admissionWhatsappLabel: string | null
+  admissionEnabled: boolean | null
   updatedAt: Date | null
 }
 
@@ -72,8 +100,12 @@ export type SettingCountAggregateOutputType = {
   address: number
   phone: number
   email: number
+  establishedYear: number
   facebook: number
   whatsapp: number
+  instagram: number
+  youtube: number
+  mapUrl: number
   logo: number
   cover1: number
   cover2: number
@@ -81,10 +113,23 @@ export type SettingCountAggregateOutputType = {
   cover4: number
   cover5: number
   cover6: number
+  admissionTitle: number
+  admissionText: number
+  admissionCallLabel: number
+  admissionWhatsappLabel: number
+  admissionEnabled: number
   updatedAt: number
   _all: number
 }
 
+
+export type SettingAvgAggregateInputType = {
+  establishedYear?: true
+}
+
+export type SettingSumAggregateInputType = {
+  establishedYear?: true
+}
 
 export type SettingMinAggregateInputType = {
   id?: true
@@ -94,8 +139,12 @@ export type SettingMinAggregateInputType = {
   address?: true
   phone?: true
   email?: true
+  establishedYear?: true
   facebook?: true
   whatsapp?: true
+  instagram?: true
+  youtube?: true
+  mapUrl?: true
   logo?: true
   cover1?: true
   cover2?: true
@@ -103,6 +152,11 @@ export type SettingMinAggregateInputType = {
   cover4?: true
   cover5?: true
   cover6?: true
+  admissionTitle?: true
+  admissionText?: true
+  admissionCallLabel?: true
+  admissionWhatsappLabel?: true
+  admissionEnabled?: true
   updatedAt?: true
 }
 
@@ -114,8 +168,12 @@ export type SettingMaxAggregateInputType = {
   address?: true
   phone?: true
   email?: true
+  establishedYear?: true
   facebook?: true
   whatsapp?: true
+  instagram?: true
+  youtube?: true
+  mapUrl?: true
   logo?: true
   cover1?: true
   cover2?: true
@@ -123,6 +181,11 @@ export type SettingMaxAggregateInputType = {
   cover4?: true
   cover5?: true
   cover6?: true
+  admissionTitle?: true
+  admissionText?: true
+  admissionCallLabel?: true
+  admissionWhatsappLabel?: true
+  admissionEnabled?: true
   updatedAt?: true
 }
 
@@ -134,8 +197,12 @@ export type SettingCountAggregateInputType = {
   address?: true
   phone?: true
   email?: true
+  establishedYear?: true
   facebook?: true
   whatsapp?: true
+  instagram?: true
+  youtube?: true
+  mapUrl?: true
   logo?: true
   cover1?: true
   cover2?: true
@@ -143,6 +210,11 @@ export type SettingCountAggregateInputType = {
   cover4?: true
   cover5?: true
   cover6?: true
+  admissionTitle?: true
+  admissionText?: true
+  admissionCallLabel?: true
+  admissionWhatsappLabel?: true
+  admissionEnabled?: true
   updatedAt?: true
   _all?: true
 }
@@ -185,6 +257,18 @@ export type SettingAggregateArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: SettingAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: SettingSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: SettingMinAggregateInputType
@@ -215,6 +299,8 @@ export type SettingGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   _count?: SettingCountAggregateInputType | true
+  _avg?: SettingAvgAggregateInputType
+  _sum?: SettingSumAggregateInputType
   _min?: SettingMinAggregateInputType
   _max?: SettingMaxAggregateInputType
 }
@@ -227,8 +313,12 @@ export type SettingGroupByOutputType = {
   address: string
   phone: string
   email: string
+  establishedYear: number | null
   facebook: string | null
   whatsapp: string | null
+  instagram: string | null
+  youtube: string | null
+  mapUrl: string | null
   logo: string | null
   cover1: string | null
   cover2: string | null
@@ -236,8 +326,15 @@ export type SettingGroupByOutputType = {
   cover4: string | null
   cover5: string | null
   cover6: string | null
+  admissionTitle: string | null
+  admissionText: string | null
+  admissionCallLabel: string | null
+  admissionWhatsappLabel: string | null
+  admissionEnabled: boolean
   updatedAt: Date
   _count: SettingCountAggregateOutputType | null
+  _avg: SettingAvgAggregateOutputType | null
+  _sum: SettingSumAggregateOutputType | null
   _min: SettingMinAggregateOutputType | null
   _max: SettingMaxAggregateOutputType | null
 }
@@ -268,8 +365,12 @@ export type SettingWhereInput = {
   address?: Prisma.StringFilter<"Setting"> | string
   phone?: Prisma.StringFilter<"Setting"> | string
   email?: Prisma.StringFilter<"Setting"> | string
+  establishedYear?: Prisma.IntNullableFilter<"Setting"> | number | null
   facebook?: Prisma.StringNullableFilter<"Setting"> | string | null
   whatsapp?: Prisma.StringNullableFilter<"Setting"> | string | null
+  instagram?: Prisma.StringNullableFilter<"Setting"> | string | null
+  youtube?: Prisma.StringNullableFilter<"Setting"> | string | null
+  mapUrl?: Prisma.StringNullableFilter<"Setting"> | string | null
   logo?: Prisma.StringNullableFilter<"Setting"> | string | null
   cover1?: Prisma.StringNullableFilter<"Setting"> | string | null
   cover2?: Prisma.StringNullableFilter<"Setting"> | string | null
@@ -277,6 +378,11 @@ export type SettingWhereInput = {
   cover4?: Prisma.StringNullableFilter<"Setting"> | string | null
   cover5?: Prisma.StringNullableFilter<"Setting"> | string | null
   cover6?: Prisma.StringNullableFilter<"Setting"> | string | null
+  admissionTitle?: Prisma.StringNullableFilter<"Setting"> | string | null
+  admissionText?: Prisma.StringNullableFilter<"Setting"> | string | null
+  admissionCallLabel?: Prisma.StringNullableFilter<"Setting"> | string | null
+  admissionWhatsappLabel?: Prisma.StringNullableFilter<"Setting"> | string | null
+  admissionEnabled?: Prisma.BoolFilter<"Setting"> | boolean
   updatedAt?: Prisma.DateTimeFilter<"Setting"> | Date | string
 }
 
@@ -288,8 +394,12 @@ export type SettingOrderByWithRelationInput = {
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  establishedYear?: Prisma.SortOrderInput | Prisma.SortOrder
   facebook?: Prisma.SortOrderInput | Prisma.SortOrder
   whatsapp?: Prisma.SortOrderInput | Prisma.SortOrder
+  instagram?: Prisma.SortOrderInput | Prisma.SortOrder
+  youtube?: Prisma.SortOrderInput | Prisma.SortOrder
+  mapUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   logo?: Prisma.SortOrderInput | Prisma.SortOrder
   cover1?: Prisma.SortOrderInput | Prisma.SortOrder
   cover2?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -297,6 +407,11 @@ export type SettingOrderByWithRelationInput = {
   cover4?: Prisma.SortOrderInput | Prisma.SortOrder
   cover5?: Prisma.SortOrderInput | Prisma.SortOrder
   cover6?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionText?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionCallLabel?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionWhatsappLabel?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionEnabled?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -311,8 +426,12 @@ export type SettingWhereUniqueInput = Prisma.AtLeast<{
   address?: Prisma.StringFilter<"Setting"> | string
   phone?: Prisma.StringFilter<"Setting"> | string
   email?: Prisma.StringFilter<"Setting"> | string
+  establishedYear?: Prisma.IntNullableFilter<"Setting"> | number | null
   facebook?: Prisma.StringNullableFilter<"Setting"> | string | null
   whatsapp?: Prisma.StringNullableFilter<"Setting"> | string | null
+  instagram?: Prisma.StringNullableFilter<"Setting"> | string | null
+  youtube?: Prisma.StringNullableFilter<"Setting"> | string | null
+  mapUrl?: Prisma.StringNullableFilter<"Setting"> | string | null
   logo?: Prisma.StringNullableFilter<"Setting"> | string | null
   cover1?: Prisma.StringNullableFilter<"Setting"> | string | null
   cover2?: Prisma.StringNullableFilter<"Setting"> | string | null
@@ -320,6 +439,11 @@ export type SettingWhereUniqueInput = Prisma.AtLeast<{
   cover4?: Prisma.StringNullableFilter<"Setting"> | string | null
   cover5?: Prisma.StringNullableFilter<"Setting"> | string | null
   cover6?: Prisma.StringNullableFilter<"Setting"> | string | null
+  admissionTitle?: Prisma.StringNullableFilter<"Setting"> | string | null
+  admissionText?: Prisma.StringNullableFilter<"Setting"> | string | null
+  admissionCallLabel?: Prisma.StringNullableFilter<"Setting"> | string | null
+  admissionWhatsappLabel?: Prisma.StringNullableFilter<"Setting"> | string | null
+  admissionEnabled?: Prisma.BoolFilter<"Setting"> | boolean
   updatedAt?: Prisma.DateTimeFilter<"Setting"> | Date | string
 }, "id">
 
@@ -331,8 +455,12 @@ export type SettingOrderByWithAggregationInput = {
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  establishedYear?: Prisma.SortOrderInput | Prisma.SortOrder
   facebook?: Prisma.SortOrderInput | Prisma.SortOrder
   whatsapp?: Prisma.SortOrderInput | Prisma.SortOrder
+  instagram?: Prisma.SortOrderInput | Prisma.SortOrder
+  youtube?: Prisma.SortOrderInput | Prisma.SortOrder
+  mapUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   logo?: Prisma.SortOrderInput | Prisma.SortOrder
   cover1?: Prisma.SortOrderInput | Prisma.SortOrder
   cover2?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -340,10 +468,17 @@ export type SettingOrderByWithAggregationInput = {
   cover4?: Prisma.SortOrderInput | Prisma.SortOrder
   cover5?: Prisma.SortOrderInput | Prisma.SortOrder
   cover6?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionText?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionCallLabel?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionWhatsappLabel?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionEnabled?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.SettingCountOrderByAggregateInput
+  _avg?: Prisma.SettingAvgOrderByAggregateInput
   _max?: Prisma.SettingMaxOrderByAggregateInput
   _min?: Prisma.SettingMinOrderByAggregateInput
+  _sum?: Prisma.SettingSumOrderByAggregateInput
 }
 
 export type SettingScalarWhereWithAggregatesInput = {
@@ -357,8 +492,12 @@ export type SettingScalarWhereWithAggregatesInput = {
   address?: Prisma.StringWithAggregatesFilter<"Setting"> | string
   phone?: Prisma.StringWithAggregatesFilter<"Setting"> | string
   email?: Prisma.StringWithAggregatesFilter<"Setting"> | string
+  establishedYear?: Prisma.IntNullableWithAggregatesFilter<"Setting"> | number | null
   facebook?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
   whatsapp?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
+  instagram?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
+  youtube?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
+  mapUrl?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
   logo?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
   cover1?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
   cover2?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
@@ -366,6 +505,11 @@ export type SettingScalarWhereWithAggregatesInput = {
   cover4?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
   cover5?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
   cover6?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
+  admissionTitle?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
+  admissionText?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
+  admissionCallLabel?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
+  admissionWhatsappLabel?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
+  admissionEnabled?: Prisma.BoolWithAggregatesFilter<"Setting"> | boolean
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Setting"> | Date | string
 }
 
@@ -377,8 +521,12 @@ export type SettingCreateInput = {
   address?: string
   phone?: string
   email?: string
+  establishedYear?: number | null
   facebook?: string | null
   whatsapp?: string | null
+  instagram?: string | null
+  youtube?: string | null
+  mapUrl?: string | null
   logo?: string | null
   cover1?: string | null
   cover2?: string | null
@@ -386,6 +534,11 @@ export type SettingCreateInput = {
   cover4?: string | null
   cover5?: string | null
   cover6?: string | null
+  admissionTitle?: string | null
+  admissionText?: string | null
+  admissionCallLabel?: string | null
+  admissionWhatsappLabel?: string | null
+  admissionEnabled?: boolean
   updatedAt?: Date | string
 }
 
@@ -397,8 +550,12 @@ export type SettingUncheckedCreateInput = {
   address?: string
   phone?: string
   email?: string
+  establishedYear?: number | null
   facebook?: string | null
   whatsapp?: string | null
+  instagram?: string | null
+  youtube?: string | null
+  mapUrl?: string | null
   logo?: string | null
   cover1?: string | null
   cover2?: string | null
@@ -406,6 +563,11 @@ export type SettingUncheckedCreateInput = {
   cover4?: string | null
   cover5?: string | null
   cover6?: string | null
+  admissionTitle?: string | null
+  admissionText?: string | null
+  admissionCallLabel?: string | null
+  admissionWhatsappLabel?: string | null
+  admissionEnabled?: boolean
   updatedAt?: Date | string
 }
 
@@ -417,8 +579,12 @@ export type SettingUpdateInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  establishedYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   facebook?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsapp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -426,6 +592,11 @@ export type SettingUpdateInput = {
   cover4?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover5?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover6?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionCallLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionWhatsappLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -437,8 +608,12 @@ export type SettingUncheckedUpdateInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  establishedYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   facebook?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsapp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -446,6 +621,11 @@ export type SettingUncheckedUpdateInput = {
   cover4?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover5?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover6?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionCallLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionWhatsappLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -457,8 +637,12 @@ export type SettingCreateManyInput = {
   address?: string
   phone?: string
   email?: string
+  establishedYear?: number | null
   facebook?: string | null
   whatsapp?: string | null
+  instagram?: string | null
+  youtube?: string | null
+  mapUrl?: string | null
   logo?: string | null
   cover1?: string | null
   cover2?: string | null
@@ -466,6 +650,11 @@ export type SettingCreateManyInput = {
   cover4?: string | null
   cover5?: string | null
   cover6?: string | null
+  admissionTitle?: string | null
+  admissionText?: string | null
+  admissionCallLabel?: string | null
+  admissionWhatsappLabel?: string | null
+  admissionEnabled?: boolean
   updatedAt?: Date | string
 }
 
@@ -477,8 +666,12 @@ export type SettingUpdateManyMutationInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  establishedYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   facebook?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsapp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -486,6 +679,11 @@ export type SettingUpdateManyMutationInput = {
   cover4?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover5?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover6?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionCallLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionWhatsappLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -497,8 +695,12 @@ export type SettingUncheckedUpdateManyInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  establishedYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   facebook?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsapp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -506,6 +708,11 @@ export type SettingUncheckedUpdateManyInput = {
   cover4?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover5?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover6?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionCallLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionWhatsappLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -517,8 +724,12 @@ export type SettingCountOrderByAggregateInput = {
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  establishedYear?: Prisma.SortOrder
   facebook?: Prisma.SortOrder
   whatsapp?: Prisma.SortOrder
+  instagram?: Prisma.SortOrder
+  youtube?: Prisma.SortOrder
+  mapUrl?: Prisma.SortOrder
   logo?: Prisma.SortOrder
   cover1?: Prisma.SortOrder
   cover2?: Prisma.SortOrder
@@ -526,7 +737,16 @@ export type SettingCountOrderByAggregateInput = {
   cover4?: Prisma.SortOrder
   cover5?: Prisma.SortOrder
   cover6?: Prisma.SortOrder
+  admissionTitle?: Prisma.SortOrder
+  admissionText?: Prisma.SortOrder
+  admissionCallLabel?: Prisma.SortOrder
+  admissionWhatsappLabel?: Prisma.SortOrder
+  admissionEnabled?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type SettingAvgOrderByAggregateInput = {
+  establishedYear?: Prisma.SortOrder
 }
 
 export type SettingMaxOrderByAggregateInput = {
@@ -537,8 +757,12 @@ export type SettingMaxOrderByAggregateInput = {
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  establishedYear?: Prisma.SortOrder
   facebook?: Prisma.SortOrder
   whatsapp?: Prisma.SortOrder
+  instagram?: Prisma.SortOrder
+  youtube?: Prisma.SortOrder
+  mapUrl?: Prisma.SortOrder
   logo?: Prisma.SortOrder
   cover1?: Prisma.SortOrder
   cover2?: Prisma.SortOrder
@@ -546,6 +770,11 @@ export type SettingMaxOrderByAggregateInput = {
   cover4?: Prisma.SortOrder
   cover5?: Prisma.SortOrder
   cover6?: Prisma.SortOrder
+  admissionTitle?: Prisma.SortOrder
+  admissionText?: Prisma.SortOrder
+  admissionCallLabel?: Prisma.SortOrder
+  admissionWhatsappLabel?: Prisma.SortOrder
+  admissionEnabled?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -557,8 +786,12 @@ export type SettingMinOrderByAggregateInput = {
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  establishedYear?: Prisma.SortOrder
   facebook?: Prisma.SortOrder
   whatsapp?: Prisma.SortOrder
+  instagram?: Prisma.SortOrder
+  youtube?: Prisma.SortOrder
+  mapUrl?: Prisma.SortOrder
   logo?: Prisma.SortOrder
   cover1?: Prisma.SortOrder
   cover2?: Prisma.SortOrder
@@ -566,15 +799,36 @@ export type SettingMinOrderByAggregateInput = {
   cover4?: Prisma.SortOrder
   cover5?: Prisma.SortOrder
   cover6?: Prisma.SortOrder
+  admissionTitle?: Prisma.SortOrder
+  admissionText?: Prisma.SortOrder
+  admissionCallLabel?: Prisma.SortOrder
+  admissionWhatsappLabel?: Prisma.SortOrder
+  admissionEnabled?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type SettingSumOrderByAggregateInput = {
+  establishedYear?: Prisma.SortOrder
 }
 
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -591,8 +845,12 @@ export type SettingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   address?: boolean
   phone?: boolean
   email?: boolean
+  establishedYear?: boolean
   facebook?: boolean
   whatsapp?: boolean
+  instagram?: boolean
+  youtube?: boolean
+  mapUrl?: boolean
   logo?: boolean
   cover1?: boolean
   cover2?: boolean
@@ -600,6 +858,11 @@ export type SettingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   cover4?: boolean
   cover5?: boolean
   cover6?: boolean
+  admissionTitle?: boolean
+  admissionText?: boolean
+  admissionCallLabel?: boolean
+  admissionWhatsappLabel?: boolean
+  admissionEnabled?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["setting"]>
 
@@ -611,8 +874,12 @@ export type SettingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   address?: boolean
   phone?: boolean
   email?: boolean
+  establishedYear?: boolean
   facebook?: boolean
   whatsapp?: boolean
+  instagram?: boolean
+  youtube?: boolean
+  mapUrl?: boolean
   logo?: boolean
   cover1?: boolean
   cover2?: boolean
@@ -620,6 +887,11 @@ export type SettingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   cover4?: boolean
   cover5?: boolean
   cover6?: boolean
+  admissionTitle?: boolean
+  admissionText?: boolean
+  admissionCallLabel?: boolean
+  admissionWhatsappLabel?: boolean
+  admissionEnabled?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["setting"]>
 
@@ -631,8 +903,12 @@ export type SettingSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   address?: boolean
   phone?: boolean
   email?: boolean
+  establishedYear?: boolean
   facebook?: boolean
   whatsapp?: boolean
+  instagram?: boolean
+  youtube?: boolean
+  mapUrl?: boolean
   logo?: boolean
   cover1?: boolean
   cover2?: boolean
@@ -640,6 +916,11 @@ export type SettingSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   cover4?: boolean
   cover5?: boolean
   cover6?: boolean
+  admissionTitle?: boolean
+  admissionText?: boolean
+  admissionCallLabel?: boolean
+  admissionWhatsappLabel?: boolean
+  admissionEnabled?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["setting"]>
 
@@ -651,8 +932,12 @@ export type SettingSelectScalar = {
   address?: boolean
   phone?: boolean
   email?: boolean
+  establishedYear?: boolean
   facebook?: boolean
   whatsapp?: boolean
+  instagram?: boolean
+  youtube?: boolean
+  mapUrl?: boolean
   logo?: boolean
   cover1?: boolean
   cover2?: boolean
@@ -660,10 +945,15 @@ export type SettingSelectScalar = {
   cover4?: boolean
   cover5?: boolean
   cover6?: boolean
+  admissionTitle?: boolean
+  admissionText?: boolean
+  admissionCallLabel?: boolean
+  admissionWhatsappLabel?: boolean
+  admissionEnabled?: boolean
   updatedAt?: boolean
 }
 
-export type SettingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "schoolName" | "tagline" | "motto" | "address" | "phone" | "email" | "facebook" | "whatsapp" | "logo" | "cover1" | "cover2" | "cover3" | "cover4" | "cover5" | "cover6" | "updatedAt", ExtArgs["result"]["setting"]>
+export type SettingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "schoolName" | "tagline" | "motto" | "address" | "phone" | "email" | "establishedYear" | "facebook" | "whatsapp" | "instagram" | "youtube" | "mapUrl" | "logo" | "cover1" | "cover2" | "cover3" | "cover4" | "cover5" | "cover6" | "admissionTitle" | "admissionText" | "admissionCallLabel" | "admissionWhatsappLabel" | "admissionEnabled" | "updatedAt", ExtArgs["result"]["setting"]>
 
 export type $SettingPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Setting"
@@ -676,8 +966,12 @@ export type $SettingPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     address: string
     phone: string
     email: string
+    establishedYear: number | null
     facebook: string | null
     whatsapp: string | null
+    instagram: string | null
+    youtube: string | null
+    mapUrl: string | null
     logo: string | null
     cover1: string | null
     cover2: string | null
@@ -685,6 +979,11 @@ export type $SettingPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     cover4: string | null
     cover5: string | null
     cover6: string | null
+    admissionTitle: string | null
+    admissionText: string | null
+    admissionCallLabel: string | null
+    admissionWhatsappLabel: string | null
+    admissionEnabled: boolean
     updatedAt: Date
   }, ExtArgs["result"]["setting"]>
   composites: {}
@@ -1116,8 +1415,12 @@ export interface SettingFieldRefs {
   readonly address: Prisma.FieldRef<"Setting", 'String'>
   readonly phone: Prisma.FieldRef<"Setting", 'String'>
   readonly email: Prisma.FieldRef<"Setting", 'String'>
+  readonly establishedYear: Prisma.FieldRef<"Setting", 'Int'>
   readonly facebook: Prisma.FieldRef<"Setting", 'String'>
   readonly whatsapp: Prisma.FieldRef<"Setting", 'String'>
+  readonly instagram: Prisma.FieldRef<"Setting", 'String'>
+  readonly youtube: Prisma.FieldRef<"Setting", 'String'>
+  readonly mapUrl: Prisma.FieldRef<"Setting", 'String'>
   readonly logo: Prisma.FieldRef<"Setting", 'String'>
   readonly cover1: Prisma.FieldRef<"Setting", 'String'>
   readonly cover2: Prisma.FieldRef<"Setting", 'String'>
@@ -1125,6 +1428,11 @@ export interface SettingFieldRefs {
   readonly cover4: Prisma.FieldRef<"Setting", 'String'>
   readonly cover5: Prisma.FieldRef<"Setting", 'String'>
   readonly cover6: Prisma.FieldRef<"Setting", 'String'>
+  readonly admissionTitle: Prisma.FieldRef<"Setting", 'String'>
+  readonly admissionText: Prisma.FieldRef<"Setting", 'String'>
+  readonly admissionCallLabel: Prisma.FieldRef<"Setting", 'String'>
+  readonly admissionWhatsappLabel: Prisma.FieldRef<"Setting", 'String'>
+  readonly admissionEnabled: Prisma.FieldRef<"Setting", 'Boolean'>
   readonly updatedAt: Prisma.FieldRef<"Setting", 'DateTime'>
 }
     
