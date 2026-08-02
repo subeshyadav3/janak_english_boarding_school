@@ -78,34 +78,32 @@ export default function TeacherDashboard({ username }: { username: string }) {
     <ToastProvider>
       <div className="min-h-screen bg-surface">
         <header className="bg-brand-deep text-white shadow-lg">
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-            <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/20">
+          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3">
+            <div className="flex min-w-0 items-center gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/20">
                 <GraduationCap className="h-5 w-5 text-accent" />
               </span>
-              <div>
-                <h1 className="text-lg font-bold">Teacher Dashboard</h1>
-                <p className="text-xs text-white/60">
-                  {me.name || `@${me.username}`}
-                </p>
+              <div className="min-w-0">
+                <h1 className="truncate text-base font-bold sm:text-lg">Teacher Dashboard</h1>
+                <p className="truncate text-xs text-white/60">{me.name || `@${me.username}`}</p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-sm hover:bg-white/20 transition"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-2 text-sm hover:bg-white/20 transition"
               >
-                <Home className="h-4 w-4" /> View Site
+                <Home className="h-4 w-4" /> <span className="hidden sm:inline">View Site</span>
               </Link>
               <button
                 onClick={logout}
-                className="inline-flex items-center gap-2 rounded-lg bg-red-600/90 px-3 py-2 text-sm hover:bg-red-600 transition"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-red-600/90 px-3 py-2 text-sm hover:bg-red-600 transition"
               >
-                <LogOut className="h-4 w-4" /> Logout
+                <LogOut className="h-4 w-4" /> <span className="hidden sm:inline">Logout</span>
               </button>
             </div>
           </div>
-          <nav className="mx-auto max-w-7xl flex gap-1 overflow-x-auto px-4 pb-2">
+          <nav className="sticky top-0 z-40 mx-auto max-w-7xl flex gap-1 overflow-x-auto bg-brand-deep px-2 pb-2 sm:px-4">
             {(
               [
                 { id: "overview", label: "Overview", icon: LayoutDashboard },
@@ -116,7 +114,7 @@ export default function TeacherDashboard({ username }: { username: string }) {
               <button
                 key={t.id}
                 onClick={() => setTab(t.id)}
-                className={`inline-flex shrink-0 items-center gap-2 rounded-t-lg px-4 py-2 text-sm font-medium transition ${
+                className={`inline-flex shrink-0 items-center gap-2 rounded-t-lg px-3 py-2 text-sm font-medium transition sm:px-4 ${
                   tab === t.id
                     ? "bg-surface text-brand-deep"
                     : "text-white/70 hover:text-white hover:bg-white/5"

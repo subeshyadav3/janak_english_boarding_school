@@ -28,6 +28,11 @@ model Setting {
   cover4          String?
   cover5          String?
   cover6          String?
+  admissionTitle  String?
+  admissionText   String?
+  admissionCallLabel    String?
+  admissionWhatsappLabel String?
+  admissionEnabled Boolean  @default(true)
   updatedAt       DateTime @updatedAt
 }
 

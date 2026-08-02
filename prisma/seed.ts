@@ -19,7 +19,7 @@ async function main() {
       address: "Gaur-3, Rautahat, Nepal",
       phone: "9845378869",
       email: "janakenglishboardingschool@gmail.com",
-      facebook: "https://www.facebook.com/share/1BQYpmXLmM/",
+      facebook: "https://www.facebook.com/p/Janak-English-Boarding-school-PvtLtd-61574904595487/",
       whatsapp: "9779845378869",
       establishedYear: 1996,
       mapUrl: "https://maps.app.goo.gl/UiTVMWV77H1VESez8",
@@ -30,6 +30,12 @@ async function main() {
       cover4: "/assets/cover4.png",
       cover5: "/assets/cover5.png",
       cover6: "/assets/cover6.png",
+      admissionTitle: "Admissions Open — Nursery to Grade 8",
+      admissionText:
+        "English medium, disciplined and caring environment. Enroll your child today for a brighter tomorrow.",
+      admissionCallLabel: "Call Us",
+      admissionWhatsappLabel: "WhatsApp Us",
+      admissionEnabled: true,
     },
   });
 

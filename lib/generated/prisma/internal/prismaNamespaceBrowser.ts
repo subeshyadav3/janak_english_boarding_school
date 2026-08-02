@@ -99,6 +99,11 @@ export const SettingScalarFieldEnum = {
   cover4: 'cover4',
   cover5: 'cover5',
   cover6: 'cover6',
+  admissionTitle: 'admissionTitle',
+  admissionText: 'admissionText',
+  admissionCallLabel: 'admissionCallLabel',
+  admissionWhatsappLabel: 'admissionWhatsappLabel',
+  admissionEnabled: 'admissionEnabled',
   updatedAt: 'updatedAt'
 } as const
 

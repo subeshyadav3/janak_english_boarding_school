@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { CheckCircle2, Mail, MessageCircle } from "lucide-react";
+import { ENQUIRY_CATEGORIES, ENQUIRY_CATEGORY_LABELS } from "@/lib/constants";
 
 type ContactSettings = {
   email: string;
@@ -13,6 +14,7 @@ export default function ContactSection({ settings }: { settings: ContactSettings
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [category, setCategory] = useState("admission");
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
@@ -22,6 +24,7 @@ export default function ContactSection({ settings }: { settings: ContactSettings
     setName("");
     setEmail("");
     setPhone("");
+    setCategory("admission");
     setMessage("");
   };
 
@@ -30,6 +33,7 @@ export default function ContactSection({ settings }: { settings: ContactSettings
     if (name) lines.push(`Name: ${name}`);
     if (email) lines.push(`Email: ${email}`);
     if (phone) lines.push(`Phone: ${phone}`);
+    lines.push(`Topic: ${ENQUIRY_CATEGORY_LABELS[category] || category}`);
     if (message) lines.push(`Message: ${message}`);
     return lines.length ? lines.join("\n") : "";
   };
@@ -58,7 +62,7 @@ export default function ContactSection({ settings }: { settings: ContactSettings
       const res = await fetch("/api/enquiries", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, message }),
+        body: JSON.stringify({ name, email, phone, category, message }),
       });
       if (!res.ok) throw new Error("Failed to send");
       setSent(true);
@@ -138,6 +142,18 @@ export default function ContactSection({ settings }: { settings: ContactSettings
               className="w-full rounded-lg border border-line bg-white px-4 py-3 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/30"
             />
           </div>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full rounded-lg border border-line bg-white px-4 py-3 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/30"
+            aria-label="Enquiry topic"
+          >
+            {ENQUIRY_CATEGORIES.map((c) => (
+              <option key={c} value={c}>
+                {ENQUIRY_CATEGORY_LABELS[c]}
+              </option>
+            ))}
+          </select>
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}

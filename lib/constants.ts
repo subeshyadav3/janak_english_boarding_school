@@ -2,6 +2,26 @@ export const MAP_EMBED = "https://www.google.com/maps?q=26.7659182,85.2689964&z=
 export const MAP_DIRECTIONS = "https://maps.app.goo.gl/UiTVMWV77H1VESez8";
 export const MAP_SHORT = "https://maps.app.goo.gl/UiTVMWV77H1VESez8";
 
+export const ENQUIRY_CATEGORIES = [
+  "admission",
+  "fees",
+  "academics",
+  "events",
+  "transport",
+  "general",
+  "other",
+] as const;
+
+export const ENQUIRY_CATEGORY_LABELS: Record<string, string> = {
+  admission: "Admission",
+  fees: "Fees & Payment",
+  academics: "Academics / Results",
+  events: "Events & Programs",
+  transport: "Transport",
+  general: "General",
+  other: "Other",
+};
+
 export type SiteSettings = {
   schoolName: string;
   tagline: string;
@@ -22,6 +42,11 @@ export type SiteSettings = {
   cover4?: string | null;
   cover5?: string | null;
   cover6?: string | null;
+  admissionTitle?: string | null;
+  admissionText?: string | null;
+  admissionCallLabel?: string | null;
+  admissionWhatsappLabel?: string | null;
+  admissionEnabled?: boolean;
 };
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -32,7 +57,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   phone: "9845378869",
   email: "janakenglishboardingschool@gmail.com",
   establishedYear: 1996,
-  facebook: "https://www.facebook.com/share/1BQYpmXLmM/",
+  facebook: "https://www.facebook.com/p/Janak-English-Boarding-school-PvtLtd-61574904595487/",
   whatsapp: "9779845378869",
   mapUrl: MAP_DIRECTIONS,
   logo: "/assets/logo.png",
@@ -42,6 +67,12 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   cover4: "/assets/cover4.png",
   cover5: "/assets/cover5.png",
   cover6: "/assets/cover6.png",
+  admissionTitle: "Admissions Open — Nursery to Grade 8",
+  admissionText:
+    "English medium, disciplined and caring environment. Enroll your child today for a brighter tomorrow.",
+  admissionCallLabel: "Call Us",
+  admissionWhatsappLabel: "WhatsApp Us",
+  admissionEnabled: true,
 };
 
 export const DEFAULT_TEACHERS = [

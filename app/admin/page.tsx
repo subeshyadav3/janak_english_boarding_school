@@ -19,6 +19,7 @@ import {
   Phone,
   CalendarDays,
   ExternalLink,
+  GraduationCap,
 } from "lucide-react";
 import { ToastProvider, useToast } from "@/lib/ui/Toast";
 import ConfirmDialog from "@/lib/ui/ConfirmDialog";
@@ -29,9 +30,11 @@ import CrudManager from "@/lib/ui/admin/CrudManager";
 import Modal from "@/lib/ui/admin/Modal";
 import { DetailRow } from "@/lib/ui/admin/DetailRow";
 import { TextInput, Textarea, Select, Toggle, FormRow } from "@/lib/ui/admin/Controls";
+import { ENQUIRY_CATEGORY_LABELS } from "@/lib/constants";
 
 type Tab =
   | "overview"
+  | "admission"
   | "teachers"
   | "notices"
   | "results"
@@ -120,6 +123,7 @@ type User = {
 
 const TABS: { id: Tab; label: string; icon: typeof Users }[] = [
   { id: "overview", label: "Overview", icon: LayoutDashboard },
+  { id: "admission", label: "Admission", icon: GraduationCap },
   { id: "teachers", label: "Teachers", icon: Users },
   { id: "notices", label: "Notices", icon: Megaphone },
   { id: "results", label: "Results", icon: Trophy },
@@ -191,37 +195,37 @@ function AdminDashboardInner() {
   return (
     <div className="min-h-screen bg-surface">
       <header className="bg-brand-deep text-white shadow-lg">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/20">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3">
+          <div className="flex min-w-0 items-center gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/20">
               <LayoutDashboard className="h-5 w-5 text-accent" />
             </span>
-            <div>
-              <h1 className="text-lg font-bold">Admin Dashboard</h1>
-              <p className="text-xs text-white/60">Janak English Boarding School</p>
+            <div className="min-w-0">
+              <h1 className="truncate text-base font-bold sm:text-lg">Admin Dashboard</h1>
+              <p className="hidden text-xs text-white/60 sm:block">Janak English Boarding School</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-sm hover:bg-white/20 transition"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-2 text-sm hover:bg-white/20 transition"
             >
-              <Home className="h-4 w-4" /> View Site
+              <Home className="h-4 w-4" /> <span className="hidden sm:inline">View Site</span>
             </Link>
             <button
               onClick={logout}
-              className="inline-flex items-center gap-2 rounded-lg bg-red-600/90 px-3 py-2 text-sm hover:bg-red-600 transition"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-red-600/90 px-3 py-2 text-sm hover:bg-red-600 transition"
             >
-              <LogOut className="h-4 w-4" /> Logout
+              <LogOut className="h-4 w-4" /> <span className="hidden sm:inline">Logout</span>
             </button>
           </div>
         </div>
-        <nav className="mx-auto max-w-7xl flex gap-1 overflow-x-auto px-4 pb-2">
+        <nav className="sticky top-0 z-40 mx-auto max-w-7xl flex gap-1 overflow-x-auto bg-brand-deep px-2 pb-2 sm:px-4">
           {TABS.map((t) => (
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className={`inline-flex shrink-0 items-center gap-2 rounded-t-lg px-4 py-2 text-sm font-medium transition ${
+              className={`inline-flex shrink-0 items-center gap-2 rounded-t-lg px-3 py-2 text-sm font-medium transition sm:px-4 ${
                 tab === t.id
                   ? "bg-surface text-brand-deep"
                   : "text-white/70 hover:text-white hover:bg-white/5"
@@ -235,6 +239,7 @@ function AdminDashboardInner() {
 
       <main className="mx-auto max-w-7xl px-4 py-8">
         {tab === "overview" && <Overview onNavigate={setTab} />}
+        {tab === "admission" && <AdmissionManager />}
         {tab === "teachers" && <TeachersManager />}
         {tab === "notices" && <NoticesManager />}
         {tab === "results" && <ResultsManager />}
@@ -360,6 +365,154 @@ function Overview({ onNavigate }: { onNavigate: (t: Tab) => void }) {
             ))}
           </div>
         )}
+      </div>
+    </PageShell>
+  );
+}
+
+// ---------- Admission ----------
+function AdmissionManager() {
+  const [form, setForm] = useState({
+    admissionTitle: "",
+    admissionText: "",
+    admissionCallLabel: "Call Us",
+    admissionWhatsappLabel: "WhatsApp Us",
+    phone: "",
+    whatsapp: "",
+    admissionEnabled: true,
+  });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const { toast } = useToast();
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const d = await j<Record<string, string | boolean | null>>("/api/admin/settings");
+        if (!cancelled && d) {
+          setForm({
+            admissionTitle: String(d.admissionTitle || "Admissions Open — Nursery to Grade 8"),
+            admissionText: String(
+              d.admissionText || "English medium, disciplined and caring environment. Enroll your child today for a brighter tomorrow."
+            ),
+            admissionCallLabel: String(d.admissionCallLabel || "Call Us"),
+            admissionWhatsappLabel: String(d.admissionWhatsappLabel || "WhatsApp Us"),
+            phone: String(d.phone || ""),
+            whatsapp: String(d.whatsapp || ""),
+            admissionEnabled: d.admissionEnabled !== false,
+          });
+        }
+      } catch (e) {
+        if (!cancelled) setError((e as Error).message);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const save = async () => {
+    setSaving(true);
+    try {
+      await j("/api/admin/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      toast("success", "Admission section saved");
+    } catch (e) {
+      setError((e as Error).message);
+      toast("error", (e as Error).message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) return <p className="text-sm text-brand-deep/60">Loading...</p>;
+
+  return (
+    <PageShell title="Admission Section" subtitle="Customize the admissions banner shown on the homepage.">
+      {error && (
+        <div className="mb-4 flex items-center justify-between rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">
+          <span>{error}</span>
+          <button onClick={() => setError("")} className="font-bold">×</button>
+        </div>
+      )}
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <div className="space-y-4 rounded-2xl bg-white border border-line p-5 shadow-sm">
+          <FormRow>
+            <TextInput
+              label="Heading"
+              value={form.admissionTitle}
+              onChange={(e) => setForm({ ...form, admissionTitle: e.target.value })}
+            />
+            <TextInput
+              label="Call button label"
+              value={form.admissionCallLabel}
+              onChange={(e) => setForm({ ...form, admissionCallLabel: e.target.value })}
+            />
+          </FormRow>
+          <Textarea
+            label="Description"
+            rows={3}
+            value={form.admissionText}
+            onChange={(e) => setForm({ ...form, admissionText: e.target.value })}
+          />
+          <FormRow>
+            <TextInput
+              label="WhatsApp button label"
+              value={form.admissionWhatsappLabel}
+              onChange={(e) => setForm({ ...form, admissionWhatsappLabel: e.target.value })}
+            />
+            <TextInput
+              label="Phone number"
+              value={form.phone}
+              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+            />
+          </FormRow>
+          <TextInput
+            label="WhatsApp number (with country code, no +)"
+            value={form.whatsapp}
+            onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
+          />
+          <Toggle
+            label="Show admission section"
+            hint="Turn off to hide the banner from the homepage."
+            checked={form.admissionEnabled}
+            onChange={(v) => setForm({ ...form, admissionEnabled: v })}
+          />
+          <button
+            onClick={save}
+            disabled={saving}
+            className="inline-flex items-center gap-2 rounded-lg bg-brand px-5 py-3 text-sm font-bold text-white hover:bg-brand-dark disabled:opacity-50 transition-colors"
+          >
+            {saving ? "Saving..." : "Save Admission Section"}
+          </button>
+        </div>
+
+        <div>
+          <p className="mb-2 text-sm font-semibold text-brand-deep/60">Preview</p>
+          <div className="overflow-hidden rounded-2xl bg-gradient-to-r from-brand to-brand-dark p-6 text-white shadow-sm">
+            <h3 className="text-xl font-extrabold">{form.admissionTitle || "Admissions Open"}</h3>
+            <p className="mt-2 text-sm text-white/80">{form.admissionText}</p>
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+              <span className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-bold text-brand">
+                <Phone className="h-4 w-4" /> {form.admissionCallLabel || "Call Us"}
+              </span>
+              <span className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-accent to-orange-400 px-5 py-2.5 text-sm font-bold text-white">
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+                </svg>
+                {form.admissionWhatsappLabel || "WhatsApp Us"}
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </PageShell>
   );
@@ -906,7 +1059,7 @@ function EnquiriesManager() {
         <div className="overflow-hidden rounded-2xl bg-white border border-line shadow-sm">
           <div className="divide-y divide-line">
             {filtered.map((e) => (
-              <div key={e.id} className="flex items-center gap-4 px-4 py-4 sm:px-5">
+              <div key={e.id} className="flex flex-wrap items-center gap-3 px-3 py-4 sm:px-5">
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand font-bold">
                   {e.name.charAt(0).toUpperCase()}
                 </span>
@@ -917,6 +1070,9 @@ function EnquiriesManager() {
                       label={e.status}
                       color={e.status === "new" ? "accent" : e.status === "contacted" ? "blue" : "green"}
                     />
+                    {e.category && e.category !== "general" && (
+                      <Badge label={ENQUIRY_CATEGORY_LABELS[e.category] || e.category} color="gray" />
+                    )}
                   </div>
                   <p className="mt-0.5 truncate text-sm text-brand-deep/60">
                     {e.subject || e.message}
@@ -924,22 +1080,24 @@ function EnquiriesManager() {
                   </p>
                 </div>
                 <span className="hidden shrink-0 text-sm text-brand-deep/60 md:block">{fmtDate(e.createdAt)}</span>
-                <button
-                  onClick={() => setViewing(e)}
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-line text-brand-deep/60 hover:border-brand hover:bg-brand-soft hover:text-brand transition-colors"
-                  title="View"
-                >
-                  <Eye className="h-4 w-4" />
-                </button>
-                <button
-                  onClick={() => setConfirmId(e.id)}
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-line text-brand-deep/60 hover:border-red-200 hover:bg-red-50 hover:text-red-600 transition-colors"
-                  title="Delete"
-                >
-                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-                  </svg>
-                </button>
+                <div className="ml-auto flex shrink-0 items-center gap-1">
+                  <button
+                    onClick={() => setViewing(e)}
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-line text-brand-deep/60 hover:border-brand hover:bg-brand-soft hover:text-brand transition-colors"
+                    title="View"
+                  >
+                    <Eye className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => setConfirmId(e.id)}
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-line text-brand-deep/60 hover:border-red-200 hover:bg-red-50 hover:text-red-600 transition-colors"
+                    title="Delete"
+                  >
+                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             ))}
           </div>

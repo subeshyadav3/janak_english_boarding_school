@@ -23,6 +23,7 @@ import {
   getTestimonials,
   getEvents,
 } from "@/lib/data";
+import { SITE_URL, SCHOOL_COORDS } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -52,15 +53,44 @@ export default async function HomePage() {
     "@graph": [
       {
         "@type": "School",
+        "@id": `${SITE_URL}/#school`,
         name: settings.schoolName,
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: "Gaur-3",
-          addressRegion: "Rautahat",
-          addressCountry: "NP",
-        },
+        url: SITE_URL,
+        image: settings.logo ? [settings.logo, settings.cover1].filter(Boolean) : undefined,
+        logo: settings.logo || undefined,
         telephone: settings.phone,
         email: settings.email,
+        description: settings.tagline,
+        slogan: settings.motto,
+        foundingDate: settings.establishedYear ? String(settings.establishedYear) : undefined,
+        sameAs: [settings.facebook].filter(Boolean),
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "Gaur-3",
+          addressLocality: "Gaur",
+          addressRegion: "Rautahat",
+          postalCode: "44500",
+          addressCountry: "NP",
+        },
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: SCHOOL_COORDS.lat,
+          longitude: SCHOOL_COORDS.lng,
+        },
+        openingHoursSpecification: [
+          {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            opens: "08:00",
+            closes: "16:00",
+          },
+        ],
+        areaServed: "Gaur, Rautahat, Nepal",
+      },
+      {
+        "@type": "WebSite",
+        url: SITE_URL,
+        name: settings.schoolName,
         description: settings.tagline,
       },
       {
@@ -90,6 +120,14 @@ export default async function HomePage() {
               text: "Janak English Boarding School offers English-medium education from Nursery to Grade 8.",
             },
           },
+          {
+            "@type": "Question",
+            name: "How can I contact Janak English Boarding School?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "You can call the school or send a message through WhatsApp or the contact form on the website.",
+            },
+          },
         ],
       },
     ],
@@ -117,6 +155,11 @@ export default async function HomePage() {
         <AdmissionCta
           phone={settings.phone}
           whatsapp={settings.whatsapp}
+          title={settings.admissionTitle}
+          text={settings.admissionText}
+          callLabel={settings.admissionCallLabel}
+          whatsappLabel={settings.admissionWhatsappLabel}
+          enabled={settings.admissionEnabled}
         />
         <FacilitiesSection />
         <TeachersSection teachers={teachers} />

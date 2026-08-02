@@ -36,7 +36,7 @@ function StatItem({
   return (
     <div className="relative">
       <p className="text-4xl font-extrabold text-white md:text-5xl">
-        {value.toLocaleString()}
+        {String(value)}
         <span className="text-2xl align-top text-accent">{suffix}</span>
       </p>
       <p className="mt-2 text-sm font-medium text-white/85">{label}</p>

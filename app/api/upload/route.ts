@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { mkdir, writeFile } from "fs/promises";
-import path from "path";
+import { put } from "@vercel/blob";
 import { randomBytes } from "crypto";
+import path from "path";
 import { requireAdmin, unauthorized } from "@/lib/admin-guard";
 
 const ALLOWED = new Set([
@@ -35,14 +35,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const ext = path.extname(file.name) || ".jpg";
+    const ext =
+      path.extname(file.name) ||
+      (file.type === "application/pdf" ? ".pdf" : ".jpg");
     const filename = `${Date.now()}-${randomBytes(6).toString("hex")}${ext}`;
-    const dir = path.join(process.cwd(), "public", "uploads");
-    await mkdir(dir, { recursive: true });
-    const buffer = Buffer.from(await file.arrayBuffer());
-    await writeFile(path.join(dir, filename), buffer);
 
-    return NextResponse.json({ url: `/uploads/${filename}` });
+    const { url } = await put(filename, file, {
+      access: "public",
+      contentType: file.type,
+    });
+
+    return NextResponse.json({ url });
   } catch (e) {
     console.error("Upload failed:", e);
     return NextResponse.json({ error: "Upload failed." }, { status: 500 });

@@ -1151,6 +1151,11 @@ export const SettingScalarFieldEnum = {
   cover4: 'cover4',
   cover5: 'cover5',
   cover6: 'cover6',
+  admissionTitle: 'admissionTitle',
+  admissionText: 'admissionText',
+  admissionCallLabel: 'admissionCallLabel',
+  admissionWhatsappLabel: 'admissionWhatsappLabel',
+  admissionEnabled: 'admissionEnabled',
   updatedAt: 'updatedAt'
 } as const
 
@@ -1324,6 +1329,13 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -1334,13 +1346,6 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 

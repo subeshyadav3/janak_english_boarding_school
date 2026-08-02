@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { ENQUIRY_EMAIL, sendMail } from "@/lib/mail";
+import { ENQUIRY_CATEGORIES, ENQUIRY_CATEGORY_LABELS } from "@/lib/constants";
 
 const esc = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -12,6 +13,10 @@ export async function POST(request: Request) {
     const message = String(body.message ?? "").trim();
     const phone = String(body.phone ?? "").trim();
     const email = String(body.email ?? "").trim();
+    const categoryRaw = String(body.category ?? "").trim();
+    const category = ENQUIRY_CATEGORIES.includes(categoryRaw as (typeof ENQUIRY_CATEGORIES)[number])
+      ? categoryRaw
+      : "general";
 
     if (!name || !message) {
       return NextResponse.json(
@@ -25,6 +30,7 @@ export async function POST(request: Request) {
         name,
         phone: phone || null,
         email: email || null,
+        category,
         message,
       },
     });
@@ -32,6 +38,7 @@ export async function POST(request: Request) {
     if (ENQUIRY_EMAIL) {
       const fields = [
         { label: "Name", value: name },
+        { label: "Topic", value: ENQUIRY_CATEGORY_LABELS[category] || category },
         { label: "Phone", value: phone },
         { label: "Email", value: email },
         { label: "Message", value: message },

@@ -31,7 +31,7 @@ export default function ListRow({
   onDelete,
 }: Props) {
   return (
-    <div className="flex items-center gap-4 px-4 py-4 sm:px-5">
+    <div className="flex flex-wrap items-center gap-3 px-3 py-4 sm:px-5">
       {!noAvatar && (
         avatar ? (
           <img
@@ -55,7 +55,9 @@ export default function ListRow({
         {subtitle && <div className="mt-0.5 truncate text-sm text-brand-deep/60">{subtitle}</div>}
       </div>
       {meta && <div className="hidden shrink-0 text-sm text-brand-deep/60 md:block">{meta}</div>}
-      <RowActions onView={onView} onEdit={onEdit} onDelete={onDelete} />
+      <div className="ml-auto">
+        <RowActions onView={onView} onEdit={onEdit} onDelete={onDelete} />
+      </div>
     </div>
   );
 }

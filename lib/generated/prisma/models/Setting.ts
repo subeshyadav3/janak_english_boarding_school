@@ -55,6 +55,11 @@ export type SettingMinAggregateOutputType = {
   cover4: string | null
   cover5: string | null
   cover6: string | null
+  admissionTitle: string | null
+  admissionText: string | null
+  admissionCallLabel: string | null
+  admissionWhatsappLabel: string | null
+  admissionEnabled: boolean | null
   updatedAt: Date | null
 }
 
@@ -79,6 +84,11 @@ export type SettingMaxAggregateOutputType = {
   cover4: string | null
   cover5: string | null
   cover6: string | null
+  admissionTitle: string | null
+  admissionText: string | null
+  admissionCallLabel: string | null
+  admissionWhatsappLabel: string | null
+  admissionEnabled: boolean | null
   updatedAt: Date | null
 }
 
@@ -103,6 +113,11 @@ export type SettingCountAggregateOutputType = {
   cover4: number
   cover5: number
   cover6: number
+  admissionTitle: number
+  admissionText: number
+  admissionCallLabel: number
+  admissionWhatsappLabel: number
+  admissionEnabled: number
   updatedAt: number
   _all: number
 }
@@ -137,6 +152,11 @@ export type SettingMinAggregateInputType = {
   cover4?: true
   cover5?: true
   cover6?: true
+  admissionTitle?: true
+  admissionText?: true
+  admissionCallLabel?: true
+  admissionWhatsappLabel?: true
+  admissionEnabled?: true
   updatedAt?: true
 }
 
@@ -161,6 +181,11 @@ export type SettingMaxAggregateInputType = {
   cover4?: true
   cover5?: true
   cover6?: true
+  admissionTitle?: true
+  admissionText?: true
+  admissionCallLabel?: true
+  admissionWhatsappLabel?: true
+  admissionEnabled?: true
   updatedAt?: true
 }
 
@@ -185,6 +210,11 @@ export type SettingCountAggregateInputType = {
   cover4?: true
   cover5?: true
   cover6?: true
+  admissionTitle?: true
+  admissionText?: true
+  admissionCallLabel?: true
+  admissionWhatsappLabel?: true
+  admissionEnabled?: true
   updatedAt?: true
   _all?: true
 }
@@ -296,6 +326,11 @@ export type SettingGroupByOutputType = {
   cover4: string | null
   cover5: string | null
   cover6: string | null
+  admissionTitle: string | null
+  admissionText: string | null
+  admissionCallLabel: string | null
+  admissionWhatsappLabel: string | null
+  admissionEnabled: boolean
   updatedAt: Date
   _count: SettingCountAggregateOutputType | null
   _avg: SettingAvgAggregateOutputType | null
@@ -343,6 +378,11 @@ export type SettingWhereInput = {
   cover4?: Prisma.StringNullableFilter<"Setting"> | string | null
   cover5?: Prisma.StringNullableFilter<"Setting"> | string | null
   cover6?: Prisma.StringNullableFilter<"Setting"> | string | null
+  admissionTitle?: Prisma.StringNullableFilter<"Setting"> | string | null
+  admissionText?: Prisma.StringNullableFilter<"Setting"> | string | null
+  admissionCallLabel?: Prisma.StringNullableFilter<"Setting"> | string | null
+  admissionWhatsappLabel?: Prisma.StringNullableFilter<"Setting"> | string | null
+  admissionEnabled?: Prisma.BoolFilter<"Setting"> | boolean
   updatedAt?: Prisma.DateTimeFilter<"Setting"> | Date | string
 }
 
@@ -367,6 +407,11 @@ export type SettingOrderByWithRelationInput = {
   cover4?: Prisma.SortOrderInput | Prisma.SortOrder
   cover5?: Prisma.SortOrderInput | Prisma.SortOrder
   cover6?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionText?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionCallLabel?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionWhatsappLabel?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionEnabled?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -394,6 +439,11 @@ export type SettingWhereUniqueInput = Prisma.AtLeast<{
   cover4?: Prisma.StringNullableFilter<"Setting"> | string | null
   cover5?: Prisma.StringNullableFilter<"Setting"> | string | null
   cover6?: Prisma.StringNullableFilter<"Setting"> | string | null
+  admissionTitle?: Prisma.StringNullableFilter<"Setting"> | string | null
+  admissionText?: Prisma.StringNullableFilter<"Setting"> | string | null
+  admissionCallLabel?: Prisma.StringNullableFilter<"Setting"> | string | null
+  admissionWhatsappLabel?: Prisma.StringNullableFilter<"Setting"> | string | null
+  admissionEnabled?: Prisma.BoolFilter<"Setting"> | boolean
   updatedAt?: Prisma.DateTimeFilter<"Setting"> | Date | string
 }, "id">
 
@@ -418,6 +468,11 @@ export type SettingOrderByWithAggregationInput = {
   cover4?: Prisma.SortOrderInput | Prisma.SortOrder
   cover5?: Prisma.SortOrderInput | Prisma.SortOrder
   cover6?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionText?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionCallLabel?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionWhatsappLabel?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionEnabled?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.SettingCountOrderByAggregateInput
   _avg?: Prisma.SettingAvgOrderByAggregateInput
@@ -450,6 +505,11 @@ export type SettingScalarWhereWithAggregatesInput = {
   cover4?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
   cover5?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
   cover6?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
+  admissionTitle?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
+  admissionText?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
+  admissionCallLabel?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
+  admissionWhatsappLabel?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
+  admissionEnabled?: Prisma.BoolWithAggregatesFilter<"Setting"> | boolean
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Setting"> | Date | string
 }
 
@@ -474,6 +534,11 @@ export type SettingCreateInput = {
   cover4?: string | null
   cover5?: string | null
   cover6?: string | null
+  admissionTitle?: string | null
+  admissionText?: string | null
+  admissionCallLabel?: string | null
+  admissionWhatsappLabel?: string | null
+  admissionEnabled?: boolean
   updatedAt?: Date | string
 }
 
@@ -498,6 +563,11 @@ export type SettingUncheckedCreateInput = {
   cover4?: string | null
   cover5?: string | null
   cover6?: string | null
+  admissionTitle?: string | null
+  admissionText?: string | null
+  admissionCallLabel?: string | null
+  admissionWhatsappLabel?: string | null
+  admissionEnabled?: boolean
   updatedAt?: Date | string
 }
 
@@ -522,6 +592,11 @@ export type SettingUpdateInput = {
   cover4?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover5?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover6?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionCallLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionWhatsappLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -546,6 +621,11 @@ export type SettingUncheckedUpdateInput = {
   cover4?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover5?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover6?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionCallLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionWhatsappLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -570,6 +650,11 @@ export type SettingCreateManyInput = {
   cover4?: string | null
   cover5?: string | null
   cover6?: string | null
+  admissionTitle?: string | null
+  admissionText?: string | null
+  admissionCallLabel?: string | null
+  admissionWhatsappLabel?: string | null
+  admissionEnabled?: boolean
   updatedAt?: Date | string
 }
 
@@ -594,6 +679,11 @@ export type SettingUpdateManyMutationInput = {
   cover4?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover5?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover6?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionCallLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionWhatsappLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -618,6 +708,11 @@ export type SettingUncheckedUpdateManyInput = {
   cover4?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover5?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover6?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionCallLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionWhatsappLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  admissionEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -642,6 +737,11 @@ export type SettingCountOrderByAggregateInput = {
   cover4?: Prisma.SortOrder
   cover5?: Prisma.SortOrder
   cover6?: Prisma.SortOrder
+  admissionTitle?: Prisma.SortOrder
+  admissionText?: Prisma.SortOrder
+  admissionCallLabel?: Prisma.SortOrder
+  admissionWhatsappLabel?: Prisma.SortOrder
+  admissionEnabled?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -670,6 +770,11 @@ export type SettingMaxOrderByAggregateInput = {
   cover4?: Prisma.SortOrder
   cover5?: Prisma.SortOrder
   cover6?: Prisma.SortOrder
+  admissionTitle?: Prisma.SortOrder
+  admissionText?: Prisma.SortOrder
+  admissionCallLabel?: Prisma.SortOrder
+  admissionWhatsappLabel?: Prisma.SortOrder
+  admissionEnabled?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -694,6 +799,11 @@ export type SettingMinOrderByAggregateInput = {
   cover4?: Prisma.SortOrder
   cover5?: Prisma.SortOrder
   cover6?: Prisma.SortOrder
+  admissionTitle?: Prisma.SortOrder
+  admissionText?: Prisma.SortOrder
+  admissionCallLabel?: Prisma.SortOrder
+  admissionWhatsappLabel?: Prisma.SortOrder
+  admissionEnabled?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -715,6 +825,10 @@ export type NullableIntFieldUpdateOperationsInput = {
 
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -744,6 +858,11 @@ export type SettingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   cover4?: boolean
   cover5?: boolean
   cover6?: boolean
+  admissionTitle?: boolean
+  admissionText?: boolean
+  admissionCallLabel?: boolean
+  admissionWhatsappLabel?: boolean
+  admissionEnabled?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["setting"]>
 
@@ -768,6 +887,11 @@ export type SettingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   cover4?: boolean
   cover5?: boolean
   cover6?: boolean
+  admissionTitle?: boolean
+  admissionText?: boolean
+  admissionCallLabel?: boolean
+  admissionWhatsappLabel?: boolean
+  admissionEnabled?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["setting"]>
 
@@ -792,6 +916,11 @@ export type SettingSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   cover4?: boolean
   cover5?: boolean
   cover6?: boolean
+  admissionTitle?: boolean
+  admissionText?: boolean
+  admissionCallLabel?: boolean
+  admissionWhatsappLabel?: boolean
+  admissionEnabled?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["setting"]>
 
@@ -816,10 +945,15 @@ export type SettingSelectScalar = {
   cover4?: boolean
   cover5?: boolean
   cover6?: boolean
+  admissionTitle?: boolean
+  admissionText?: boolean
+  admissionCallLabel?: boolean
+  admissionWhatsappLabel?: boolean
+  admissionEnabled?: boolean
   updatedAt?: boolean
 }
 
-export type SettingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "schoolName" | "tagline" | "motto" | "address" | "phone" | "email" | "establishedYear" | "facebook" | "whatsapp" | "instagram" | "youtube" | "mapUrl" | "logo" | "cover1" | "cover2" | "cover3" | "cover4" | "cover5" | "cover6" | "updatedAt", ExtArgs["result"]["setting"]>
+export type SettingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "schoolName" | "tagline" | "motto" | "address" | "phone" | "email" | "establishedYear" | "facebook" | "whatsapp" | "instagram" | "youtube" | "mapUrl" | "logo" | "cover1" | "cover2" | "cover3" | "cover4" | "cover5" | "cover6" | "admissionTitle" | "admissionText" | "admissionCallLabel" | "admissionWhatsappLabel" | "admissionEnabled" | "updatedAt", ExtArgs["result"]["setting"]>
 
 export type $SettingPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Setting"
@@ -845,6 +979,11 @@ export type $SettingPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     cover4: string | null
     cover5: string | null
     cover6: string | null
+    admissionTitle: string | null
+    admissionText: string | null
+    admissionCallLabel: string | null
+    admissionWhatsappLabel: string | null
+    admissionEnabled: boolean
     updatedAt: Date
   }, ExtArgs["result"]["setting"]>
   composites: {}
@@ -1289,6 +1428,11 @@ export interface SettingFieldRefs {
   readonly cover4: Prisma.FieldRef<"Setting", 'String'>
   readonly cover5: Prisma.FieldRef<"Setting", 'String'>
   readonly cover6: Prisma.FieldRef<"Setting", 'String'>
+  readonly admissionTitle: Prisma.FieldRef<"Setting", 'String'>
+  readonly admissionText: Prisma.FieldRef<"Setting", 'String'>
+  readonly admissionCallLabel: Prisma.FieldRef<"Setting", 'String'>
+  readonly admissionWhatsappLabel: Prisma.FieldRef<"Setting", 'String'>
+  readonly admissionEnabled: Prisma.FieldRef<"Setting", 'Boolean'>
   readonly updatedAt: Prisma.FieldRef<"Setting", 'DateTime'>
 }
     

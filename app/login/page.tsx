@@ -1,13 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { GraduationCap } from "lucide-react";
 import AdminLoginForm from "@/app/components/AdminLoginForm";
+import { getSessionUser } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Login - Janak English Boarding School",
+  robots: { index: false, follow: false },
 };
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const user = await getSessionUser();
+  if (user?.role === "admin") redirect("/admin");
+  if (user?.role === "teacher") redirect("/teacher");
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand-deep via-brand-dark to-brand-deep px-4">
       <div className="w-full max-w-sm">
