@@ -128,6 +128,7 @@ export default async function HomePage() {
         <ContactSection
           settings={{
             email: settings.email,
+            phone: settings.phone,
             whatsapp: settings.whatsapp,
           }}
         />

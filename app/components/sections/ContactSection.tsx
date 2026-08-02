@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, Mail, MessageCircle } from "lucide-react";
+import { CheckCircle2, Mail, MessageCircle, Phone } from "lucide-react";
 
 type ContactSettings = {
   email: string;
+  phone?: string | null;
   whatsapp?: string | null;
 };
 
@@ -22,24 +23,23 @@ export default function ContactSection({ settings }: { settings: ContactSettings
     setMessage("");
   };
 
-  const sendWhatsApp = () => {
-    if (!name || !message) {
-      setError("Please fill name and message.");
-      return;
-    }
-    const text = encodeURIComponent(`Name: ${name}%0APhone: ${phone}%0AMessage: ${message}`);
+  const prefilled = () => {
+    const lines = [];
+    if (name) lines.push(`Name: ${name}`);
+    if (phone) lines.push(`Phone: ${phone}`);
+    if (message) lines.push(`Message: ${message}`);
+    return lines.length ? lines.join("\n") : "";
+  };
+
+  const openWhatsApp = () => {
+    if (!settings.whatsapp) return;
+    const text = encodeURIComponent(prefilled() || "Hello, I would like to know more about admission.");
     window.open(`https://wa.me/${settings.whatsapp}?text=${text}`, "_blank");
   };
 
-  const sendEmail = () => {
-    if (!name || !message) {
-      setError("Please fill name and message.");
-      return;
-    }
-    const subject = encodeURIComponent(`Enquiry from ${name}`);
-    const body = encodeURIComponent(
-      `Name: ${name}\nPhone: ${phone}\nMessage: ${message}`
-    );
+  const openEmail = () => {
+    const subject = encodeURIComponent(name ? `Enquiry from ${name}` : "Enquiry from website");
+    const body = encodeURIComponent(prefilled());
     window.location.href = `mailto:${settings.email}?subject=${subject}&body=${body}`;
   };
 
@@ -74,13 +74,43 @@ export default function ContactSection({ settings }: { settings: ContactSettings
         <h2 className="section-title">Contact Us / Enquiry</h2>
         <div className="section-title-line" />
         <p className="text-center text-brand-deep/70 max-w-xl mx-auto">
-          Have a question about admission? Send us a message directly on WhatsApp or
-          Email.
+          Reach us directly on WhatsApp or Email, or send an enquiry using the
+          form below.
         </p>
+
+        <div className="mx-auto mt-10 grid max-w-2xl gap-4 sm:grid-cols-2">
+          <button
+            onClick={openWhatsApp}
+            className="group flex items-center gap-4 rounded-2xl border border-line bg-white p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand hover:shadow-md"
+          >
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-green-100 text-green-700">
+              <MessageCircle className="h-6 w-6" />
+            </span>
+            <span>
+              <span className="block font-bold text-brand-deep">Chat on WhatsApp</span>
+              <span className="mt-0.5 block text-sm text-brand-deep/60">
+                {settings.phone || "Instant reply on WhatsApp"}
+              </span>
+            </span>
+          </button>
+
+          <button
+            onClick={openEmail}
+            className="group flex items-center gap-4 rounded-2xl border border-line bg-white p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-accent hover:shadow-md"
+          >
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent/15 text-accent">
+              <Mail className="h-6 w-6" />
+            </span>
+            <span>
+              <span className="block font-bold text-brand-deep">Send an Email</span>
+              <span className="mt-0.5 block break-all text-sm text-brand-deep/60">{settings.email}</span>
+            </span>
+          </button>
+        </div>
 
         <form
           onSubmit={submit}
-          className="mx-auto mt-10 max-w-xl space-y-4 rounded-2xl border border-line bg-white p-6 md:p-8 shadow-sm"
+          className="mx-auto mt-6 max-w-xl space-y-4 rounded-2xl border border-line bg-white p-6 md:p-8 shadow-sm"
         >
           <input
             value={name}
@@ -89,13 +119,23 @@ export default function ContactSection({ settings }: { settings: ContactSettings
             required
             className="w-full rounded-lg border border-line bg-white px-4 py-3 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/30"
           />
-          <input
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="Phone Number"
-            type="tel"
-            className="w-full rounded-lg border border-line bg-white px-4 py-3 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/30"
-          />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <input
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="Phone Number"
+              type="tel"
+              className="w-full rounded-lg border border-line bg-white px-4 py-3 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/30"
+            />
+            {settings.phone && (
+              <a
+                href={`tel:${settings.phone}`}
+                className="inline-flex items-center justify-center gap-2 rounded-lg border border-line px-4 py-3 text-sm font-semibold text-brand-deep/70 hover:border-brand hover:bg-brand-soft/50 transition-colors"
+              >
+                <Phone className="h-4 w-4" /> {settings.phone}
+              </a>
+            )}
+          </div>
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
@@ -112,23 +152,6 @@ export default function ContactSection({ settings }: { settings: ContactSettings
               soon.
             </p>
           )}
-
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              type="button"
-              onClick={sendWhatsApp}
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand px-4 py-3 text-sm font-bold text-white hover:bg-brand-dark transition-colors"
-            >
-              <MessageCircle className="h-4 w-4" /> Send via WhatsApp
-            </button>
-            <button
-              type="button"
-              onClick={sendEmail}
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-accent to-orange-400 px-4 py-3 text-sm font-bold text-white hover:opacity-90 transition"
-            >
-              <Mail className="h-4 w-4" /> Send via Email
-            </button>
-          </div>
 
           <button
             type="submit"
