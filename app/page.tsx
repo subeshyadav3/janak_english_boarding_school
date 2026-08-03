@@ -41,13 +41,23 @@ export default async function HomePage() {
     ]);
   const user = await getSessionUser();
 
+  const extraCovers: string[] = settings.extraCovers
+    ? (() => {
+        try {
+          const arr = JSON.parse(settings.extraCovers);
+          return Array.isArray(arr) ? arr.filter((s: unknown): s is string => typeof s === "string") : [];
+        } catch {
+          return [];
+        }
+      })()
+    : [];
+
   const covers = [
     settings.cover1,
     settings.cover2,
     settings.cover3,
     settings.cover4,
-    settings.cover5,
-    settings.cover6,
+    ...extraCovers,
   ].filter((c): c is string => Boolean(c));
 
   const jsonLd = {

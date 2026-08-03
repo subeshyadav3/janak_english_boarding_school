@@ -1151,6 +1151,7 @@ export const SettingScalarFieldEnum = {
   cover4: 'cover4',
   cover5: 'cover5',
   cover6: 'cover6',
+  extraCovers: 'extraCovers',
   admissionTitle: 'admissionTitle',
   admissionText: 'admissionText',
   admissionCallLabel: 'admissionCallLabel',

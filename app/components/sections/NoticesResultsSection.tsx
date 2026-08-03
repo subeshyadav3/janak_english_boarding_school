@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   ChevronLeft,
   ChevronRight,
@@ -188,70 +189,73 @@ function FileViewer({
         <Download className={compact ? "h-4 w-4" : "h-5 w-5"} />
       </a>
 
-      {open && showViewer && (
-        <div
-          className="fixed inset-0 z-[70] flex items-center justify-center bg-brand-deep/80 p-4 backdrop-blur-sm"
-          onClick={() => setOpen(false)}
-        >
-          <div
-            className="flex h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl animate-toast-in"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between border-b border-line px-5 py-3">
-              <h3 className="truncate pr-4 font-bold">{title}</h3>
-              <div className="flex items-center gap-2">
-                <a
-                  href={filePath}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-line px-3 py-1.5 text-sm font-bold text-brand-deep/70 hover:border-brand hover:text-brand transition-colors"
-                >
-                  <ExternalLink className="h-4 w-4" /> Open
-                </a>
-                <a
-                  href={filePath}
-                  download
-                  title="Download"
-                  aria-label="Download"
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-brand text-white hover:bg-brand-dark transition-colors"
-                >
-                  <Download className="h-4 w-4" />
-                </a>
-                <button
-                  onClick={() => setOpen(false)}
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-brand-deep/60 hover:bg-surface hover:text-brand transition-colors"
-                  aria-label="Close"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-            </div>
-            <div className="flex-1 overflow-auto bg-surface-muted">
-              {loading && (
-                <div className="flex h-full items-center justify-center">
-                  <Loader2 className="h-8 w-8 animate-spin text-brand" />
+      {open && showViewer && typeof document !== "undefined"
+        ? createPortal(
+            <div
+              className="fixed inset-0 z-[100] flex items-center justify-center bg-gradient-to-b from-brand-deep/90 via-brand-deep/85 to-brand-deep/95 p-4 backdrop-blur-sm"
+              onClick={() => setOpen(false)}
+            >
+              <div
+                className="flex h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl animate-toast-in"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex items-center justify-between border-b border-line px-5 py-3 bg-surface">
+                  <h3 className="truncate pr-4 font-bold">{title}</h3>
+                  <div className="flex items-center gap-2">
+                    <a
+                      href={filePath}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-line px-3 py-1.5 text-sm font-bold text-brand-deep/70 hover:border-brand hover:text-brand transition-colors"
+                    >
+                      <ExternalLink className="h-4 w-4" /> Open
+                    </a>
+                    <a
+                      href={filePath}
+                      download
+                      title="Download"
+                      aria-label="Download"
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-brand text-white hover:bg-brand-dark transition-colors"
+                    >
+                      <Download className="h-4 w-4" />
+                    </a>
+                    <button
+                      onClick={() => setOpen(false)}
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-brand-deep/60 hover:bg-surface hover:text-brand transition-colors"
+                      aria-label="Close"
+                    >
+                      <X className="h-5 w-5" />
+                    </button>
+                  </div>
                 </div>
-              )}
-              {isPdf(filePath) ? (
-                <iframe
-                  src={`${filePath}#toolbar=1`}
-                  title={title}
-                  className="h-full w-full border-0"
-                  onLoad={() => setLoading(false)}
-                />
-              ) : (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={filePath}
-                  alt={title}
-                  onLoad={() => setLoading(false)}
-                  className="mx-auto max-h-full w-auto object-contain p-2"
-                />
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+                <div className="flex-1 overflow-auto bg-surface-muted">
+                  {loading && (
+                    <div className="flex h-full items-center justify-center">
+                      <Loader2 className="h-8 w-8 animate-spin text-brand" />
+                    </div>
+                  )}
+                  {isPdf(filePath) ? (
+                    <iframe
+                      src={`${filePath}#toolbar=1`}
+                      title={title}
+                      className="h-full w-full border-0"
+                      onLoad={() => setLoading(false)}
+                    />
+                  ) : (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={filePath}
+                      alt={title}
+                      onLoad={() => setLoading(false)}
+                      className="mx-auto max-h-full w-auto object-contain p-2"
+                    />
+                  )}
+                </div>
+              </div>
+            </div>,
+            document.body
+          )
+        : null}
     </>
   );
 }

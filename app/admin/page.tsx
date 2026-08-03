@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -20,6 +20,8 @@ import {
   CalendarDays,
   ExternalLink,
   GraduationCap,
+  Plus,
+  X,
 } from "lucide-react";
 import { ToastProvider, useToast } from "@/lib/ui/Toast";
 import ConfirmDialog from "@/lib/ui/ConfirmDialog";
@@ -1253,8 +1255,6 @@ const SETTING_FIELDS = [
   { key: "cover2", label: "Cover 2", image: true },
   { key: "cover3", label: "Cover 3", image: true },
   { key: "cover4", label: "Cover 4", image: true },
-  { key: "cover5", label: "Cover 5", image: true },
-  { key: "cover6", label: "Cover 6", image: true },
 ] as const;
 
 function SettingsManager() {
@@ -1300,6 +1300,20 @@ function SettingsManager() {
 
   const set = (key: string, value: string) => setSettings((prev) => ({ ...prev, [key]: value }));
 
+  const extraCovers = useMemo(() => {
+    try {
+      const v = settings.extraCovers;
+      if (!v) return [] as string[];
+      const arr = JSON.parse(v);
+      return Array.isArray(arr) ? arr.filter((s: unknown) => typeof s === "string") : ([] as string[]);
+    } catch {
+      return [] as string[];
+    }
+  }, [settings.extraCovers]);
+
+  const setExtraCovers = (arr: string[]) =>
+    set("extraCovers", arr.length ? JSON.stringify(arr) : "");
+
   if (loading) return <p className="text-sm text-brand-deep/60">Loading...</p>;
 
   return (
@@ -1322,6 +1336,50 @@ function SettingsManager() {
             )}
           </div>
         ))}
+        <div className="rounded-xl border border-line bg-surface p-4">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h3 className="text-sm font-bold text-brand-deep">More Slideshow Images</h3>
+              <p className="mt-0.5 text-xs text-brand-deep/60">
+                Add extra photos for the home hero slideshow.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setExtraCovers([...extraCovers, ""])}
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-brand px-3 py-2 text-xs font-bold text-brand hover:bg-brand/5 transition-colors"
+            >
+              <Plus className="h-4 w-4" /> Add Image
+            </button>
+          </div>
+          {extraCovers.length === 0 ? (
+            <p className="mt-3 text-xs text-brand-deep/50 italic">No extra slideshow images yet.</p>
+          ) : (
+            <div className="mt-3 space-y-3">
+              {extraCovers.map((url, i) => (
+                <div key={i} className="flex items-start gap-2">
+                  <div className="flex-1">
+                    <FileUpload
+                      value={url}
+                      onChange={(v) =>
+                        setExtraCovers(extraCovers.map((u, j) => (j === i ? v : u)))
+                      }
+                      label={`Upload Image ${i + 1}`}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setExtraCovers(extraCovers.filter((_, j) => j !== i))}
+                    className="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-line text-brand-deep/60 hover:border-red-200 hover:text-red-600 transition-colors"
+                    aria-label={`Remove image ${i + 1}`}
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         <button onClick={save} disabled={saving}
           className="inline-flex items-center gap-2 rounded-lg bg-brand px-5 py-3 text-sm font-bold text-white hover:bg-brand-dark disabled:opacity-50">
           {saving ? "Saving..." : "Save Settings"}

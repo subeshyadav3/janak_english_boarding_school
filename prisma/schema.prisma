@@ -28,6 +28,7 @@ model Setting {
   cover4          String?
   cover5          String?
   cover6          String?
+  extraCovers     String?
   admissionTitle  String?
   admissionText   String?
   admissionCallLabel    String?
