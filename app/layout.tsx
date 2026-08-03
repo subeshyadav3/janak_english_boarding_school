@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     default:
-      "Best Boarding School in Gaur, Rautahat | Janak English Boarding School",
+      "Janak English Boarding School Pvt. Ltd. Gaur Rautahat",
     template: "%s | Janak English Boarding School",
   },
   description: DEFAULT_DESCRIPTION,
