@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     default:
-      "Best Boarding School in Gaur, Rautahat | Janak English Boarding School",
+      "Janak English Boarding School Pvt. Ltd. Gaur Rautahat",
     template: "%s | Janak English Boarding School",
   },
   description: DEFAULT_DESCRIPTION,
@@ -57,6 +57,9 @@ export const metadata: Metadata = {
       "max-snippet": -1,
       "max-video-preview": -1,
     },
+  },
+  verification: {
+    google: "c7S4yXfJocR_vy9oH0lCsIc10gvrNTlxKpON4VeT8H8",
   },
   openGraph: {
     title: "Best Boarding School in Gaur, Rautahat - Janak English Boarding School",
