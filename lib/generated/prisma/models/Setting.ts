@@ -55,6 +55,7 @@ export type SettingMinAggregateOutputType = {
   cover4: string | null
   cover5: string | null
   cover6: string | null
+  extraCovers: string | null
   admissionTitle: string | null
   admissionText: string | null
   admissionCallLabel: string | null
@@ -84,6 +85,7 @@ export type SettingMaxAggregateOutputType = {
   cover4: string | null
   cover5: string | null
   cover6: string | null
+  extraCovers: string | null
   admissionTitle: string | null
   admissionText: string | null
   admissionCallLabel: string | null
@@ -113,6 +115,7 @@ export type SettingCountAggregateOutputType = {
   cover4: number
   cover5: number
   cover6: number
+  extraCovers: number
   admissionTitle: number
   admissionText: number
   admissionCallLabel: number
@@ -152,6 +155,7 @@ export type SettingMinAggregateInputType = {
   cover4?: true
   cover5?: true
   cover6?: true
+  extraCovers?: true
   admissionTitle?: true
   admissionText?: true
   admissionCallLabel?: true
@@ -181,6 +185,7 @@ export type SettingMaxAggregateInputType = {
   cover4?: true
   cover5?: true
   cover6?: true
+  extraCovers?: true
   admissionTitle?: true
   admissionText?: true
   admissionCallLabel?: true
@@ -210,6 +215,7 @@ export type SettingCountAggregateInputType = {
   cover4?: true
   cover5?: true
   cover6?: true
+  extraCovers?: true
   admissionTitle?: true
   admissionText?: true
   admissionCallLabel?: true
@@ -326,6 +332,7 @@ export type SettingGroupByOutputType = {
   cover4: string | null
   cover5: string | null
   cover6: string | null
+  extraCovers: string | null
   admissionTitle: string | null
   admissionText: string | null
   admissionCallLabel: string | null
@@ -378,6 +385,7 @@ export type SettingWhereInput = {
   cover4?: Prisma.StringNullableFilter<"Setting"> | string | null
   cover5?: Prisma.StringNullableFilter<"Setting"> | string | null
   cover6?: Prisma.StringNullableFilter<"Setting"> | string | null
+  extraCovers?: Prisma.StringNullableFilter<"Setting"> | string | null
   admissionTitle?: Prisma.StringNullableFilter<"Setting"> | string | null
   admissionText?: Prisma.StringNullableFilter<"Setting"> | string | null
   admissionCallLabel?: Prisma.StringNullableFilter<"Setting"> | string | null
@@ -407,6 +415,7 @@ export type SettingOrderByWithRelationInput = {
   cover4?: Prisma.SortOrderInput | Prisma.SortOrder
   cover5?: Prisma.SortOrderInput | Prisma.SortOrder
   cover6?: Prisma.SortOrderInput | Prisma.SortOrder
+  extraCovers?: Prisma.SortOrderInput | Prisma.SortOrder
   admissionTitle?: Prisma.SortOrderInput | Prisma.SortOrder
   admissionText?: Prisma.SortOrderInput | Prisma.SortOrder
   admissionCallLabel?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -439,6 +448,7 @@ export type SettingWhereUniqueInput = Prisma.AtLeast<{
   cover4?: Prisma.StringNullableFilter<"Setting"> | string | null
   cover5?: Prisma.StringNullableFilter<"Setting"> | string | null
   cover6?: Prisma.StringNullableFilter<"Setting"> | string | null
+  extraCovers?: Prisma.StringNullableFilter<"Setting"> | string | null
   admissionTitle?: Prisma.StringNullableFilter<"Setting"> | string | null
   admissionText?: Prisma.StringNullableFilter<"Setting"> | string | null
   admissionCallLabel?: Prisma.StringNullableFilter<"Setting"> | string | null
@@ -468,6 +478,7 @@ export type SettingOrderByWithAggregationInput = {
   cover4?: Prisma.SortOrderInput | Prisma.SortOrder
   cover5?: Prisma.SortOrderInput | Prisma.SortOrder
   cover6?: Prisma.SortOrderInput | Prisma.SortOrder
+  extraCovers?: Prisma.SortOrderInput | Prisma.SortOrder
   admissionTitle?: Prisma.SortOrderInput | Prisma.SortOrder
   admissionText?: Prisma.SortOrderInput | Prisma.SortOrder
   admissionCallLabel?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -505,6 +516,7 @@ export type SettingScalarWhereWithAggregatesInput = {
   cover4?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
   cover5?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
   cover6?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
+  extraCovers?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
   admissionTitle?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
   admissionText?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
   admissionCallLabel?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
@@ -534,6 +546,7 @@ export type SettingCreateInput = {
   cover4?: string | null
   cover5?: string | null
   cover6?: string | null
+  extraCovers?: string | null
   admissionTitle?: string | null
   admissionText?: string | null
   admissionCallLabel?: string | null
@@ -563,6 +576,7 @@ export type SettingUncheckedCreateInput = {
   cover4?: string | null
   cover5?: string | null
   cover6?: string | null
+  extraCovers?: string | null
   admissionTitle?: string | null
   admissionText?: string | null
   admissionCallLabel?: string | null
@@ -592,6 +606,7 @@ export type SettingUpdateInput = {
   cover4?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover5?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover6?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extraCovers?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionCallLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -621,6 +636,7 @@ export type SettingUncheckedUpdateInput = {
   cover4?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover5?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover6?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extraCovers?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionCallLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -650,6 +666,7 @@ export type SettingCreateManyInput = {
   cover4?: string | null
   cover5?: string | null
   cover6?: string | null
+  extraCovers?: string | null
   admissionTitle?: string | null
   admissionText?: string | null
   admissionCallLabel?: string | null
@@ -679,6 +696,7 @@ export type SettingUpdateManyMutationInput = {
   cover4?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover5?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover6?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extraCovers?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionCallLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -708,6 +726,7 @@ export type SettingUncheckedUpdateManyInput = {
   cover4?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover5?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cover6?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extraCovers?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionCallLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -737,6 +756,7 @@ export type SettingCountOrderByAggregateInput = {
   cover4?: Prisma.SortOrder
   cover5?: Prisma.SortOrder
   cover6?: Prisma.SortOrder
+  extraCovers?: Prisma.SortOrder
   admissionTitle?: Prisma.SortOrder
   admissionText?: Prisma.SortOrder
   admissionCallLabel?: Prisma.SortOrder
@@ -770,6 +790,7 @@ export type SettingMaxOrderByAggregateInput = {
   cover4?: Prisma.SortOrder
   cover5?: Prisma.SortOrder
   cover6?: Prisma.SortOrder
+  extraCovers?: Prisma.SortOrder
   admissionTitle?: Prisma.SortOrder
   admissionText?: Prisma.SortOrder
   admissionCallLabel?: Prisma.SortOrder
@@ -799,6 +820,7 @@ export type SettingMinOrderByAggregateInput = {
   cover4?: Prisma.SortOrder
   cover5?: Prisma.SortOrder
   cover6?: Prisma.SortOrder
+  extraCovers?: Prisma.SortOrder
   admissionTitle?: Prisma.SortOrder
   admissionText?: Prisma.SortOrder
   admissionCallLabel?: Prisma.SortOrder
@@ -858,6 +880,7 @@ export type SettingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   cover4?: boolean
   cover5?: boolean
   cover6?: boolean
+  extraCovers?: boolean
   admissionTitle?: boolean
   admissionText?: boolean
   admissionCallLabel?: boolean
@@ -887,6 +910,7 @@ export type SettingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   cover4?: boolean
   cover5?: boolean
   cover6?: boolean
+  extraCovers?: boolean
   admissionTitle?: boolean
   admissionText?: boolean
   admissionCallLabel?: boolean
@@ -916,6 +940,7 @@ export type SettingSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   cover4?: boolean
   cover5?: boolean
   cover6?: boolean
+  extraCovers?: boolean
   admissionTitle?: boolean
   admissionText?: boolean
   admissionCallLabel?: boolean
@@ -945,6 +970,7 @@ export type SettingSelectScalar = {
   cover4?: boolean
   cover5?: boolean
   cover6?: boolean
+  extraCovers?: boolean
   admissionTitle?: boolean
   admissionText?: boolean
   admissionCallLabel?: boolean
@@ -953,7 +979,7 @@ export type SettingSelectScalar = {
   updatedAt?: boolean
 }
 
-export type SettingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "schoolName" | "tagline" | "motto" | "address" | "phone" | "email" | "establishedYear" | "facebook" | "whatsapp" | "instagram" | "youtube" | "mapUrl" | "logo" | "cover1" | "cover2" | "cover3" | "cover4" | "cover5" | "cover6" | "admissionTitle" | "admissionText" | "admissionCallLabel" | "admissionWhatsappLabel" | "admissionEnabled" | "updatedAt", ExtArgs["result"]["setting"]>
+export type SettingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "schoolName" | "tagline" | "motto" | "address" | "phone" | "email" | "establishedYear" | "facebook" | "whatsapp" | "instagram" | "youtube" | "mapUrl" | "logo" | "cover1" | "cover2" | "cover3" | "cover4" | "cover5" | "cover6" | "extraCovers" | "admissionTitle" | "admissionText" | "admissionCallLabel" | "admissionWhatsappLabel" | "admissionEnabled" | "updatedAt", ExtArgs["result"]["setting"]>
 
 export type $SettingPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Setting"
@@ -979,6 +1005,7 @@ export type $SettingPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     cover4: string | null
     cover5: string | null
     cover6: string | null
+    extraCovers: string | null
     admissionTitle: string | null
     admissionText: string | null
     admissionCallLabel: string | null
@@ -1428,6 +1455,7 @@ export interface SettingFieldRefs {
   readonly cover4: Prisma.FieldRef<"Setting", 'String'>
   readonly cover5: Prisma.FieldRef<"Setting", 'String'>
   readonly cover6: Prisma.FieldRef<"Setting", 'String'>
+  readonly extraCovers: Prisma.FieldRef<"Setting", 'String'>
   readonly admissionTitle: Prisma.FieldRef<"Setting", 'String'>
   readonly admissionText: Prisma.FieldRef<"Setting", 'String'>
   readonly admissionCallLabel: Prisma.FieldRef<"Setting", 'String'>

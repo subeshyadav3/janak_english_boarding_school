@@ -50,3 +50,10 @@ plan.md
 .agent/
 .agents/
 .claude/
+
+# local scripts / seed (not part of the repo)
+prisma/seed.ts
+scripts-verify.ts
+
+# local upload fallback
+public/uploads/

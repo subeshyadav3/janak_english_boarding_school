@@ -40,8 +40,7 @@ export type SiteSettings = {
   cover2?: string | null;
   cover3?: string | null;
   cover4?: string | null;
-  cover5?: string | null;
-  cover6?: string | null;
+  extraCovers?: string | null;
   admissionTitle?: string | null;
   admissionText?: string | null;
   admissionCallLabel?: string | null;
@@ -65,8 +64,6 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   cover2: "/assets/cover2.png",
   cover3: "/assets/cover3.png",
   cover4: "/assets/cover4.png",
-  cover5: "/assets/cover5.png",
-  cover6: "/assets/cover6.png",
   admissionTitle: "Admissions Open — Nursery to Grade 8",
   admissionText:
     "English medium, disciplined and caring environment. Enroll your child today for a brighter tomorrow.",
