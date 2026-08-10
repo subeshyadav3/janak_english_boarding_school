@@ -2,7 +2,7 @@ import { ChevronDown } from "lucide-react";
 
 const FAQS = [
   {
-    q: "What is the best boarding school in Gaur, Rautahat?",
+    q: "Which boarding school is the best in Gaur, Rautahat?",
     a: "Janak English Boarding School Pvt. Ltd. is one of the oldest, most respected, and top-rated boarding schools in Gaur, Rautahat, known for quality education and high discipline.",
   },
   {
